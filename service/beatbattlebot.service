@@ -1,0 +1,18 @@
+[Unit]
+Description=BeatBattleBot - Discord.js beat battle organizer
+Documentation=https://github.com/jakerunsdnd/beatbattlebot
+After=network.target
+
+[Service]
+Type=simple
+Environment=NODE_ENV=production
+WorkingDirectory=/opt/beatbattlebot
+ExecStart=/usr/bin/node bot.js >> /var/log/beatbattlebot.log
+Restart=on-failure
+RestartSec=60s
+#Only available in systemd 236+
+#StandardOutput=file:/var/log/bot.log
+#StandardError=file:/var/log/bot.err
+
+[Install]
+WantedBy=multi-user.target

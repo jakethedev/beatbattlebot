@@ -1,0 +1,42 @@
+{
+  "name": "beatbattlebot",
+  "version": "0.1.0",
+  "releasenotes": "Beta version of a handy beat battle organizer",
+  "description": "Discord.js bot for organizing and handling beat battle submissions on music servers",
+  "main": "bot.js",
+  "scripts": {
+    "start": "node bot.js",
+    "devbot": "nodemon bot.js",
+    "test": "node test.js > /dev/null",
+    "verbosetest": "node test.js",
+    "build": "echo Placeholder text for smushing libs into a bot.js for web page usage"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jakethedev/beatbattlebot"
+  },
+  "keywords": [
+    "beat battle",
+    "music",
+    "organizer",
+    "link submission",
+    "discord",
+    "bot"
+  ],
+  "author": "jakethedev",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/jakethedev/beatbattlebot/issues"
+  },
+  "homepage": "https://github.com/jakethedev/beatbattlebot#readme",
+  "dependencies": {
+    "discord.js": "^12.4.1",
+    "opusscript": "0.0.7"
+  },
+  "engines": {
+    "node": ">=12.0.0"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.6"
+  }
+}

@@ -1,0 +1,6 @@
+{
+  "token": "hunter2",
+  "botkey": "!",
+  "activeChannels": ["golemworks", "bot"],
+  "gameStatus": "tavernbot | !help for info"
+}
