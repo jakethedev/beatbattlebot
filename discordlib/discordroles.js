@@ -1,6 +1,11 @@
 // See readme for more info, you can return raw data or a promise and the bot will reply
 //    with either the data or the resolution of the promise
 
+/**
+ * NOTICE: This is currently unused, just keeping it here
+ * for future reference if role operations are desired
+ */
+
 exports.newrole = function(input, message, client) {
   if (input.toLowerCase() == 'help') return `'newrole new-role-name' will create a new role with the same permissions as the everybody role`
   if (!message.member) return `you don't even live here, stop messing with things (err: not a server member)`

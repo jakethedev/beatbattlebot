@@ -1,22 +1,28 @@
 const os = require('os')
 require('../randomUtil')
 
-exports.newbattle = function(input) {
-  return `got feedback, ideas, or bugs? Awesome! Let me know on github at ${process.env.npm_package_bugs_url}`
+exports.newbattle = function(input, msg, client) {
+  // TODO name with input, or give neat codename
+  return `NEW BATTLE TIME (wip)`
 }
 
-exports.submit = function(input) {
-  return `got feedback, ideas, or bugs? Awesome! Let me know on github at ${process.env.npm_package_bugs_url}`
+exports.submit = function(input, msg, client) {
+  // TODO delete msg, if msg.attach print Not supported yet, try bribing jake else save link
+  return `thanks for submitting`
 }
 
-exports.submissions = function(input) {
+exports.submissions = function(input, msg, client) {
   if (input === 'channel'){
-    return `got feedback, ideas, or bugs? Awesome! Let me know on github at ${process.env.npm_package_bugs_url}`
+    return `channel output`
   } else {
-    return `got feedback, ideas, or bugs? Awesome! Let me know on github at ${process.env.npm_package_bugs_url}`
+    return `dm output`
   }
 }
 
-exports.newbattle = function(input) {
-  return `got feedback, ideas, or bugs? Awesome! Let me know on github at ${process.env.npm_package_bugs_url}`
+exports.stopsubs = function(){
+  return `submissions are CLOSED! (jk this is not )`
+}
+
+exports.battlevote = function(){
+  return `here's a form with all entrants and emojis to vote on them with`
 }
