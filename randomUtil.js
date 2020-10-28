@@ -2,19 +2,19 @@
 
 // Ref: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/random
 // Random number inclusive of both values, defaults to 1 -> inclusiveMax
-randPosInt = function(inclusiveMax, min) {
+exports.randPosInt = function(inclusiveMax, min) {
   return Math.floor(Math.random() * (inclusiveMax - min + 1)) + min;
 }
 
-randIntMinOne = function(inclusiveMax) {
+exports.randIntMinOne = function(inclusiveMax) {
   return randPosInt(inclusiveMax, 1);
 }
 
-randIntMinZero = function(inclusiveMax) {
+exports.randIntMinZero = function(inclusiveMax) {
   return randPosInt(inclusiveMax, 0);
 }
 
-randArrIdx = function(array) {
+exports.randArrIdx = function(array) {
   if (array) {
     return randPosInt(array.length - 1, 0)
   } else {
@@ -24,7 +24,7 @@ randArrIdx = function(array) {
 }
 
 // Give back a random item (or set of items) from a list
-choice = function(array = [], numChoices = 1) {
+exports.choice = function(array = [], numChoices = 1) {
   if (numChoices == 1) {
     let idx = randArrIdx(array)
     return array[idx]
@@ -41,7 +41,7 @@ choice = function(array = [], numChoices = 1) {
 
 //https://stackoverflow.com/a/12646864/6794180 - No native shuffle functions. Bummer.
 //Needed to smash up our data arrays for randomness
-shuffleArray = function(inputArray) {
+exports.shuffleArray = function(inputArray) {
   let array = inputArray.slice(0) //Quick clone
   for (var i = array.length - 1; i > 0; i--) {
     var j = Math.floor(Math.random() * (i + 1));

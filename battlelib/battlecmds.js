@@ -1,17 +1,31 @@
-const os = require('os')
-require('../randomUtil')
+const bcache = require('./battlecache')
 
 exports.newbattle = function(input, msg, client) {
+  if (input.toLowerCase() == 'help') {
+    return `Usage: TODO usage info`
+  }
   // TODO name with input, or give neat codename
-  return `NEW BATTLE TIME (wip)`
+  bcache.emptyCache()
+  return `A NEW BATTLE HAS BEGUN!`
 }
 
 exports.submit = function(input, msg, client) {
-  // TODO delete msg, if msg.attach print Not supported yet, try bribing jake else save link
-  return `thanks for submitting`
+  if (input.toLowerCase() == 'help') {
+    return `Usage: TODO usage info`
+  }
+  if (msg.guild) {
+    // TODO delete msg, if msg.attach print Not supported yet, try bribing jake else save link
+    let requestorName = msg.member.user.username
+
+  } else {
+    return `this command needs to be run in a server, not a dm`
+  }
 }
 
 exports.submissions = function(input, msg, client) {
+  if (input.toLowerCase() == 'help') {
+    return `Usage: TODO usage info`
+  }
   if (input === 'channel'){
     return `channel output`
   } else {
@@ -20,9 +34,15 @@ exports.submissions = function(input, msg, client) {
 }
 
 exports.stopsubs = function(){
+  if (input.toLowerCase() == 'help') {
+    return `Usage: TODO usage info`
+  }
   return `submissions are CLOSED! (jk this is not )`
 }
 
 exports.battlevote = function(){
+  if (input.toLowerCase() == 'help') {
+    return `Usage: TODO usage info`
+  }
   return `here's a form with all entrants and emojis to vote on them with`
 }

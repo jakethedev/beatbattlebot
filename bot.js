@@ -1,5 +1,4 @@
 // Core bot setup
-require('./randomUtil')
 const fs = require('fs')
 const { token, botkey, activeChannels, gameStatus } = JSON.parse(fs.readFileSync('config.json', 'utf-8'))
 const discord = require("discord.js")
@@ -22,7 +21,7 @@ loadAllOperations = function(libNames){
   }
   return [ allOps, meta ]
 }
-// Always keep gravemind at the end
+// List of local directories to load, see anyofthem/index.js for the rest of this magic
 const MODULES = [ './discordlib', './battlelib', './syslib' ]
 const [ commander, metadata ] = loadAllOperations(MODULES)
 
