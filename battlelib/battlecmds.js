@@ -16,7 +16,8 @@ exports.submit = function(input, msg, client) {
   if (msg.guild) {
     // TODO delete msg, if msg.attach print Not supported yet, try bribing jake else save link
     let requestorName = msg.member.user.username
-
+    bcache.addEntry(requestorName, input.trim())
+    return `your entry has been recorded (${bcache.entryMap.size} entries total)!`
   } else {
     return `this command needs to be run in a server, not a dm`
   }
@@ -27,7 +28,7 @@ exports.submissions = function(input, msg, client) {
     return `Usage: TODO usage info`
   }
   if (input === 'channel'){
-    return `channel output`
+    return `channel output, `
   } else {
     return `dm output`
   }
