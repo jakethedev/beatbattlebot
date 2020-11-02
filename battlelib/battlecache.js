@@ -6,15 +6,34 @@ const fs = require('fs')
 
 exports.default = {
   _cacheFile: 'battlecache.json',
-  entryMap: {},
+  battleMap: {},
   addEntry: function(username, link, server){
-    this.entryMap[username] = link;
-    //TODO require(fs), use writeSync method since we're already async
+    let entryExists = false // For smarter output
+    if (!this.battleMap[server]){
+      this.battleMap[server] = {}
+    }
+    if (this.battleMap[server][username]) {
+      entryExists = true
+    }
+    this.battleMap[server][username] = link;
+    //TODO use fs.writeSync method since we're already async
+    if (entryExists){
+      return `thanks for the update, saved your new entry!`
+    } else {
+      return `welcome to the battle! >:D`
+    }
   },
   emptyCache: function(server){
-    //TODO close file if necessary
     //TODO mv disk cache to cache.back
-    this.entryMap = {}
-    //TODO save NEW empty to disk
+    if (this.battleMap[server]){
+      this.battleMap[server] = {}
+    }
+    //TODO save modified battlemap to disk
+  },
+  getCacheForServer: function(server){
+    if (!this.battleMap[server]){
+      this.battleMap[server] = {}
+    } 
+    return this.battleMap[server]
   }
 }

@@ -34,14 +34,14 @@ exports.submissions = function(input, msg, client) {
   }
 }
 
-exports.stopsubs = function(){
+exports.stopsubs = function(input, msg, client){
   if (input.toLowerCase() == 'help') {
     return `Usage: TODO usage info`
   }
   return `submissions are CLOSED! (jk this is not )`
 }
 
-exports.battlevote = function(){
+exports.battlevote = function(input, msg, client){
   if (input.toLowerCase() == 'help') {
     return `Usage: TODO usage info`
   }
