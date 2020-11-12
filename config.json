@@ -1,6 +1,6 @@
 {
   "token": "hunter2",
   "botkey": "!",
-  "activeChannels": ["golemworks", "bot"],
-  "gameStatus": "tavernbot | !help for info"
+  "activeChannels": ["bot", "botspam", "battles", "beat-challenge-submissions", "beat-battle", "beat-battle-vc"],
+  "gameStatus": "battlebot | !help for info"
 }
