@@ -1,42 +1,77 @@
 const fs = require('fs')
 const _cacheFile = 'battlecache.json'
-//TODO This needs to work for multiple serverNames from the start
-//TODO initialize code, read from _cacheFile if exists, put data in _entriesMap
-let battleMap = {}
-
 let debug = msg => console.log(`bcache: ${msg}`)
 
-exports.addEntry = function(username, link, serverName){
-  if (!battleMap[serverName]){
-    debug(`add: new subcache for ${serverName}`)
-    battleMap[serverName] = new Map() 
+// Load old cache on init
+let battleMap = {}
+try {
+  battleMap = fs.readFileSync(_cacheFile).toJSON()  
+} catch (error) {
+  debug(`if ENOENT this is totally ok - could not load JSON from old cache: ${error}`)
+  battleMap = {}
+}
+
+// Simple persistence layer
+function _saveBattleState(){
+  try {
+    fs.writeFileSync(_cacheFile, JSON.stringify(battleMap))
+  } catch(error) {
+    debug(`error saving cache: ${error}`)
   }
-  let entryExisted = battleMap[serverName].get(username) // For smarter output
-  battleMap[serverName].set(username, link);
+}
+
+// Quick util for seeing if a battle is active
+function _isBattleInProgress(battleName){
+  let battleExists = !!battleMap[battleName]
+  debug(`btl exists: ${battleExists}`)
+  let battleHasEntries = battleExists && battleMap[battleName].size() > 0
+  debug(`btl entries: ${battleHasEntries}`)
+  return battleHasEntries
+}
+
+exports.addEntry = function(username, link, battleName){
+  if (!battleMap[battleName]){
+    return `there is no active battle for this channel`
+  }
+  let entryExisted = battleMap[battleName].get(username) // For smarter output
+  battleMap[battleName].set(username, link);
+  _saveBattleState()
   //TODO use fs.writeSync method since we're already async
   if (entryExisted){
-    return `thanks for the update, saved your new entry! (${battleMap[serverName].size} entries)`
+    return `thanks for the update, saved your new entry! (${battleMap[battleName].size} entries)`
   } else {
-    return `welcome to the battle! (${battleMap[serverName].size} entries)`
+    return `welcome to the battle! (${battleMap[battleName].size} entries)`
   }
 }
 
-exports.emptyCache = function(serverName){
+exports.resetCache = function(battleName){
   //TODO mv disk cache to cache.back
-  battleMap[serverName] = new Map()
-  return `a new battle has begun!`
-  //TODO save modified battlemap to disk
+  let battleExisted = _isBattleInProgress(battleName)
+  battleMap[battleName] = new Map()
+  _saveBattleState()
+  if (!battleExisted) {
+    return `looks like the first battle in this channel, lets goooo!`
+  } else {
+    return `the old battle is OVER, a new round has started!`
+  }
 }
 
-exports.getCacheForServer = function(serverName){
-  if (!battleMap[serverName]){
-    debug(`get: new subcache for ${serverName}`)
-    battleMap[serverName] = new Map()
+exports.getRawEntryMapForBattle = function(battleName){
+  if (!battleMap[battleName]){
+    debug(`get: new subcache for ${battleName}`)
+    battleMap[battleName] = new Map()
   } 
-  return battleMap[serverName]
+  return battleMap[battleName]
 }
 
-exports.stopSubsForServer = function(serverName){
-  debug(`stop: TODO figure out way to cleanly stop entries for ${serverName}`)
-  return `this is not implemented yet`
+exports.getBattleSize = function(battleName){
+  if (!battleMap[battleName]){
+    return `this battle does not exist`
+  }
+  return battleMap[battleName].size()
+}
+
+exports.isBattleActive = function(battleName){
+  debug(`checking progress for ${battleName}`)
+  return _isBattleInProgress(battleName)
 }
