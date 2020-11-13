@@ -24,7 +24,7 @@ function _saveBattleState(){
 function _isBattleInProgress(battleName){
   let battleExists = !!battleMap[battleName]
   debug(`btl exists: ${battleExists}`)
-  let battleHasEntries = battleExists && battleMap[battleName].size() > 0
+  let battleHasEntries = battleExists && battleMap[battleName].size > 0
   debug(`btl entries: ${battleHasEntries}`)
   return battleHasEntries
 }
@@ -36,7 +36,6 @@ exports.addEntry = function(username, link, battleName){
   let entryExisted = battleMap[battleName].get(username) // For smarter output
   battleMap[battleName].set(username, link);
   _saveBattleState()
-  //TODO use fs.writeSync method since we're already async
   if (entryExisted){
     return `thanks for the update, saved your new entry! (${battleMap[battleName].size} entries)`
   } else {
