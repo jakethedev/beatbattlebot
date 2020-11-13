@@ -6,6 +6,7 @@ let debug = msg => console.log(`bcache: ${msg}`)
 let battleMap = {}
 try {
   //TODO This is broken as hell, this needs to parse right or move to raw Objects to work
+  //    Seems this is an option: Object.fromEntries(map);
   battleMap = fs.readFileSync(_cacheFile).toJSON()
 } catch (error) {
   debug(`if ENOENT this is totally ok - could not load JSON from old cache: ${error}`)
@@ -15,6 +16,7 @@ try {
 // Simple persistence layer
 function _saveBattleState(){
   try {
+  //    Seems this is an option: Object.fromEntries(map);
     fs.writeFileSync(_cacheFile, JSON.stringify(battleMap))
   } catch(error) {
     debug(`error saving cache: ${error}`)
