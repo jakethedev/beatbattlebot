@@ -6,7 +6,7 @@ let debug = msg => console.log(`bcache: ${msg}`)
 let battleMap = {}
 try {
   //TODO This is broken as hell, this needs to parse right or move to raw Objects to work
-  battleMap = fs.readFileSync(_cacheFile).toJSON()  
+  battleMap = fs.readFileSync(_cacheFile).toJSON()
 } catch (error) {
   debug(`if ENOENT this is totally ok - could not load JSON from old cache: ${error}`)
   battleMap = {}
