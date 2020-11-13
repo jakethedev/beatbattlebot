@@ -22,7 +22,7 @@ loadAllOperations = function(libNames){
   return [ allOps, meta ]
 }
 // List of local directories to load, see anyofthem/index.js for the rest of this magic
-const MODULES = [ './discordlib', './battlelib', './syslib' ]
+const MODULES = ['./battlelib', './discordlib', './musiclib', './syslib']
 const [ commander, metadata ] = loadAllOperations(MODULES)
 
 // In case something happens, we'll want to see logs
