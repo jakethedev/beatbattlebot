@@ -3,7 +3,7 @@ const bcache = require('./battlecache')
 
 let debug = msg => console.log(`battlecmds: ${msg}`)
 
-//TODO Persist this similar to battleCache
+//TODO Persist this similar to battleCache?
 let closedBattles = []
 
 exports.newbattle = function(input, msg) {
