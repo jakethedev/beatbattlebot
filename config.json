@@ -1,4 +1,7 @@
 {
+  "version": "1.0.0",
+  "releasenotes": "First version of a handy beat battle organizer",
+  "issuelink": "https://github.com/jakethedev/beatbattlebot/issues",
   "token": "hunter2",
   "botkey": "!",
   "activeChannels": ["bot", "botspam", "battles", "beat-challenge-submissions", "beat-battle", "beat-battle-vc"],

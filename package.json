@@ -1,7 +1,6 @@
 {
   "name": "beatbattlebot",
-  "version": "0.1.0",
-  "releasenotes": "Beta version of a handy beat battle organizer",
+  "version": "1.0.0",
   "description": "Discord.js bot for organizing and handling beat battle submissions on music servers",
   "main": "bot.js",
   "scripts": {

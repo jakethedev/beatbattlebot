@@ -60,8 +60,9 @@ exports.submissions = function(input, msg) {
     if (bcache.isBattleActive(battleName)){
       const submissionMapObj = bcache.getSubsFor(battleName)
       let response = `here are the submissions for this channel's battle:\n`
+      // { user: link }
       for (const [key, value] of Object.entries(submissionMapObj)) {
-        response += `-- ${key} -> ${value}\n`
+        response += `-- ${key} -> <${value}>\n`
       }
       //  if (input && input.trim().toLowerCase() == 'here') {
         return response

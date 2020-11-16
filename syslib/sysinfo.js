@@ -1,17 +1,18 @@
 const os = require('os')
 const MBinB = 1048576
 const rand = require('../randomUtil')
+const config = require('../package.json')
 
 // Simple version, bug link, and release notes output
 exports.version = function() {
-  let response = `I am BeatBattleBot v**${process.env.npm_package_version}**!\n\n`
-  response += `**Release notes**\n${process.env.npm_package_releasenotes}\n\n`
-  response += `**Bug or feature request? Drop it here!**\n${process.env.npm_package_bugs_url}\n`
+  let response = `I am BeatBattleBot v**${config.version}**!\n\n`
+  response += `**Release notes**\n${config.releasenotes}\n\n`
+  response += `**Bug or feature request? Drop it here!**\n${config.issuelink}\n`
   return response
 }
 
 exports.feedback = function() {
-  return `got feedback, ideas, or bugs? Awesome! Let me know on github at ${process.env.npm_package_bugs_url}`
+  return `got feedback, ideas, or bugs? Awesome! Let me know on github at ${config.issuelink}`
 }
 
 exports.serverstats = function() {
