@@ -15,7 +15,7 @@ set -e
 # - jakethedev
 ###################################
 
-cd /opt/beatbattlebot
+cd /opt/deploy/beatbattlebot
 cp package.json package.old
 git pull > /dev/null 2> /dev/null
 diff -w package.old package.json || systemctl restart beatbattlebot

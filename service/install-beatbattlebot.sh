@@ -12,6 +12,9 @@ sudo systemctl daemon-reload
 systemctl status beatbattlebot # It should say 'not loaded'
 sudo systemctl enable beatbattlebot
 sudo systemctl start beatbattlebot
+sleep 1
 sudo journalctl -f 
 # You should see healthy output and a logged-in message
 
+echo "Setting up logrotate"
+sudo ln -s $(pwd)/logrotate.beatbattlebot /etc/logrotate.d/

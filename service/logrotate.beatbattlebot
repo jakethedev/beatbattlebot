@@ -1,4 +1,4 @@
-/var/log/beatbattlebot.log {
+/var/log/beatbattlebot.log /opt/deploy/beatbattlebot/LOGFILE {
 	rotate 2
 	daily
 	missingok
