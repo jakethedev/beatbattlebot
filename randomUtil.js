@@ -2,37 +2,37 @@
 
 // Ref: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/random
 // Random number inclusive of both values, defaults to 1 -> inclusiveMax
-exports.randPosInt = function(inclusiveMax, min) {
+function _randPosInt(inclusiveMax, min) {
   return Math.floor(Math.random() * (inclusiveMax - min + 1)) + min;
 }
 
-exports.randIntMinOne = function(inclusiveMax) {
-  return randPosInt(inclusiveMax, 1);
-}
-
-exports.randIntMinZero = function(inclusiveMax) {
-  return randPosInt(inclusiveMax, 0);
-}
-
-exports.randArrIdx = function(array) {
+function _randArrIdx(array) {
   if (array) {
-    return randPosInt(array.length - 1, 0)
+    return _randPosInt(array.length - 1, 0)
   } else {
     console.log('Requested array index from nonarray: ' + array + ' -- returning NaN')
     return NaN
   }
 }
 
+exports.randIntMinOne = function(inclusiveMax) {
+  return _randPosInt(inclusiveMax, 1);
+}
+
+exports.randIntMinZero = function(inclusiveMax) {
+  return _randPosInt(inclusiveMax, 0);
+}
+
 // Give back a random item (or set of items) from a list
 exports.choice = function(array = [], numChoices = 1) {
   if (numChoices == 1) {
-    let idx = randArrIdx(array)
+    let idx = _randArrIdx(array)
     return array[idx]
   } else if (numChoices > 1) {
     if (numChoices >= array.length - 1) return array;
     let result = []
     while (numChoices-- > 0) {
-      let idx = randArrIdx(array)
+      let idx = _randArrIdx(array)
       result.push(array.splice(idx, 1)[0]) //Splice returns array
     }
     return result
