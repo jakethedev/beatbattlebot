@@ -57,11 +57,11 @@ exports.submissions = function(input, msg) {
   if (msg.guild) {
     let battleName = `${msg.guild.name}_${msg.channel.name}`
     if (bcache.isBattleActive(battleName)){
-      const submissionMap = bcache.getRawEntryMapForBattle(battleName)
+      const submissionMapObj = bcache.getSubsFor(battleName)
       let response = `here are the submissions for this channel's battle:\n`
-      submissionMap.forEach((v,k) => {
-        response += `-- ${k} -> ${v}\n`
-      })
+      for (const [key, value] of Object.entries(submissionMapObj)) {
+        response += `-- ${key} -> ${value}\n`
+      }
       return response
     } else {
       return `there are no entries, or there isn't an active battle in this channel`
