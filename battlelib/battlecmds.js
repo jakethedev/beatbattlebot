@@ -52,6 +52,7 @@ exports.submit = function(input, msg) {
 
 exports.submissions = function(input, msg) {
   if (input.toLowerCase() == 'help') {
+    //TODO Update with 'here' param
     return `\`!submissions\` to print out all submissions for this channel's beat battle, if any exist`
   }
   if (msg.guild) {
@@ -62,7 +63,11 @@ exports.submissions = function(input, msg) {
       for (const [key, value] of Object.entries(submissionMapObj)) {
         response += `-- ${key} -> ${value}\n`
       }
-      return response
+      //  if (input && input.trim().toLowerCase() == 'here') {
+        return response
+      //  } else {
+        //TODO DM response to msg.member
+      //  }
     } else {
       return `there are no entries, or there isn't an active battle in this channel`
     }

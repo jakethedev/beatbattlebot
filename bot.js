@@ -22,7 +22,7 @@ loadAllOperations = function(libNames){
   return [ allOps, meta ]
 }
 // List of local directories to load, see anyofthem/index.js for the rest of this magic
-const MODULES = ['./battlelib', './musiclib', './syslib'] // './discordlib',
+const MODULES = ['./battlelib', './syslib'] // './discordlib', './musiclib',
 const [ commander, metadata ] = loadAllOperations(MODULES)
 
 // In case something happens, we'll want to see logs
@@ -66,7 +66,7 @@ client.on('message', msg => {
           console.log(`${execTime}: ERR: ${err}`)
         })
     } else if (cmd == 'help') {
-      let fullHelp = `here's everything i know:`
+      let fullHelp = `Here's the menu, type \`${botkey}help command\` for usage info:\n`
       // Each library is a string
       for (library in metadata){ // Already overloaded command, oops
         fullHelp += `\n**${metadata[library].helptext}**: \n` // Set in each lib's index.js, saved at :17
