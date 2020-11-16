@@ -1,0 +1,11 @@
+**BATTLE BOT USAGE**
+
+`!newbattle` starts a new battle in a specific channel, it currently requires an admin or someone with "Manage Channels" permissions to run it since it wipes that channel's previous battle if one existed - I'll upgrade this soon to take in a list of roles so admins can grant newbattle power to others
+
+`!submit https://link` works in a channel where newbattle was run, and it saves the most recent submission per person, so it's super easy to resub if someone makes a typo.
+
+Last but not least `!submissions` prints a table of entries like
+-- user -> https://link-to-submission
+in the channel it's called in, specifically in a way that doesn't create the preview thing for every single link. All the battles are keyed off the channel name, so a beat-battle and a yeet-battle won't conflict at all. I'm working on a quick way for this to send a DM by default so it doesn't clog up a channel, but may back-burner the idea if it's not a problem.
+
+One last note - the bot only works in a set of whitelisted channels that is just coded into the bot because i'm a lazy tryhard. So for now, it's set to only listen to channels named "bot", "botspam", "battles", "beat-challenge-submissions", "beat-battle", or "beat-battle-vc". This is really fast to change on my end, and it's less than 2 minutes from saving the change to having it auto upgrade itself, so I plan to make the channel list dynamic after it needs changed twice
