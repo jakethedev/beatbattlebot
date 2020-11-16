@@ -8,7 +8,10 @@ let closedBattles = []
 
 // Relies on discord permission scheme: https://discord.com/developers/docs/topics/permissions
 function _isPowerfulMember(msg){
-  return msg.member.permissions.any(['ADMINISTRATOR', 'MANAGE_CHANNELS'])
+  const isAdmin = msg.member.permissions.any(['ADMINISTRATOR', 'MANAGE_CHANNELS'])
+  //TODO: const hasBotRole = msg.member.roles.any()
+  return isAdmin // || hasBotRole
+    
 }
 
 exports.newbattle = function(input, msg) {
