@@ -49,8 +49,8 @@ client.on('message', msg => {
   if (activeChannels.includes(channelName) || msg.channel.recipient) {
     if (!msg.content.trim().startsWith(botkey) || msg.author.bot) return
     // Normalize input
-    let parts = msg.content.trim().toLowerCase().substring(1).split(/\s+/)
-    let cmd = parts[0]
+    let parts = msg.content.trim().substring(1).split(/\s+/)
+    let cmd = parts[0].toLowerCase()
     let input = parts[1] ? parts.slice(1).join(' ') : '' //Some cmds have no input, this lets us use if(input)
     let execTime = new Date(Date.now()).toLocaleString();
     // If we have the requested op, send it - otherwise, log it quietly
