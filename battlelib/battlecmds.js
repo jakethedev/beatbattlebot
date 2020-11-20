@@ -40,7 +40,7 @@ exports.submit = function(input, msg) {
   if (msg.guild) {
     let requestorName = msg.member.nickname
     if (!requestorName) {
-      requestorName = msg.member.user.name
+      requestorName = msg.member.user.username
     }
     let battleName = `${msg.guild.name}_${msg.channel.name}`
     const entry = input.split(' ')[0].trim()
