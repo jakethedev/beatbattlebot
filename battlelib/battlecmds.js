@@ -38,13 +38,14 @@ exports.submit = function(input, msg) {
     return `Usage: \`!submit https://link.to.your/beat\` to enter the battle in this channel (if a battle is active)` 
   }
   if (msg.guild) {
-    let requestorName = msg.member.user.username
+    let requestorName = msg.member.nickname
     let battleName = `${msg.guild.name}_${msg.channel.name}`
-    if (!input.includes('https')) {
-      return `this doesn't look like a valid link, make sure it's an *https* address then try again!`
+    const entry = input.split(' ')[0].trim()
+    if (!entry.includes('https')) {
+      return `the first word after submit doesn't look like a valid link, make sure it's an *https* address then try again!`
     }
-    debug(`${requestorName} has submitted ${input.trim()} for battle[${battleName}]`)
-    return bcache.addEntry(requestorName, input.trim(), battleName)
+    debug(`${requestorName} has submitted ${entry} for battle[${battleName}]`)
+    return bcache.addEntry(requestorName, entry, battleName)
   } else {
     return `this command needs to be run in a server`
   }
