@@ -39,6 +39,9 @@ exports.submit = function(input, msg) {
   }
   if (msg.guild) {
     let requestorName = msg.member.nickname
+    if (!requestorName) {
+      requestorName = msg.member.user.name
+    }
     let battleName = `${msg.guild.name}_${msg.channel.name}`
     const entry = input.split(' ')[0].trim()
     if (!entry.includes('https')) {
