@@ -63,10 +63,18 @@ exports.submissions = function(input, msg) {
     let battleName = `${msg.guild.name}_${msg.channel.name}`
     if (bcache.isBattleActive(battleName)){
       const submissionMapObj = bcache.getSubsFor(battleName)
-      let response = `here are the submissions for this channel's battle:\n`
-      // { user: link }
-      for (const [key, value] of Object.entries(submissionMapObj)) {
-        response += `-- ${key} -> <${value}>\n`
+      // First gnarly hack of the bot: battle entry lists break the 2000 character limit pretty easily, so 
+      // this is a cheap way to paginate the response, bot.js knows to msg.reply the first entry of an array
+      // and the rest are just sent to the channel the command was received in
+      let response = [`here are the submissions for this channel's battle:\n`]
+      let curIdx = 0
+      for (const [key, value] of Object.entries(submissionMapObj)) { // { key=user: value=link }
+        let miniBuffer = ` - ${key} -> <${value}>\n`
+        if (response[curIdx].length + miniBuffer.length >= 1600){
+          curIdx++
+          response[curIdx] = '' // *ding* typewriter sounds
+        }
+        response[curIdx] += miniBuffer
       }
       //  if (input && input.trim().toLowerCase() == 'here') {
         return response

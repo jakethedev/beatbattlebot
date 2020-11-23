@@ -3,6 +3,7 @@ const fs = require('fs')
 const { token, botkey, activeChannels, gameStatus } = JSON.parse(fs.readFileSync('config.json', 'utf-8'))
 const discord = require("discord.js")
 const client = new discord.Client()
+const debug = (msg) => console.log(`MAIN: ${msg}`)
 
 // Dynamically load all operations we care about into a single commander object
 loadAllOperations = function(libNames){
@@ -59,7 +60,16 @@ client.on('message', msg => {
       // Works for a string or a promise return. Sick. https://stackoverflow.com/a/27760489
       Promise.resolve( commander[cmd](input, msg, client) )
         .then(function(result) {
-          msg.reply(result)
+          // Quick workaround for massive responses
+          if (Array.isArray(result)) {
+            msg.reply(result[0])
+            result.shift()
+            for (const otherItem of result){
+              msg.channel.send(otherItem)
+            }
+          } else {
+            msg.reply(result)
+          }
         })
         .catch(function(err) {
           msg.reply(`your command met with a terrible fate and I nearly died. Have an admin check the logs plz`)
