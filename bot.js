@@ -76,7 +76,7 @@ client.on('message', msg => {
           console.log(`${execTime}: ERR: ${err}`)
         })
     } else if (cmd == 'help') {
-      let fullHelp = `Here's the menu, type \`${botkey}help command\` for usage info:\n`
+      let fullHelp = `Here's the commands, type \`${botkey}oneofthecommands help\` for more details:\n`
       // Each library is a string
       for (library in metadata){ // Already overloaded command, oops
         fullHelp += `\n**${metadata[library].helptext}**: \n` // Set in each lib's index.js, saved at :17
@@ -86,8 +86,7 @@ client.on('message', msg => {
             fullHelp += `${opName}\n`
         }
       }
-      fullHelp += `\nFor any command, run '${botkey}command help' for detailed use info. `
-      fullHelp += `If you notice something weird or broken, run **${botkey}feedback** for support info`
+      fullHelp += `\nIf you notice something weird or broken, run **${botkey}feedback** for support info`
       msg.channel.send(fullHelp)
     } else {
       console.log(`${execTime}: NOTICE: can't find ${cmd}(${input}) for ${msg.author.username}`)

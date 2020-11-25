@@ -16,7 +16,7 @@ function _isPowerfulMember(msg){
 
 exports.newbattle = function(input, msg) {
   if (input.toLowerCase() == 'help') {
-    return `Usage: \`!newbattle\` to start a new beat battle for this channel!`
+    return `Post \`!newbattle\` to start a new beat battle for this channel!`
   }
   if (msg.guild){
     if (_isPowerfulMember(msg)){
@@ -35,13 +35,10 @@ exports.newbattle = function(input, msg) {
 
 exports.submit = function(input, msg) {
   if (input.toLowerCase() == 'help') {
-    return `Usage: \`!submit https://link.to.your/beat\` to enter the battle in this channel (if a battle is active)` 
+    return `Post a new message that starts with \`!submit https://link.to.your/beat\` to enter the battle in this channel!` 
   }
   if (msg.guild) {
-    let requestorName = msg.member.nickname
-    if (!requestorName) {
-      requestorName = msg.member.user.username
-    }
+    let requestorName = msg.member.user.username
     let battleName = `${msg.guild.name}_${msg.channel.name}`
     const entry = input.split(' ')[0].trim()
     if (!entry.includes('https')) {
@@ -57,7 +54,7 @@ exports.submit = function(input, msg) {
 exports.submissions = function(input, msg) {
   if (input.toLowerCase() == 'help') {
     //TODO Update with 'here' param
-    return `\`!submissions\` to print out all submissions for this channel's beat battle, if any exist`
+    return `Post \`!submissions\` to see all submissions for this channel's beat battle, I'll DM you the list if it's a big one! \`!submissions here\` to override and print the list to this channel even if it's massive`
   }
   if (msg.guild) {
     let battleName = `${msg.guild.name}_${msg.channel.name}`
@@ -66,7 +63,7 @@ exports.submissions = function(input, msg) {
       // First gnarly hack of the bot: battle entry lists break the 2000 character limit pretty easily, so 
       // this is a cheap way to paginate the response, bot.js knows to msg.reply the first entry of an array
       // and the rest are just sent to the channel the command was received in
-      let response = [`here are the submissions for this channel's battle:\n`]
+      let response = [`here are the current submissions:\n`]
       let curIdx = 0
       for (const [key, value] of Object.entries(submissionMapObj)) { // { key=user: value=link }
         let miniBuffer = ` - ${key} -> <${value}>\n`
@@ -76,11 +73,20 @@ exports.submissions = function(input, msg) {
         }
         response[curIdx] += miniBuffer
       }
-      //  if (input && input.trim().toLowerCase() == 'here') {
+      response[curIdx+1] = "Be careful, there's a lot of heat in this list :fire:"
+      // If we've got a small battle or someone says "here", print to the channel
+      let largeBattle = Object.entries(submissionMapObj).length > 10
+      let printInChannel = !largeBattle || input.toLowerCase() == 'here'
+      if (printInChannel) {
         return response
-      //  } else {
-        //TODO DM response to msg.member
-      //  }
+      }
+      // At this point we have a big battle, reply via dm with a confirmation to channel
+      msg.author.send(response[0])
+      response.shift()
+      for (const otherItem of response){
+        msg.author.send(otherItem)
+      }
+      return `sent you the list!`
     } else {
       return `there are no entries, or there isn't an active battle in this channel`
     }
