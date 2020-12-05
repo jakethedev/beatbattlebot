@@ -1,6 +1,6 @@
 {
   "name": "beatbattlebot",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "Discord.js bot for organizing and handling beat battle submissions on music servers",
   "main": "bot.js",
   "scripts": {
@@ -29,7 +29,7 @@
   },
   "homepage": "https://github.com/jakethedev/beatbattlebot#readme",
   "dependencies": {
-    "discord.js": "^12.4.1",
+    "discord.js": "^11",
     "opusscript": "0.0.7"
   },
   "engines": {

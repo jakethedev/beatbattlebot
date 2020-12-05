@@ -6,7 +6,7 @@
  * for future reference if role operations are desired
  */
 
-exports.newrole = function(input, message, client) {
+let newrole = function(input, message, client) {
   if (input.toLowerCase() == 'help') return `'newrole new-role-name' will create a new role with the same permissions as the everybody role`
   if (!message.member) return `you don't even live here, stop messing with things (err: not a server member)`
   // if (message.member.permissions.includes 'icandothings'){
@@ -18,7 +18,7 @@ exports.newrole = function(input, message, client) {
 }
 
 //Given a rolename as input, add it to the requestor if it doesn't result in new privileges
-exports.giverole = function(input, message, client) {
+let giverole = function(input, message, client) {
   if (input.toLowerCase() == 'help') return `Usage: addrole/giverole 'the role name' will try to add the role to your user. Optionally, you can tag one person (after the role name) to attempt to give them the role`
   if (!input.trim()) return `you can't just add nothing as a role, that's not how any of this works!`
   let expectedRoleName = input.split('<')[0].toLowerCase().trim() //Expecting only one role, before any mentions
@@ -46,7 +46,7 @@ exports.giverole = function(input, message, client) {
 }
 
 // List roles on the server that the bot can assign
-exports.allroles = function(input, message, client) {
+let allroles = function(input, message, client) {
   if (input.toLowerCase() == 'help')
     return `'roles' will get you a list of the server roles that I can grant you`
   // If we're on a server, get them roles - reply intelligently in unhappy circumstances
@@ -67,7 +67,7 @@ exports.allroles = function(input, message, client) {
 }
 
 //List the requestor's roles
-exports.myroles = function(input, message, client) {
+let myroles = function(input, message, client) {
   if (input.toLowerCase() == 'help') return `'myroles' will list all roles you have here`
   if (message.guild) {
     const userRolesRaw = message.member.roles
@@ -85,7 +85,7 @@ exports.myroles = function(input, message, client) {
 }
 
 //Self-remove a role, after verifying that the author is a member (role-bearer)
-exports.unrole = function(input, message, client) {
+let unrole = function(input, message, client) {
   if (!input || input.toLowerCase() == 'help') return `'unrole rolename' will rolename from your roles if you have it`
   if (message.guild) {
     let userRoles = message.member.roles
@@ -103,7 +103,7 @@ exports.unrole = function(input, message, client) {
 }
 
 //Number of people in a given role
-exports.rolesize = function(input = '', message, client) {
+let rolesize = function(input = '', message, client) {
   if (!input) return `give me a role and I'll give you an answer`
   if (input.toLowerCase() == 'help') return `'rolesize role-name' prints the size of a role - this might go away soon though`
   if (message.guild) {
@@ -120,7 +120,7 @@ exports.rolesize = function(input = '', message, client) {
 }
 
 //List people in a given role
-exports.rolemembers = function(input = '', message, client) {
+let rolemembers = function(input = '', message, client) {
   if (!input) return `give me a role and I'll give you an answer`
   if (input.toLowerCase() == 'help') return `'rolemembers role-name' definitely doesn't list the members of a role`
   if (message.guild) {
