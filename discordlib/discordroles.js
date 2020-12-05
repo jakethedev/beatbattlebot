@@ -120,7 +120,7 @@ let rolesize = function(input = '', message, client) {
 }
 
 //List people in a given role
-let rolemembers = function(input = '', message, client) {
+exports.rolemembers = function(input = '', message, client) {
   if (!input) return `give me a role and I'll give you an answer`
   if (input.toLowerCase() == 'help') return `'rolemembers role-name' definitely doesn't list the members of a role`
   if (message.guild) {
