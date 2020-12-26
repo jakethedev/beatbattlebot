@@ -26,7 +26,7 @@ let runexchange = function(input, message, client) {
       let [santa, goblin] = [names[i], shuffledNames[i]]
       console.log(`${santa} is gifting samples to `)
       let safeZipName = goblin.split(' ').join('').split('.').join('').split('_').join('') + ".zip"
-      let messageToSend = `Your Sample Goblin is **${goblin}**!\n\nSENDING YOUR SAMPLES: \nWhen you finish your pack of 10+ quality samples, PLEASE NAME IT **'${safeZipName}'**. Upload it to google drive or dropbox, and send the link to **samplegoblin@gmail.com** - santos and jake run it, and will use that address to send samples anonymously to each goblin. \n\nFYI: ${goblin} won't get your pack until they send theirs in, because that's how we're getting emails :)`
+      let messageToSend = `Your Sample Goblin is **${goblin}**!\n\nSENDING YOUR SAMPLES: \nWhen you finish your pack of 10+ quality samples, PLEASE NAME IT **'${safeZipName}'**. Upload it to google drive or dropbox, and ask an admin for an email address to send to - the admins will use that address to send samples anonymously to each goblin. \n\nFYI: ${goblin} won't get your pack until they send theirs in, because that's how we're getting emails :)`
       if (input == 'letsgo') {
         debug(`DMing ${santa} that they have ${goblin}...`) 
         new User(client, {id: participants[santa]}).send(messageToSend)
