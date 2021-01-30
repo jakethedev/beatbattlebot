@@ -1,6 +1,7 @@
 // Core bot setup
 const fs = require('fs')
-const { token, botkey, activeChannels, gameStatus } = JSON.parse(fs.readFileSync('config.json', 'utf-8'))
+const { botkey, activeChannels, gameStatus } = JSON.parse(fs.readFileSync('config.json', 'utf-8'))
+const { token } = JSON.parse(fs.readFileSync('.token.json', 'utf-8'))
 const discord = require("discord.js")
 const client = new discord.Client()
 const debug = (msg) => console.log(`MAIN: ${msg}`)

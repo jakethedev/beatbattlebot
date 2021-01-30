@@ -9,9 +9,9 @@ See the section at the bottom of this doc for current commands
 
 ## Development
 
-Install Node.js 12+, fork this project, npm install, set up an app token (as above), add the token to config.json in the project root, then invite the bot to a server for testing
+Install Node.js 12+, fork this project, npm install, set up an app token (as above), add the token to a NEW file at `.token.json` in the project root, then invite the bot to a server for testing.
 
-'npm run devbot' will set you up with a hot-reloading bot instance, and 'npm test' should run quietly with no issues if everything's set up correctly. 'npm run verbosetest' will show you the npm test output, which should look like Discord-formatted responses.
+'npm start' will run the bot in the foreground, 'npm run devbot' will run a hot-reloading bot instance, and 'npm test' should run quietly with no issues if everything's set up correctly. 'npm run verbosetest' will show you the npm test output, which should look like Discord-formatted responses.
 
 ### Expectations and how it loads
 
@@ -21,7 +21,7 @@ The bot is set up to load a list of local libs, grab every exported function, an
 
 If you just want to just *add a relevant command* to a library, you only need *step 4*. But if you have commands to add that don't seem to fit with the theme of functions in a particular file, follow all of these steps to add a new library folder to the bot:
 
-1. Make a new directory
+1. Find an appropriate place to put your command - if one exists, skip to step 4, otherwise make a new directory
 2. Add your new directory to the MODULES array in bot.js
 3. Copy index.js from discordlib or gravemind into your new lib as a handy piece of boilerplate
 4. Write exported functions in your library (Note: The bot ignores the default export!)
@@ -42,11 +42,27 @@ An issue with the bot, while testing new commands, is that you have to be very a
 
 ## Current commands:
 
-......
+Run the bot and type `!help` for a full list
 
 ## Upcoming commands: 
 
-- !submit link: submit a link to the current beat battle using your discord nick, saves to json for safety
-- !submissions: get a DM of the CSV of submissions
-- !submissions here: print the CSV of submissions in the current channel
-- !newbattle: reset the current submission list by mv'ing to a .bak file
+!getballot: CHANNEL ONLY: if voting is open, sends asker a numbered list of submissions  
+!vote X [Y Z]: DM ONLY: if !getballot has been run for a battle, this places your vote for number X [and Y and Z if any are set]
+
+Following are all MOD-ONLY:
+!closebattle: sets all deadlines to the moment command was run
+!closesubs [X]: set submission deadline to now [optionally: plus interval X, see `!closesubs help` for details]
+!closevotes [X]: set vote deadline to now [optionally: plus interval X, see `!closevotes help` for details]
+!results [X=10]: if votes have been cast, return top X beats of the battle numbered by rank (internal max of half the entries)
+
+## Probably upcoming commands:
+
+!votemax: Number of entries that can be voted for in a battle
+!deadlines: Output the deadlines, if any
+!setdeadline: a mod-only command to set a battle deadline, at which point submissions won't be accepted
+!votedeadline: a mod-only command to set a voting deadline
+
+## Mindmap of ideas that are off the roadmap
+
+!battle: quick battle summary view, entry number and deadlines, "state" of battle?
+!battlename $name: mod-only to set a battle name, should be an option at !newbattle too?

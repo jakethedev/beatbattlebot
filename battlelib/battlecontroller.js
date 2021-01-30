@@ -1,5 +1,5 @@
 const { Message } = require('discord.js')
-const bcache = require('./battlecache')
+const bcache = require('./battlecachedao')
 
 let debug = msg => console.log(`battlecmds: ${msg}`)
 
@@ -11,7 +11,6 @@ function _isPowerfulMember(msg){
   const isAdmin = msg.member.permissions.any(['ADMINISTRATOR', 'MANAGE_CHANNELS'])
   //TODO: const hasBotRole = msg.member.roles.any()
   return isAdmin // || hasBotRole
-    
 }
 
 exports.newbattle = function(input, msg) {
