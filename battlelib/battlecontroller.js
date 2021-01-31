@@ -1,10 +1,8 @@
 const { Message } = require('discord.js')
-const bcache = require('./battlecachedao')
+const battledao = require('./battlecachedao')
+const NOT_ALLOWED_MSG = "this is a mod-only command"
 
 let debug = msg => console.log(`battlecmds: ${msg}`)
-
-//TODO Persist this similar to battleCache?
-let closedBattles = []
 
 // Relies on discord permission scheme: https://discord.com/developers/docs/topics/permissions
 function _isPowerfulMember(msg){
@@ -20,10 +18,10 @@ exports.newbattle = function(input, msg) {
   if (msg.guild){
     if (_isPowerfulMember(msg)){
       let battleName = `${msg.guild.name}_${msg.channel.name}`
-      if (bcache.isBattleActive(battleName) && input !== 'letsgo') {
+      if (battledao.isBattleActive(battleName) && input !== 'letsgo') {
         return `heads up, this resets the current battle. Are you ready for a new round? \`!newbattle letsgo\` to confirm!`
       }
-      return bcache.resetCache(battleName)
+      return battledao.resetCache(battleName)
     } else {
       return `you have no power here - consult a mod :slight_smile:`
     }
@@ -44,7 +42,7 @@ exports.submit = function(input, msg) {
       return `the first word after submit doesn't look like a valid link, make sure it's an *https* address then try again!`
     }
     debug(`${requestorName} has submitted ${entry} for battle[${battleName}]`)
-    return bcache.addEntry(requestorName, entry, battleName)
+    return battledao.addEntry(requestorName, entry, battleName)
   } else {
     return `this command needs to be run in a server`
   }
@@ -57,8 +55,8 @@ exports.submissions = function(input, msg) {
   }
   if (msg.guild) {
     let battleName = `${msg.guild.name}_${msg.channel.name}`
-    if (bcache.isBattleActive(battleName)){
-      const submissionMapObj = bcache.getSubsFor(battleName)
+    if (battledao.isBattleActive(battleName)){
+      const submissionMapObj = battledao.getSubsFor(battleName)
       // First gnarly hack of the bot: battle entry lists break the 2000 character limit pretty easily, so 
       // this is a cheap way to paginate the response, bot.js knows to msg.reply the first entry of an array
       // and the rest are just sent to the channel the command was received in
@@ -94,10 +92,9 @@ exports.submissions = function(input, msg) {
   }
 }
 
-/*
-exports.stopsubs = function(input, msg){
+exports.deadlines = function(input, msg){
   if (input.toLowerCase() == 'help') {
-    return `Usage: TODO usage info`
+    return `Usage: #TODO usage info`
   }
   if (msg.guild) {
     if (_isPowerfulMember(msg)){
@@ -110,12 +107,42 @@ exports.stopsubs = function(input, msg){
     return `this command needs to be run in a server`
   }
 }
-*/
 
-/*
-exports.battlevote = function(input, msg){
+exports.stopsubs = function(input, msg){
   if (input.toLowerCase() == 'help') {
-    return `Usage: TODO usage info`
+    return `Usage: #TODO usage info`
+  }
+  if (msg.guild) {
+    if (_isPowerfulMember(msg)){
+      let battleName = `${msg.guild.name}_${msg.channel.name}`
+      return bcache.getCacheForBattle(battleName)
+    } else {
+      return `you have no power here - consult a mod :slight_smile:`
+    }
+  } else {
+    return `this command needs to be run in a server`
+  }
+}
+
+exports.stopvotes = function(input, msg){
+  if (input.toLowerCase() == 'help') {
+    return `Usage: #TODO usage info`
+  }
+  if (msg.guild) {
+    if (_isPowerfulMember(msg)){
+      let battleName = `${msg.guild.name}_${msg.channel.name}`
+      return bcache.getCacheForBattle(battleName)
+    } else {
+      return `you have no power here - consult a mod :slight_smile:`
+    }
+  } else {
+    return `this command needs to be run in a server`
+  }
+}
+
+exports.getballot = function(input, msg){
+  if (input.toLowerCase() == 'help') {
+    return `Usage: #TODO usage info`
   }
   if (msg.guild) {
     let battleName = `${msg.guild.name}_${msg.channel.name}`
@@ -129,4 +156,37 @@ exports.battlevote = function(input, msg){
     return `this command needs to be run in a server`
   }
 }
-*/
+
+exports.vote = function(input, msg){
+  if (input.toLowerCase() == 'help') {
+    return `Usage: #TODO usage info`
+  }
+  if (msg.guild) {
+    let battleName = `${msg.guild.name}_${msg.channel.name}`
+    const submissionMap = bcache.getRawEntryMapForBattle(battleName)
+    let response = `here are the submissions for this channel's battle:\n`
+    submissionMap.forEach((v,k) => {
+      response += `-- ${k} -> ${v}\n`
+    })
+    return `here's a form with all entrants and emojis to vote on them with`
+  } else {
+    return `this command needs to be run in a server`
+  }
+}
+
+exports.results = function(input, msg){
+  if (input.toLowerCase() == 'help') {
+    return `Usage: #TODO usage info`
+  }
+  if (msg.guild) {
+    let battleName = `${msg.guild.name}_${msg.channel.name}`
+    const submissionMap = bcache.getRawEntryMapForBattle(battleName)
+    let response = `here are the submissions for this channel's battle:\n`
+    submissionMap.forEach((v,k) => {
+      response += `-- ${k} -> ${v}\n`
+    })
+    return `here's a form with all entrants and emojis to vote on them with`
+  } else {
+    return `this command needs to be run in a server`
+  }
+}

@@ -78,3 +78,18 @@ exports.isBattleActive = function(battleName){
   debug(`checking progress for ${battleName}`)
   return _isBattleInProgress(battleName)
 }
+
+/*
+#TODO batledata restructure (see #22 for new direction)
+#TODO BattleTestData.json
+#TODO areSubsOpen()
+#TODO areVotesOpen()
+#TODO _deregisterVoter(user)
+#TODO registerVoter(user,battleName)
+#TODO setSubDeadline(battleName, timestamp)
+#TODO setVotingDeadline(battleName, timestamp)
+#TODO voteAndDeregister(user,entries)
+#TODO getResults(battleName) // should this have an option to end the battle early?
+#TODO sendBallotToUserForBattle(user, battleName)
+#TODO UPGRADE: resetCache() to deregister all voters for battle
+*/
