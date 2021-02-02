@@ -3,6 +3,14 @@
   "releasenotes": "First version of a handy beat battle organizer",
   "issuelink": "https://github.com/jakethedev/beatbattlebot/issues",
   "botkey": "!",
-  "activeChannels": ["bot", "botspam", "battles", "beat-challenge-submissions", "beat-battle", "beat-battle-vc"],
-  "gameStatus": "battlebot | !help for info"
+  "activeChannels": [
+    "bot", 
+    "botspam",
+    "🤖-bot-spam", 
+    "battles", 
+    "beat-challenge-submissions", 
+    "beat-battle", 
+    "beat-battle-vc"
+  ],
+  "gameStatus": "beat battles | !help for cmds"
 }
