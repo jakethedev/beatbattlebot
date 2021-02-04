@@ -14,7 +14,7 @@ try {
 // Simple persistence layer
 function _saveBattleState(){
   try {
-    fs.writeFileSync(_cacheFile, JSON.stringify(battleMap))
+    fs.writeFileSync(_cacheFile, JSON.stringify(battleMap, null, 2))
   } catch(error) {
     debug(`error saving cache: ${error}`)
   }
