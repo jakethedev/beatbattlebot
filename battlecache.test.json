@@ -1,0 +1,59 @@
+{
+  "SERVER_CHANNEL1": {
+    "entries": {
+      "id1": {
+        "link": "https://adams-entry",
+        "ts": "2021-02-01T00:07:25.805Z",
+        "displayname": "adam"
+      }, 
+      "id2": {
+        "link": "https://b-entry",
+        "ts": "2021-02-02T00:07:25.805Z",
+        "displayname": "id2"
+      },
+      "id3": {
+        "link": "https://c-entry",
+        "ts": "2021-02-03T00:07:25.805Z",
+        "displayname": "charlie"
+      }, 
+      "id4": {
+        "link": "https://d-entry",
+        "ts": "2021-02-04T00:07:25.805Z",
+        "displayname": "id4"
+      }, 
+      "id5": {
+        "link": "https://eve-entry",
+        "ts": "2021-02-05T00:07:25.805Z",
+        "displayname": "eve"
+      }, 
+      "id6": {
+        "link": "https://f-entry",
+        "ts": "2021-02-06T00:07:25.805Z",
+        "displayname": "id6"
+      }, 
+      "id7": {
+        "link": "https://grant-entry",
+        "ts": "2021-02-07T00:07:25.805Z",
+        "displayname": "grant"
+      }
+    },
+    "votes": {
+      "id1": [1, 2, 3],
+      "id2": [2, 3],
+      "id3": [1, 2],
+      "id4": [1, 2]
+    }
+  },
+  "DIFFSERVER_CHANNEL":{
+    "entries":{},
+    "votes": {},
+    "subdeadline": "2020-02-25",
+    "votedeadline": "2020-02-28"
+  },
+  "votereg": {
+    "id1": "SERVER_CHANNEL1",
+    "id2": "DIFFSERVER_CHANNEL",
+    "id5": "SERVER_CHANNEL1",
+    "id6": "DIFFSERVER_CHANNEL"
+  }
+}

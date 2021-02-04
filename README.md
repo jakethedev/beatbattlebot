@@ -17,6 +17,8 @@ Install Node.js 12+, fork this project, npm install, set up an app token (as abo
 
 'npm start' will run the bot in the foreground, 'npm run devbot' will run a hot-reloading bot instance, and 'npm test' should run quietly with no issues if everything's set up correctly. 'npm run verbosetest' will show you the npm test output, which should look like Discord-formatted responses.
 
+Note: battlecache.test.json may be helpful for testing, just rename SERVER_CHANNEL1 and DIFFSERVER_CHANNEL to names appropriate for your server (e.g. "$servername\_$botchannelname", this should change to ID though)
+
 ### Expectations and how it loads
 
 The bot is set up to load a list of local libs, grab every exported function, and drop the functions + a bit of metadata into a global commander object. That said, this means it calls all functions exactly the same way - and if you need more parameters for some reason, perhaps we should chat. For your new commands to drop in and immediately work, they must have the following signature: `f(input:String, message:discord.js#message, client:discord.js#client)` - input will be everything after your commands name in the message to the bot (like '!commandname input is all this stuff'), the message will be the full message object [per the Discord.js api](https://discord.js.org/#/docs/main/stable/class/Message), and the client is [from Discord.js too](https://discord.js.org/#/docs/main/stable/class/Client).
