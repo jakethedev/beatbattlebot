@@ -17,7 +17,7 @@ Install Node.js 12+, fork this project, npm install, set up an app token (as abo
 
 'npm start' will run the bot in the foreground, 'npm run devbot' will run a hot-reloading bot instance, and 'npm test' should run quietly with no issues if everything's set up correctly. 'npm run verbosetest' will show you the npm test output, which should look like Discord-formatted responses.
 
-Note: battlecache.test.json may be helpful for testing, just rename SERVER_CHANNEL1 and DIFFSERVER_CHANNEL to names appropriate for your server (e.g. "$servername\_$botchannelname", this should change to ID though)
+Note: battlecache.test.json may be helpful for testing, just `cp` it to battlecache.json, rename SERVER_CHANNEL1 and DIFFSERVER_CHANNEL to names appropriate for your server (e.g. "$servername\_$botchannelname", this should change to ID though: #23)
 
 ### Expectations and how it loads
 
