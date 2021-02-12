@@ -1,5 +1,6 @@
 // See readme for more info, you can return raw data or a promise and the bot will reply
 //    with either the data or the resolution of the promise
+const discordutil = require('../../util/discord')
 
 /**
  * NOTICE: This is currently unused, just keeping it here

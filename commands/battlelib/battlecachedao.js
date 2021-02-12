@@ -1,9 +1,13 @@
+const MSG_INACTIVE_BATTLE = `there is no active battle in this channel, consult a mod if this is unexpected`
+
+
 const fs = require('fs')
 const _cacheFile = 'battlecache.json'
-let debug = msg => console.log(`bcache: ${msg}`)
+const debug = msg => console.log(`bcache: ${msg}`)
+
+let battleMap = {}
 
 // Load old cache on init
-let battleMap = {}
 try {
   battleMap = JSON.parse(fs.readFileSync(_cacheFile))
 } catch (error) {
@@ -23,7 +27,7 @@ function _saveBattleState(){
 // Just for readability below
 function _battleSize(battleName){
   if (battleMap[battleName])
-    return Object.keys(battleMap[battleName]).length
+    return Object.keys(battleMap[battleName].entries).length
   return 0
 }
 
@@ -36,12 +40,17 @@ function _isBattleInProgress(battleName){
   return battleHasEntries
 }
 
-exports.addEntry = function(username, link, battleName){
+exports.addEntry = function(entrantId, entrantName, link, battleName){
+  //TODO Swap username with discord user id except displayname
   if (!battleMap[battleName]){
     return `there is no active battle for this channel`
   }
-  let entryExisted = !!battleMap[battleName][username] // For smarter output
-  battleMap[battleName][username] = link;
+  let entryExisted = !!battleMap[battleName].entries[entrantId] // For smarter output
+  battleMap[battleName].entries[entrantId] = {
+    'ts': new Date(),
+    'link': link,
+    'displayname': entrantName
+  };
   _saveBattleState()
   let numEntries = _battleSize(battleName)
   if (entryExisted){
@@ -54,7 +63,8 @@ exports.addEntry = function(username, link, battleName){
 exports.resetCache = function(battleName){
   //TODO mv disk cache to cache.backup
   let battleExisted = _isBattleInProgress(battleName)
-  battleMap[battleName] = {}
+  // Super simple template
+  battleMap[battleName] = { 'entries': {}, 'votes': {}, 'subdeadline': false, 'votedeadline': false }
   _saveBattleState()
   if (!battleExisted) {
     return `looks like the first battle in this channel, lets goooo!`
@@ -63,12 +73,11 @@ exports.resetCache = function(battleName){
   }
 }
 
-exports.getSubsFor = function(battleName){
+exports.getEntriesFor = function(battleName){
   if (!battleMap[battleName]){
-    debug(`get: new subcache for ${battleName}`)
-    battleMap[battleName] = {}
+    return `there's no active battle in this channel, ask a mod if there should be one`
   } 
-  return battleMap[battleName]
+  return battleMap[battleName].entries
 }
 
 // Trick for using this function locally and as export
@@ -81,7 +90,7 @@ exports.isBattleActive = function(battleName){
 
 /*
 #TODO batledata restructure (see #22 for new direction)
-#TODO BattleTestData.json
+#TODO 100% test coverage on dao
 #TODO areSubsOpen()
 #TODO areVotesOpen()
 #TODO _deregisterVoter(user)
@@ -92,4 +101,6 @@ exports.isBattleActive = function(battleName){
 #TODO getResults(battleName) // should this have an option to end the battle early?
 #TODO sendBallotToUserForBattle(user, battleName)
 #TODO UPGRADE: resetCache() to deregister all voters for battle
+
+#done BattleTestData.json
 */
