@@ -8,7 +8,7 @@ class Container {
         this.services = {};
     }
 
-    service(name, cb){
+    register(name, cb){
         Object.defineProperty(this, name, {
             get: () => {
                 if(!this.services.hasOwnProperty(name)){

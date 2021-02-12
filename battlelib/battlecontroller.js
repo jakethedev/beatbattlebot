@@ -4,13 +4,6 @@ const NOT_ALLOWED_MSG = "this is a mod-only command"
 
 let debug = msg => console.log(`battlecmds: ${msg}`)
 
-// Relies on discord permission scheme: https://discord.com/developers/docs/topics/permissions
-function _isPowerfulMember(msg){
-  const isAdmin = msg.member.permissions.any(['ADMINISTRATOR', 'MANAGE_CHANNELS'])
-  //TODO: const hasBotRole = msg.member.roles.any()
-  return isAdmin // || hasBotRole
-}
-
 exports.newbattle = function(input, msg) {
   if (input.toLowerCase() == 'help') {
     return `Post \`!newbattle\` to start a new beat battle for this channel!`
