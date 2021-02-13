@@ -1,24 +1,38 @@
-# TODO List
+# todolist
 
-## Upcoming commands: 
+### See the issues page for actual tasks, this is a notepad for active work
 
-!getballot: CHANNEL ONLY: if voting is open, sends asker a numbered list of submissions  
-!vote X [Y Z]: DM ONLY: if !getballot has been run for a battle, this places your vote for number X [and Y and Z if any are set]
+TODO battlecachedao
+- 100% test coverage
+- areSubsOpen()
+- areVotesOpen()
+- _deregisterVoter(user)
+- registerVoter(user,battleName)
+- setSubDeadline(battleName, timestamp)
+- setVotingDeadline(battleName, timestamp)
+- voteAndDeregister(user,entries)
+- getResults(battleName) // should this have an option to end the battle early?
+- sendBallotToUserForBattle(user, battleName)
+- resetCache() to deregister all voters for battle
 
-Following are all MOD-ONLY:
-!closebattle: sets all deadlines to the moment command was run
-!closesubs [X]: set submission deadline to now [optionally: plus interval X, see `!closesubs help` for details]
-!closevotes [X]: set vote deadline to now [optionally: plus interval X, see `!closevotes help` for details]
-!results [X=10]: if votes have been cast, return top X beats of the battle numbered by rank (internal max of half the entries)
+TODO before voting
+- date formatter code in util/datefmt (pull in day.js?) #34
+- format funcs: 
+    shortRemaining(date)
+    fullTimestamp(date) // 5 Jan, 2pm PST
+    default to PST, here's the note to mark a case for timezone settings per server 
 
-## Probably upcoming commands:
+TODO battlecontroller
+- deal with any changes from dao
+- stopsubs command #13
+- stopvotes command #19
+- deadlines cmd #18
+- getballot #20
+- results #8
+- vote #5
+- add sub count to submissions output #16
+- switch battleName's to channel.id #25
 
-!votemax: Number of entries that can be voted for in a battle
-!deadlines: Output the deadlines, if any
-!setdeadline: a mod-only command to set a battle deadline, at which point submissions won't be accepted
-!votedeadline: a mod-only command to set a voting deadline
-
-## Mindmap of ideas that are off the roadmap
-
-!battle: quick battle summary view, entry number and deadlines, "state" of battle?
-!battlename $name: mod-only to set a battle name, should be an option at !newbattle too?
+DONE
+- batledata restructure (see #22 for new direction)
+- BattleTestData.json

@@ -4,45 +4,94 @@
       "id1": {
         "link": "https://adams-entry",
         "ts": "2021-02-01T00:07:25.805Z",
-        "displayname": "adam"
-      }, 
+        "displayname": "armasendon"
+      },
       "id2": {
         "link": "https://b-entry",
         "ts": "2021-02-02T00:07:25.805Z",
         "displayname": "id2"
       },
       "id3": {
-        "link": "https://c-entry",
+        "link": "https://cyprus-entry",
         "ts": "2021-02-03T00:07:25.805Z",
-        "displayname": "charlie"
-      }, 
+        "displayname": "cyprus"
+      },
       "id4": {
         "link": "https://d-entry",
         "ts": "2021-02-04T00:07:25.805Z",
         "displayname": "id4"
-      }, 
+      },
       "id5": {
-        "link": "https://eve-entry",
+        "link": "https://etsytypebeat-entry",
         "ts": "2021-02-05T00:07:25.805Z",
-        "displayname": "eve"
-      }, 
+        "displayname": "etsytypebeats"
+      },
       "id6": {
         "link": "https://f-entry",
         "ts": "2021-02-06T00:07:25.805Z",
         "displayname": "id6"
-      }, 
+      },
       "id7": {
-        "link": "https://grant-entry",
+        "link": "https://goodestguystevest-entry",
         "ts": "2021-02-07T00:07:25.805Z",
-        "displayname": "grant"
+        "displayname": "goodguysteve"
+      },
+      "id8": {
+        "link": "https://h-entry",
+        "ts": "2021-02-08T00:07:25.805Z",
+        "displayname": "id8"
+      },
+      "id9": {
+        "link": "https://icarus-entry/butitscrazylongfortestpurposes",
+        "ts": "2021-02-09T00:07:25.805Z",
+        "displayname": "icarus"
+      },
+      "idA": {
+        "link": "https://j-entry",
+        "ts": "2021-02-10T00:07:25.805Z",
+        "displayname": "idA"
+      },
+      "idB": {
+        "link": "https://k-entry/characterpaddingyoooo",
+        "ts": "2021-02-11T00:07:25.805Z",
+        "displayname": "karmaafterya"
+      },
+      "idC": {
+        "link": "https://l-entry",
+        "ts": "2021-02-12T00:07:25.805Z",
+        "displayname": "idC"
+      },
+      "114914119487979527": {
+        "ts": "2021-02-12T23:13:11.295Z",
+        "link": "https://nickupdateyet",
+        "displayname": "jake"
       }
     },
     "votes": {
-      "id1": [1, 2, 3],
-      "id2": [2, 3],
-      "id3": [1, 2],
-      "id4": [1, 2]
-    }
+      "id1": [
+        1,
+        2,
+        3
+      ],
+      "id2": [
+        2,
+        3
+      ],
+      "id3": [
+        1,
+        2
+      ],
+      "id4": [
+        1,
+        2
+      ],
+      "id5": [ 4 ],
+      "id6": [ 4 ],
+      "id7": [ 4 ],
+      "idA": [ 4 ]
+    },
+    "subdeadline": false,
+    "votedeadline": false
   },
   "DIFFSERVER_CHANNEL":{
     "entries":{},
