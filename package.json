@@ -29,7 +29,7 @@
   },
   "homepage": "https://github.com/jakethedev/beatbattlebot#readme",
   "dependencies": {
-    "discord.js": "^11",
+    "discord.js": "^12",
     "opusscript": "0.0.7"
   },
   "engines": {
