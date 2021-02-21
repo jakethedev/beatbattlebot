@@ -61,7 +61,7 @@ exports.submissions = function(input, msg) {
       // and the rest are just sent to the channel the command was received in
       let response = [`here are the current submissions:\n`]
       let curIdx = 0
-      // TODO dao should unpack this somehow
+      // TODO move to subroutine or dao, perhaps discordutil.prepareLargeRespone?
       for (const [id, entry] of Object.entries(submissionMapObj)) { // { key=user: value=link }
         const { link, displayname } = entry
         let miniBuffer = ` - ${displayname} -> <${link}>\n`
@@ -85,7 +85,7 @@ exports.submissions = function(input, msg) {
       for (const otherItem of response){
         msg.author.send(otherItem)
       }
-      return `sent you the list!`
+      return discordutil.SUCCESS
     } else {
       return MSG_BATTLE_INACTIVE
     }
@@ -100,8 +100,6 @@ exports.deadlines = function(input, msg){
   }
   if (msg.guild) {
     if (discordutil.isPowerfulMember(msg)){
-      let battleName = `${msg.guild.name}_${msg.channel.name}`
-      //return bcache.getCacheForBattle(battleName)
       return `not implemented yet`
     } else {
       return MSG_MOD_ONLY
@@ -117,7 +115,6 @@ exports.stopsubs = function(input, msg){
   }
   if (msg.guild) {
     if (discordutil.isPowerfulMember(msg)){
-      let battleName = `${msg.guild.name}_${msg.channel.name}`
       return `not implemented yet`
     } else {
       return MSG_MOD_ONLY
@@ -133,7 +130,6 @@ exports.stopvotes = function(input, msg){
   }
   if (msg.guild) {
     if (discordutil.isPowerfulMember(msg)){
-      let battleName = `${msg.guild.name}_${msg.channel.name}`
       return `not implemented yet`
     } else {
       return MSG_MOD_ONLY
@@ -148,12 +144,6 @@ exports.getballot = function(input, msg){
     return `Usage: #TODO usage info`
   }
   if (msg.guild) {
-    let battleName = `${msg.guild.name}_${msg.channel.name}`
-    const submissionMap = bcache.getRawEntryMapForBattle(battleName)
-    let response = `here are the submissions for this channel's battle:\n`
-    submissionMap.forEach((v,k) => {
-      response += `-- ${k} -> ${v}\n`
-    })
     return `not implemented yet`
   } else {
     return MSG_SERVER_ONLY
@@ -165,12 +155,6 @@ exports.vote = function(input, msg){
     return `Usage: #TODO usage info`
   }
   if (msg.guild) {
-    let battleName = `${msg.guild.name}_${msg.channel.name}`
-    const submissionMap = bcache.getRawEntryMapForBattle(battleName)
-    let response = `here are the submissions for this channel's battle:\n`
-    submissionMap.forEach((v,k) => {
-      response += `-- ${k} -> ${v}\n`
-    })
     return `not implemented yet`
   } else {
     return MSG_SERVER_ONLY

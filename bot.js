@@ -6,6 +6,7 @@ const { botkey, activeChannels, gameStatus } = JSON.parse(fs.readFileSync('confi
 const { token } = JSON.parse(fs.readFileSync('.token.json', 'utf-8'))
 // Instantiating the manifold
 const discord = require('discord.js')
+const discordutil = require('./util/discord')
 const client = new discord.Client()
 const { ops, meta } = require('./commands')
 
@@ -44,7 +45,9 @@ client.on('message', msg => {
       Promise.resolve( ops[cmd](input, msg, client) )
         .then(function(result) {
           // Quick workaround for massive responses
-          if (Array.isArray(result)) {
+          if (discordutil.reactionnames.includes(result)) {
+            msg.react(discordutil.emojifromname(result))
+          } else if (Array.isArray(result)) {
             msg.reply(result[0])
             result.shift()
             for (const otherItem of result){
