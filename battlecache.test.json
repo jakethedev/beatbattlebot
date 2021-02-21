@@ -1,5 +1,5 @@
 {
-  "SERVER_CHANNEL1": {
+  "BATTLEONE": {
     "entries": {
       "id1": {
         "link": "https://adams-entry/fillertextforlongerresponsesyaaaaay",
@@ -93,16 +93,16 @@
     "subdeadline": false,
     "votedeadline": false
   },
-  "DIFFSERVER_CHANNEL":{
+  "BATTLETWO":{
     "entries":{},
     "votes": {},
     "subdeadline": "2020-02-25",
     "votedeadline": "2020-02-28"
   },
   "votereg": {
-    "id1": "SERVER_CHANNEL1",
-    "id2": "DIFFSERVER_CHANNEL",
-    "id5": "SERVER_CHANNEL1",
-    "id6": "DIFFSERVER_CHANNEL"
+    "id1": "BATTLEONE",
+    "id2": "BATTLETWO",
+    "id5": "BATTLEONE",
+    "id6": "BATTLETWO"
   }
 }
