@@ -5,8 +5,14 @@ exports.isPowerfulMember = function(discordJsMsg){
   return isAdmin // || hasBotRole
 }
 
+exports.getRoleFromMessageGuild = function(roleinput, message){
+  rolesearch = roleinput.trim().toLowerCase()
+  return message.guild.roles.cache.find(role => role.name.toLowerCase() === rolesearch)
+}
+
 // A means of interactive response that allows more complex/longform commands to run
 const reactionmap = {
+  'loading': '⏳',
   'success': '☑',
   'failure': '❌',
   'play': '▶',
