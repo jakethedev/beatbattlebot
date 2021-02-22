@@ -33,7 +33,7 @@ exports.submit = function(input, msg) {
   }
   if (msg.guild) {
     let entrantId = msg.member.id
-    //TODO Figure out why this doesn't seem to update on nick change? link 
+    // Note: nickname changes take time to propagate, so nickchange -> submit can result in the old nick saving instead
     let entrantName = msg.member.nickname || msg.member.user.username
     let battleName = `${msg.guild.name}_${msg.channel.name}`
     const link = input.split(' ')[0].trim()
@@ -49,8 +49,7 @@ exports.submit = function(input, msg) {
 
 exports.submissions = function(input, msg) {
   if (input.toLowerCase() == 'help') {
-    //TODO Update with 'here' param
-    return `Post \`!submissions\` to see all submissions for this channel's beat battle, I'll DM you the list if it's a big one! \`!submissions here\` to override and print the list to this channel even if it's massive`
+    return `Post \`!submissions\` to see this battle's entries! Use \`!submissions here\` to print entries to this channel (no matter how big the list is)`
   }
   if (msg.guild) {
     let battleName = `${msg.guild.name}_${msg.channel.name}`
@@ -139,6 +138,21 @@ exports.stopvotes = function(input, msg){
   }
 }
 
+exports.maxvotes = function(input, msg){
+  if (input.toLowerCase() == 'help') {
+    return `Usage: #TODO usage info`
+  }
+  if (msg.guild) {
+    if (discordutil.isPowerfulMember(msg)){
+      return `not implemented yet`
+    } else {
+      return MSG_MOD_ONLY
+    }
+  } else {
+    return MSG_SERVER_ONLY
+  }
+}
+
 exports.getballot = function(input, msg){
   if (input.toLowerCase() == 'help') {
     return `Usage: #TODO usage info`
@@ -162,6 +176,22 @@ exports.vote = function(input, msg){
 }
 
 exports.results = function(input, msg){
+  if (input.toLowerCase() == 'help') {
+    return `Usage: #TODO usage info`
+  }
+  if (msg.guild) {
+    if (discordutil.isPowerfulMember(msg)){
+      let battleName = `${msg.guild.name}_${msg.channel.name}`
+      return `not implemented yet`
+    } else {
+      return MSG_MOD_ONLY
+    }
+  } else {
+    return MSG_SERVER_ONLY
+  }
+}
+
+exports.stopbattle = function(input, msg){
   if (input.toLowerCase() == 'help') {
     return `Usage: #TODO usage info`
   }

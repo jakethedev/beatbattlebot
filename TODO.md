@@ -34,5 +34,6 @@ TODO battlecontroller
 - switch battleName's to channel.id #25
 
 DONE
+- fix role issues #35
 - batledata restructure (see #22 for new direction)
 - BattleTestData.json
