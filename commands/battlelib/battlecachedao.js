@@ -1,6 +1,5 @@
 const MSG_INACTIVE_BATTLE = `there is no active battle in this channel, consult a mod if this is unexpected`
 
-
 const fs = require('fs')
 const _cacheFile = 'battlecache.json'
 const debug = msg => console.log(`bcache: ${msg}`)
@@ -77,10 +76,10 @@ exports.getVotingDeadline = function(battleName){
 }
 
 exports.addEntry = function(entrantId, entrantName, link, battleName){
-  //TODO Swap username with discord user id except displayname
   if (!battleMap[battleName]){
     return `there is no active battle for this channel`
   }
+  //TODO if subdeadline passed: return 'the deadline passed
   let entryExisted = !!battleMap[battleName].entries[entrantId] // For smarter output
   battleMap[battleName].entries[entrantId] = {
     'ts': new Date(),
