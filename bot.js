@@ -1,30 +1,14 @@
 // Core bot setup
 const fs = require('fs')
-const { token, botkey, activeChannels, gameStatus } = JSON.parse(fs.readFileSync('config.json', 'utf-8'))
-const discord = require("discord.js")
-const client = new discord.Client()
 const debug = (msg) => console.log(`MAIN: ${msg}`)
-
-// Dynamically load all operations we care about into a single commander object
-loadAllOperations = function(libNames){
-  let allOps = {}, meta = {}
-  // Get each lib by name
-  for (lib of libNames) {
-    meta[lib] = []
-    let libOps = require(lib);
-    for (op in libOps) {
-      // Stash all op names at meta[libname] for help reference
-      allOps[op] = libOps[op]
-      meta[lib].push(op)
-    }
-    // These will clobber eachother, this keeps them split up
-    meta[lib].helptext = libOps['helptext']()
-  }
-  return [ allOps, meta ]
-}
-// List of local directories to load, see anyofthem/index.js for the rest of this magic
-const MODULES = ['./battlelib', './syslib', './discordlib', './musiclib']
-const [ commander, metadata ] = loadAllOperations(MODULES)
+// Config
+const { botkey, activeChannels, gameStatus } = JSON.parse(fs.readFileSync('config.json', 'utf-8'))
+const { token } = JSON.parse(fs.readFileSync('.token.json', 'utf-8'))
+// Instantiating the manifold
+const discord = require('discord.js')
+const discordutil = require('./util/discord')
+const client = new discord.Client()
+const { ops, meta } = require('./commands')
 
 // In case something happens, we'll want to see logs
 client.on("error", (e) => console.error(e))
@@ -55,13 +39,15 @@ client.on('message', msg => {
     let input = parts[1] ? parts.slice(1).join(' ') : '' //Some cmds have no input, this lets us use if(input)
     let execTime = new Date(Date.now()).toLocaleString();
     // If we have the requested op, send it - otherwise, log it quietly
-    if (cmd in commander) {
+    if (cmd in ops) {
       console.log(execTime + ': running ' + cmd + '(' + input + ') for ' + msg.author.username)
       // Works for a string or a promise return. Sick. https://stackoverflow.com/a/27760489
-      Promise.resolve( commander[cmd](input, msg, client) )
+      Promise.resolve( ops[cmd](input, msg, client) )
         .then(function(result) {
           // Quick workaround for massive responses
-          if (Array.isArray(result)) {
+          if (discordutil.reactionnames.includes(result)) {
+            msg.react(discordutil.emojifromname(result))
+          } else if (Array.isArray(result)) {
             msg.reply(result[0])
             result.shift()
             for (const otherItem of result){
@@ -78,10 +64,10 @@ client.on('message', msg => {
     } else if (cmd == 'help') {
       let fullHelp = `Here's the commands, type \`${botkey}oneofthecommands help\` for more details:\n`
       // Each library is a string
-      for (library in metadata){ // Already overloaded command, oops
-        fullHelp += `\n**${metadata[library].helptext}**: \n` // Set in each lib's index.js, saved at :17
+      for (library in meta){ // Already overloaded command, oops
+        fullHelp += `\n**${meta[library].helptext}**: \n` // Set in each lib's index.js, saved at :17
         // meta[lib] is a list of ops in that lib
-        for (var opName of metadata[library]) {
+        for (var opName of meta[library]) {
           if ((opName) != 'helptext')
             fullHelp += `${opName}\n`
         }

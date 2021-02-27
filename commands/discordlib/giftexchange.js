@@ -1,5 +1,5 @@
 const { User } = require('discord.js');
-const rand = require('../randomUtil')
+const rand = require('../../util/random')
 const debug = (msg) => console.log(`giftexchange: ${msg}`)
 
 let participants = {}

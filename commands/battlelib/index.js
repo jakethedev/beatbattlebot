@@ -1,6 +1,6 @@
 // List all local components here
 const components = [
-  './battlecmds'
+  './battlecontroller'
 ]
 
 // Go through each chunk of the library and set each exported
