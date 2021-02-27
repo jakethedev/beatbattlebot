@@ -40,6 +40,42 @@ function _isBattleInProgress(battleName){
   return battleHasEntries
 }
 
+function _deregisterVoter(battleName, userID){
+  //TODO
+}
+
+// Trick for using this function locally and as export
+exports.getBattleSize = _battleSize
+
+exports.isBattleActive = function(battleName){
+  debug(`checking progress for ${battleName}`)
+  return _isBattleInProgress(battleName)
+}
+
+exports.isSubmitOpen = function(battleName){
+  //TODO
+}
+
+exports.isVotingOpen = function(battleName){
+  //TODO
+}
+
+exports.setSubDeadline = function(battleName, timeFromNow){
+  //TODO
+}
+
+exports.setVotingDeadline = function(battleName, timeFromNow){
+  //TODO
+}
+
+exports.getSubDeadline = function(battleName){
+  //TODO
+}
+
+exports.getVotingDeadline = function(battleName){
+  //TODO
+}
+
 exports.addEntry = function(entrantId, entrantName, link, battleName){
   //TODO Swap username with discord user id except displayname
   if (!battleMap[battleName]){
@@ -80,10 +116,15 @@ exports.getEntriesFor = function(battleName){
   return battleMap[battleName].entries
 }
 
-// Trick for using this function locally and as export
-exports.getBattleSize = _battleSize
+exports.registerVoter = function(battleName, userID){
+  //TODO
+}
 
-exports.isBattleActive = function(battleName){
-  debug(`checking progress for ${battleName}`)
-  return _isBattleInProgress(battleName)
+exports.voteAndDeregister = function(battleName, userID, voteIdxArray){
+  //TODO
+}
+
+
+exports.getPodium = function(battleName, entrantCap = 10){
+  //TODO
 }

@@ -12,7 +12,6 @@ TODO battlecachedao
 - setVotingDeadline(battleName, timestamp)
 - voteAndDeregister(user,entries)
 - getResults(battleName) // should this have an option to end the battle early?
-- sendBallotToUserForBattle(user, battleName)
 - resetCache() to deregister all voters for battle
 
 TODO before voting
@@ -28,6 +27,7 @@ TODO battlecontroller
 - stopvotes command #19
 - deadlines cmd #18
 - getballot #20
+    this is gonna be a chunky one
 - results #8
 - vote #5
 - add sub count to submissions output #16

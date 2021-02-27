@@ -159,6 +159,7 @@ exports.getballot = function(input, msg){
     return `Usage: #TODO usage info`
   }
   if (msg.guild) {
+    //TODO THIS IS WHERE THE SAUSAGE GETS MADE
     return `not implemented yet`
   } else {
     return MSG_SERVER_ONLY
