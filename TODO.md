@@ -4,6 +4,7 @@
 
 TODO battlecachedao
 - 100% test coverage
+    mock discord message, user, channel
 - areSubsOpen()
 - areVotesOpen()
 - _deregisterVoter(user)
