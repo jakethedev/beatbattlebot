@@ -139,7 +139,9 @@ exports.stopvotes = function(input, msg){
   }
 }
 
-exports.maxvotes = function(input, msg){
+// TODO Whiteboard this idea
+// exports.maxvotes = function(input, msg){
+maxvotes = function(input, msg){
   if (input.toLowerCase() == 'help') {
     return `Usage: #TODO usage info`
   }
