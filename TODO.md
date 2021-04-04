@@ -24,8 +24,8 @@ TODO before voting
 
 TODO battlecontroller
 - deal with any changes from dao
-- stopsubs command #13
-- stopvotes command #19
+- setdeadline command #13
+- votingends command #19
 - deadlines cmd #18
 - getballot #20
     this is gonna be a chunky one

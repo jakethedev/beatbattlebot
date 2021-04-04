@@ -1,7 +1,7 @@
 const { Message } = require('discord.js')
 const discordutil = require('../../util/discord')
 const battledao = require('./battlecachedao')
-const day = require('../../util/dayjs')
+const dayjs = require('../../util/dayjs')
 
 const MSG_SERVER_ONLY = "this command needs to be run in a server channel where this bot is active"
 const MSG_MOD_ONLY = "this is a mod-only command"
@@ -180,6 +180,39 @@ exports.vote = function(input, msg){
 }
 
 exports.results = function(input, msg){
+  if (input.toLowerCase() == 'help') {
+    return `Usage: #TODO usage info`
+  }
+  if (msg.guild) {
+    if (discordutil.isPowerfulMember(msg)){
+      let battleName = `${msg.guild.name}_${msg.channel.name}`
+      return `not implemented yet`
+    } else {
+      return MSG_MOD_ONLY
+    }
+  } else {
+    return MSG_SERVER_ONLY
+  }
+}
+
+exports.setdeadline = function(input, msg){
+  if (input.toLowerCase() == 'help') {
+    return `Usage: #TODO usage info`
+  }
+  if (msg.guild) {
+    if (discordutil.isPowerfulMember(msg)){
+      let battleName = `${msg.guild.name}_${msg.channel.name}`
+      const deadline = dayjs.addTimespanToNow(input)
+      return `Deadline is ${deadline.fromNow()}`
+    } else {
+      return MSG_MOD_ONLY
+    }
+  } else {
+    return MSG_SERVER_ONLY
+  }
+}
+
+exports.votingends = function(input, msg){
   if (input.toLowerCase() == 'help') {
     return `Usage: #TODO usage info`
   }
