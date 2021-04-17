@@ -53,36 +53,49 @@ exports.isBattleActive = function(battleName){
 }
 
 function _isSubmitOpen(battleName) {
-  //TODO
+  //TODO return now < battleName.subdeadline
+  return true
 }
 exports.isSubmitOpen = _isSubmitOpen
 
 function _isVotingOpen(battleName){
-  //TODO
+  //TODO return now < battleName.votedeadline
+  return true
 }
 exports.isVotingOpen = _isVotingOpen
 
 exports.setSubDeadline = function(battleName, dayJsDate){
-  //TODO
+  battleMap[battleName]['subdeadline'] = dayJsDate.toISOString()
+  _saveBattleState()
 }
 
 exports.setVotingDeadline = function(battleName, dayJsDate){
-  //TODO
+  battleMap[battleName]['votedeadline'] = dayJsDate.toISOString()
+  _saveBattleState()
 }
 
 exports.getSubDeadline = function(battleName){
-  //TODO
+  const subdl = battleMap[battleName]['subdeadline']
+  if (subdl)
+    return new day.dayjs(subdl)
+  return null // Simplest effective solution for now
 }
 
 exports.getVotingDeadline = function(battleName){
-  //TODO
+  const vdl = battleMap[battleName]['votedeadline']
+  if (vdl)
+    return new day.dayjs(vdl)
+  return null // Simplest effective solution for now
 }
 
 exports.addEntry = function(entrantId, entrantName, link, battleName){
   if (!battleMap[battleName]){
     return `there is no active battle for this channel`
   }
-  //TODO if subdeadline passed: return 'the deadline passed
+  if (!_isSubmitOpen(battleName)){
+    //TODO if subdeadline passed: return 'the deadline passed
+    return `the deadline has passed, this submission has not been saved`
+  }
   let entryExisted = !!battleMap[battleName].entries[entrantId] // For smarter output
   battleMap[battleName].entries[entrantId] = {
     'ts': new Date(),

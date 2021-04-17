@@ -100,7 +100,79 @@ exports.deadlines = function(input, msg){
   }
   if (msg.guild) {
     if (discordutil.isPowerfulMember(msg)){
-      return `not implemented yet`
+      let battleName = `${msg.guild.name}_${msg.channel.name}`
+      let subdl = battledao.getSubDeadline(battleName)
+      let votedl = battledao.getVotingDeadline(battleName)
+      let response = "deadlines for this battle:\n"
+      if (subdl) {
+        response += `ENTRIES: Submissions are due ${subdl.fromNow()} (at ${day.fmtAsPST(subdl)})\n`
+      }
+      if (votedl) {
+        response += `VOTING: If subs are closed, votes are due ${votedl.fromNow()} (${day.fmtAsPST(votedl)})\n`
+      }
+      if (!subdl && !votedl) {
+        response += 'No deadlines set! Mods can use `!setdeadline` and `!votingends` to set them'
+      }
+      return response
+    } else {
+      return MSG_MOD_ONLY
+    }
+  } else {
+    return MSG_SERVER_ONLY
+  }
+}
+
+exports.setdeadline = function(input, msg){
+  if (input.toLowerCase() == 'help') {
+    return `Usage: !setdeadline SPAN to set the submission deadline of this battle to SPAN time from now! You can use numbers, w, d, h, and m to specify how long in weeks, days, hours, and minutes the battle should run\nExample: \`!setdeadline 1w2d3h15m\` will set the deadline to 1 week, 2 days, 3 hours, and 15 minutes from now (days and hours are rounded forward to the next clean hour)`
+  }
+  if (msg.guild) {
+    if (discordutil.isPowerfulMember(msg)){
+      let battleName = `${msg.guild.name}_${msg.channel.name}`
+      const deadline = day.addTimespan(input)
+      //TODO if deadline before now, dont set, return usage
+      battledao.setSubDeadline(battleName, deadline)
+      return `Submission deadline changed, entries due ${deadline.fromNow()}! (${day.fmtAsPST(deadline)})`
+    } else {
+      return MSG_MOD_ONLY
+    }
+  } else {
+    return MSG_SERVER_ONLY
+  }
+}
+
+exports.votingends = function(input, msg){
+  if (input.toLowerCase() == 'help') {
+    return `Usage: !votingends SPAN to set the voting deadline of this battle to SPAN time from now! You can use numbers, w, d, h, and m to specify how long in weeks, days, hours, and minutes the voting period should run\nExample: \`!votingends 1w5d2h30m\` will set the deadline to 1 week, 5 days, 2 hours, and 30 minutes from now (days and hours are rounded forward to the next clean hour)`
+  }
+  if (msg.guild) {
+    if (discordutil.isPowerfulMember(msg)){
+      let battleName = `${msg.guild.name}_${msg.channel.name}`
+      const deadline = day.addTimespan(input)
+      //TODO if deadline before now, dont set, return usage
+      battledao.setVotingDeadline(battleName, deadline)
+      return `Voting deadline changed, votes are due ${deadline.fromNow()}! (${day.fmtAsPST(deadline)})`
+    } else {
+      return MSG_MOD_ONLY
+    }
+  } else {
+    return MSG_SERVER_ONLY
+  }
+}
+
+exports.stopbattle = function(input, msg){
+  if (input.toLowerCase() == 'help') {
+    return `Usage: #TODO usage info`
+  }
+  if (msg.guild) {
+    if (discordutil.isPowerfulMember(msg)){
+      let battleName = `${msg.guild.name}_${msg.channel.name}`
+      const deadline = new day.dayjs()
+      battledao.setSubDeadline(battleName, deadline)
+      if (battledao.isVotingOpen()) {
+        battledao.setVotingDeadline(battleName, deadline)
+      }
+      return `The battle is now CLOSED! Anyone can see the entries with \`!submissions\`, and mods can use \`!setdeadline\` and \`!votingends\` to extend the battle, or \`!results\` to see the podium`
     } else {
       return MSG_MOD_ONLY
     }
@@ -180,56 +252,6 @@ exports.vote = function(input, msg){
 }
 
 exports.results = function(input, msg){
-  if (input.toLowerCase() == 'help') {
-    return `Usage: #TODO usage info`
-  }
-  if (msg.guild) {
-    if (discordutil.isPowerfulMember(msg)){
-      let battleName = `${msg.guild.name}_${msg.channel.name}`
-      return `not implemented yet`
-    } else {
-      return MSG_MOD_ONLY
-    }
-  } else {
-    return MSG_SERVER_ONLY
-  }
-}
-
-exports.setdeadline = function(input, msg){
-  if (input.toLowerCase() == 'help') {
-    return `Usage: #TODO usage info`
-  }
-  if (msg.guild) {
-    if (discordutil.isPowerfulMember(msg)){
-      let battleName = `${msg.guild.name}_${msg.channel.name}`
-      const deadline = day.addTimespan(input)
-      battledao.setSubDeadline(battleName, deadline)
-      return `Deadline is ${deadline.fromNow()} (${deadline})`
-    } else {
-      return MSG_MOD_ONLY
-    }
-  } else {
-    return MSG_SERVER_ONLY
-  }
-}
-
-exports.votingends = function(input, msg){
-  if (input.toLowerCase() == 'help') {
-    return `Usage: #TODO usage info`
-  }
-  if (msg.guild) {
-    if (discordutil.isPowerfulMember(msg)){
-      let battleName = `${msg.guild.name}_${msg.channel.name}`
-      return `not implemented yet`
-    } else {
-      return MSG_MOD_ONLY
-    }
-  } else {
-    return MSG_SERVER_ONLY
-  }
-}
-
-exports.stopbattle = function(input, msg){
   if (input.toLowerCase() == 'help') {
     return `Usage: #TODO usage info`
   }

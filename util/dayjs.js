@@ -6,8 +6,9 @@ dayjs.extend(require('dayjs/plugin/relativeTime'))
 // For dayjs(date).tz('America/Seattle')
 dayjs.extend(require('dayjs/plugin/utc'))
 dayjs.extend(require('dayjs/plugin/timezone'))
-// Defaults to PST
-dayjs.tz.setDefault("America/Seattle")
+// Set default to PST/PDT
+const PST_TZ = "America/Los_Angeles"
+dayjs.tz.setDefault(PST_TZ)
 
 let parseTimespanToObject = function(timespan){
   let parsedSpan = { 
@@ -38,7 +39,12 @@ exports.addTimespan = function(timespan, from = new dayjs()){
                       .date(from.date() + parsedSpanObj['d'] + (parsedSpanObj['w']*7))
                       .hour(from.hour() + parsedSpanObj['h'] + 1)
                       .minute(0 + parsedSpanObj['m'])
+                      .tz(PST_TZ)
   return result
+}
+
+exports.fmtAsPST = function(dayjsobj) {
+  return dayjsobj.format('D MMM [at] HH:mm [PST]', { timeZone: PST_TZ })
 }
 
 exports.dayjs = dayjs

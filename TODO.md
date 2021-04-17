@@ -9,24 +9,23 @@ TODO battlecachedao
 - areVotesOpen()
 - _deregisterVoter(user)
 - registerVoter(user,battleName)
-- setSubDeadline(battleName, timestamp)
-- setVotingDeadline(battleName, timestamp)
+X setSubDeadline(battleName, timestamp)
+X setVotingDeadline(battleName, timestamp)
 - voteAndDeregister(user,entries)
 - getResults(battleName) // should this have an option to end the battle early?
 - resetCache() to deregister all voters for battle
 
 TODO before voting
 - date formatter code in util/datefmt (pull in day.js?) #34
-- format funcs: 
-    shortRemaining(date)
-    fullTimestamp(date) // 5 Jan, 2pm PST
-    default to PST, here's the note to mark a case for timezone settings per server 
+X format funcs: 
+    fmtAsPST: short PST date
 
 TODO battlecontroller
 - deal with any changes from dao
-- setdeadline command #13
-- votingends command #19
-- deadlines cmd #18
+. setdeadline #13, votingends #19
+    clean up input better
+    ensure setting to future/less than a year from now
+X deadlines cmd #18
 - getballot #20
     this is gonna be a chunky one
 - results #8
