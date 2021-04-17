@@ -33,6 +33,7 @@ TODO battlecontroller
 - vote #5
 - add sub count to submissions output #16
 - switch battleName's to channel.id #25
+- stopsubs / stopvotes shorcuts 
 
 DONE
 - fix role issues #35

@@ -1,7 +1,13 @@
 const dayjs = require('dayjs')
 const digits = '0123456789'
 const debug = msg => console.log(`dayjs helper: ${msg}`)
+// For human-friendly "time to/from" display
 dayjs.extend(require('dayjs/plugin/relativeTime'))
+// For dayjs(date).tz('America/Seattle')
+dayjs.extend(require('dayjs/plugin/utc'))
+dayjs.extend(require('dayjs/plugin/timezone'))
+// Defaults to PST
+dayjs.tz.setDefault("America/Seattle")
 
 let parseTimespanToObject = function(timespan){
   let parsedSpan = { 
@@ -24,16 +30,14 @@ let parseTimespanToObject = function(timespan){
   return parsedSpan
 }
 
-exports.addTimespanToNow = function(timespan){
+exports.addTimespan = function(timespan, from = new dayjs()){
   let parsedSpanObj = parseTimespanToObject(timespan)
-  let from = new dayjs()
   // Rounding forward to the next hour, just for a clean deadline
   // Also order matters a lot with this, dont set smaller units first
   let result = new dayjs().millisecond(0).second(0)
                       .date(from.date() + parsedSpanObj['d'] + (parsedSpanObj['w']*7))
                       .hour(from.hour() + parsedSpanObj['h'] + 1)
                       .minute(0 + parsedSpanObj['m'])
-  debug(`Deadline is ${result}`)
   return result
 }
 

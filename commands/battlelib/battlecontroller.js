@@ -1,7 +1,7 @@
 const { Message } = require('discord.js')
 const discordutil = require('../../util/discord')
 const battledao = require('./battlecachedao')
-const dayjs = require('../../util/dayjs')
+const day = require('../../util/dayjs')
 
 const MSG_SERVER_ONLY = "this command needs to be run in a server channel where this bot is active"
 const MSG_MOD_ONLY = "this is a mod-only command"
@@ -202,8 +202,9 @@ exports.setdeadline = function(input, msg){
   if (msg.guild) {
     if (discordutil.isPowerfulMember(msg)){
       let battleName = `${msg.guild.name}_${msg.channel.name}`
-      const deadline = dayjs.addTimespanToNow(input)
-      return `Deadline is ${deadline.fromNow()}`
+      const deadline = day.addTimespan(input)
+      battledao.setSubDeadline(battleName, deadline)
+      return `Deadline is ${deadline.fromNow()} (${deadline})`
     } else {
       return MSG_MOD_ONLY
     }

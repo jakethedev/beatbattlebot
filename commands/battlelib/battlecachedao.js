@@ -1,6 +1,7 @@
 const MSG_INACTIVE_BATTLE = `there is no active battle in this channel, consult a mod if this is unexpected`
 
 const fs = require('fs')
+const day = require('../../util/dayjs')
 const _cacheFile = 'battlecache.json'
 const debug = msg => console.log(`bcache: ${msg}`)
 
@@ -51,19 +52,21 @@ exports.isBattleActive = function(battleName){
   return _isBattleInProgress(battleName)
 }
 
-exports.isSubmitOpen = function(battleName){
+function _isSubmitOpen(battleName) {
+  //TODO
+}
+exports.isSubmitOpen = _isSubmitOpen
+
+function _isVotingOpen(battleName){
+  //TODO
+}
+exports.isVotingOpen = _isVotingOpen
+
+exports.setSubDeadline = function(battleName, dayJsDate){
   //TODO
 }
 
-exports.isVotingOpen = function(battleName){
-  //TODO
-}
-
-exports.setSubDeadline = function(battleName, timeFromNow){
-  //TODO
-}
-
-exports.setVotingDeadline = function(battleName, timeFromNow){
+exports.setVotingDeadline = function(battleName, dayJsDate){
   //TODO
 }
 
