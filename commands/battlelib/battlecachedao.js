@@ -53,14 +53,20 @@ exports.isBattleActive = function(battleName){
 }
 
 function _isSubmitOpen(battleName) {
-  //TODO return now < battleName.subdeadline
-  return true
+  const now = new day.dayjs()
+  const subdl = battleMap[battleName]['subdeadline']
+  if (subdl)
+    return now.isBefore(subdl)
+  return true // No deadline in a battle means its open until closed
 }
 exports.isSubmitOpen = _isSubmitOpen
 
 function _isVotingOpen(battleName){
-  //TODO return now < battleName.votedeadline
-  return true
+  const now = new day.dayjs()
+  const vdl = battleMap[battleName]['votedeadline']
+  if (vdl)
+    return now.isBefore(vdl)
+  return true // Same reason as _isSubmitOpen, no reason to block it
 }
 exports.isVotingOpen = _isVotingOpen
 
@@ -89,12 +95,9 @@ exports.getVotingDeadline = function(battleName){
 }
 
 exports.addEntry = function(entrantId, entrantName, link, battleName){
+  // Expects caller to verify that submissions are allowed
   if (!battleMap[battleName]){
     return `there is no active battle for this channel`
-  }
-  if (!_isSubmitOpen(battleName)){
-    //TODO if subdeadline passed: return 'the deadline passed
-    return `the deadline has passed, this submission has not been saved`
   }
   let entryExisted = !!battleMap[battleName].entries[entrantId] // For smarter output
   battleMap[battleName].entries[entrantId] = {

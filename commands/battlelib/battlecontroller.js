@@ -30,7 +30,7 @@ exports.newbattle = function(input, msg) {
 
 exports.submit = function(input, msg) {
   if (input.toLowerCase() == 'help') {
-    return `Post a new message that starts with \`!submit https://link.to.your/beat\` to enter the battle in this channel!` 
+    return `Usage: Post a new message that starts with \`!submit https://link.to.your/beat\` to enter the battle in this channel! Make sure there's a space after your link if you want to write more in your message, otherwise it might not save right` 
   }
   if (msg.guild) {
     let entrantId = msg.member.id
@@ -38,11 +38,32 @@ exports.submit = function(input, msg) {
     let entrantName = msg.member.nickname || msg.member.user.username
     let battleName = `${msg.guild.name}_${msg.channel.name}`
     const link = input.split(' ')[0].trim()
+    debug(`${entrantName} has submitted ${link} for battle[${battleName}]`)
     if (!link.includes('https')) {
       return `the first word after submit doesn't look like a valid link, make sure it's an *https* address then try again!`
     }
-    debug(`${entrantName} has submitted ${link} for battle[${battleName}]`)
+    if (!battledao.isSubmitOpen(battleName)){
+      const subdl = battledao.getSubDeadline(battleName)
+      return `sorry but this battle is closed, the deadline was ${day.fmtAsPST(subdl)}`
+    }
     return battledao.addEntry(entrantId, entrantName, link, battleName)
+  } else {
+    return MSG_SERVER_ONLY
+  }
+}
+
+//exports.
+let modsubmit = function(input, msg) {
+  if (input.toLowerCase() == 'help') {
+    return `Usage: !modsubmit \@discordmember https://their-link - this is a mod-only command for special case entries that need to be added after a submission deadline` 
+  }
+  if (msg.guild) {
+    if (discordutil.isPowerfulMember(msg)){
+      let battleName = `${msg.guild.name}_${msg.channel.name}`
+      return `not implemented yet`
+    } else {
+      return MSG_MOD_ONLY
+    }
   } else {
     return MSG_SERVER_ONLY
   }
@@ -130,7 +151,6 @@ exports.setdeadline = function(input, msg){
     if (discordutil.isPowerfulMember(msg)){
       let battleName = `${msg.guild.name}_${msg.channel.name}`
       const deadline = day.addTimespan(input)
-      //TODO if deadline before now, dont set, return usage
       battledao.setSubDeadline(battleName, deadline)
       return `Submission deadline changed, entries due ${deadline.fromNow()}! (${day.fmtAsPST(deadline)})`
     } else {
@@ -141,7 +161,8 @@ exports.setdeadline = function(input, msg){
   }
 }
 
-exports.votingends = function(input, msg){
+//exports.
+let votingends = function(input, msg){
   if (input.toLowerCase() == 'help') {
     return `Usage: !votingends SPAN to set the voting deadline of this battle to SPAN time from now! You can use numbers, w, d, h, and m to specify how long in weeks, days, hours, and minutes the voting period should run\nExample: \`!votingends 1w5d2h30m\` will set the deadline to 1 week, 5 days, 2 hours, and 30 minutes from now (days and hours are rounded forward to the next clean hour)`
   }
@@ -149,7 +170,6 @@ exports.votingends = function(input, msg){
     if (discordutil.isPowerfulMember(msg)){
       let battleName = `${msg.guild.name}_${msg.channel.name}`
       const deadline = day.addTimespan(input)
-      //TODO if deadline before now, dont set, return usage
       battledao.setVotingDeadline(battleName, deadline)
       return `Voting deadline changed, votes are due ${deadline.fromNow()}! (${day.fmtAsPST(deadline)})`
     } else {
@@ -160,16 +180,17 @@ exports.votingends = function(input, msg){
   }
 }
 
-exports.stopbattle = function(input, msg){
+//exports.
+let stopbattle = function(input, msg){
   if (input.toLowerCase() == 'help') {
-    return `Usage: #TODO usage info`
+    return `Usage: !stopbattle sets the submission AND voting deadlines to right now, stopping the battle in its *tracks*`
   }
   if (msg.guild) {
     if (discordutil.isPowerfulMember(msg)){
       let battleName = `${msg.guild.name}_${msg.channel.name}`
       const deadline = new day.dayjs()
       battledao.setSubDeadline(battleName, deadline)
-      if (battledao.isVotingOpen()) {
+      if (battledao.isVotingOpen(battleName)) {
         battledao.setVotingDeadline(battleName, deadline)
       }
       return `The battle is now CLOSED! Anyone can see the entries with \`!submissions\`, and mods can use \`!setdeadline\` and \`!votingends\` to extend the battle, or \`!results\` to see the podium`
@@ -183,11 +204,14 @@ exports.stopbattle = function(input, msg){
 
 exports.stopsubs = function(input, msg){
   if (input.toLowerCase() == 'help') {
-    return `Usage: #TODO usage info`
+    return `Usage: !stopsubs sets the submission deadline to right now, preventing further submissions`
   }
   if (msg.guild) {
     if (discordutil.isPowerfulMember(msg)){
-      return `not implemented yet`
+      let battleName = `${msg.guild.name}_${msg.channel.name}`
+      const deadline = new day.dayjs()
+      battledao.setSubDeadline(battleName, deadline)
+      return `submissions for this battle are now CLOSED! \`!submissions\` to see the final list of entries`
     } else {
       return MSG_MOD_ONLY
     }
@@ -196,9 +220,10 @@ exports.stopsubs = function(input, msg){
   }
 }
 
-exports.stopvotes = function(input, msg){
+//exports.
+let stopvotes = function(input, msg){
   if (input.toLowerCase() == 'help') {
-    return `Usage: #TODO usage info`
+    return `Usage: !stopvotes sets the voting deadline to right now, locking in the current podium`
   }
   if (msg.guild) {
     if (discordutil.isPowerfulMember(msg)){
@@ -212,8 +237,8 @@ exports.stopvotes = function(input, msg){
 }
 
 // TODO Whiteboard this idea
-// exports.maxvotes = function(input, msg){
-maxvotes = function(input, msg){
+//exports.
+let maxvotes = function(input, msg){
   if (input.toLowerCase() == 'help') {
     return `Usage: #TODO usage info`
   }
@@ -228,7 +253,8 @@ maxvotes = function(input, msg){
   }
 }
 
-exports.getballot = function(input, msg){
+//exports.
+let getballot = function(input, msg){
   if (input.toLowerCase() == 'help') {
     return `Usage: #TODO usage info`
   }
@@ -240,7 +266,8 @@ exports.getballot = function(input, msg){
   }
 }
 
-exports.vote = function(input, msg){
+//exports.
+let vote = function(input, msg){
   if (input.toLowerCase() == 'help') {
     return `Usage: #TODO usage info`
   }
@@ -251,7 +278,8 @@ exports.vote = function(input, msg){
   }
 }
 
-exports.results = function(input, msg){
+//exports.
+let results = function(input, msg){
   if (input.toLowerCase() == 'help') {
     return `Usage: #TODO usage info`
   }
