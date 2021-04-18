@@ -1,5 +1,6 @@
 //TODO Switch this to require(fs).listDir() or something
-const MODULES = ['./battlelib', './syslib', './discordlib']
+// const MODULES = ['./battlelib', './syslib', './discordlib', './giftex', './musiclib']
+const MODULES = ['./battlelib', './syslib', './discordlib', './giftex']
 const debug = (msg) => console.log(`cmdidx: ${msg}`)
 
 // Dynamically load all operations we care about into a single commander object

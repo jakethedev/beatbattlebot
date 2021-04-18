@@ -227,7 +227,10 @@ let stopvotes = function(input, msg){
   }
   if (msg.guild) {
     if (discordutil.isPowerfulMember(msg)){
-      return `not implemented yet`
+      let battleName = `${msg.guild.name}_${msg.channel.name}`
+      const deadline = new day.dayjs()
+      battledao.setVotingDeadline(battleName, deadline)
+      return `voting for this battle is now CLOSED! Mods can use \`!results X\` to see the top X entries ranked by votes`
     } else {
       return MSG_MOD_ONLY
     }
