@@ -1,6 +1,7 @@
 const MSG_INACTIVE_BATTLE = `there is no active battle in this channel, consult a mod if this is unexpected`
 
 const fs = require('fs')
+const day = require('../../util/dayjs')
 const _cacheFile = 'battlecache.json'
 const debug = msg => console.log(`bcache: ${msg}`)
 
@@ -51,35 +52,53 @@ exports.isBattleActive = function(battleName){
   return _isBattleInProgress(battleName)
 }
 
-exports.isSubmitOpen = function(battleName){
-  //TODO
+function _isSubmitOpen(battleName) {
+  const now = new day.dayjs()
+  const subdl = battleMap[battleName]['subdeadline']
+  if (subdl)
+    return now.isBefore(subdl)
+  return true // No deadline in a battle means its open until closed
+}
+exports.isSubmitOpen = _isSubmitOpen
+
+function _isVotingOpen(battleName){
+  const now = new day.dayjs()
+  const vdl = battleMap[battleName]['votedeadline']
+  if (vdl)
+    return now.isBefore(vdl)
+  return true // Same reason as _isSubmitOpen, no reason to block it
+}
+exports.isVotingOpen = _isVotingOpen
+
+exports.setSubDeadline = function(battleName, dayJsDate){
+  battleMap[battleName]['subdeadline'] = dayJsDate.toISOString()
+  _saveBattleState()
 }
 
-exports.isVotingOpen = function(battleName){
-  //TODO
-}
-
-exports.setSubDeadline = function(battleName, timeFromNow){
-  //TODO
-}
-
-exports.setVotingDeadline = function(battleName, timeFromNow){
-  //TODO
+exports.setVotingDeadline = function(battleName, dayJsDate){
+  battleMap[battleName]['votedeadline'] = dayJsDate.toISOString()
+  _saveBattleState()
 }
 
 exports.getSubDeadline = function(battleName){
-  //TODO
+  const subdl = battleMap[battleName]['subdeadline']
+  if (subdl)
+    return new day.dayjs(subdl)
+  return null // Simplest effective solution for now
 }
 
 exports.getVotingDeadline = function(battleName){
-  //TODO
+  const vdl = battleMap[battleName]['votedeadline']
+  if (vdl)
+    return new day.dayjs(vdl)
+  return null // Simplest effective solution for now
 }
 
 exports.addEntry = function(entrantId, entrantName, link, battleName){
+  // Expects caller to verify that submissions are allowed
   if (!battleMap[battleName]){
     return `there is no active battle for this channel`
   }
-  //TODO if subdeadline passed: return 'the deadline passed
   let entryExisted = !!battleMap[battleName].entries[entrantId] // For smarter output
   battleMap[battleName].entries[entrantId] = {
     'ts': new Date(),

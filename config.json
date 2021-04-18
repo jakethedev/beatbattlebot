@@ -1,6 +1,6 @@
 {
-  "version": "1.0.6",
-  "releasenotes": "First version of a handy beat battle organizer",
+  "version": "1.0.7",
+  "releasenotes": "Now with submission deadlines and a couple randomizers!",
   "issuelink": "https://github.com/jakethedev/beatbattlebot/issues",
   "botkey": "!",
   "activeChannels": [

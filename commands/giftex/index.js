@@ -1,7 +1,6 @@
 // List all local components here
 const components = [
-  './discordroles',
-  './fun'
+  './giftexchange'
 ]
 
 // Go through each chunk of the library and set each exported
@@ -13,4 +12,4 @@ for (sublib of components) {
   }
   console.log(sublib + " loaded!")
 }
-exports['helptext'] = () => "Discord Role and Misc Commands"
+exports['helptext'] = () => "Gift Exchange Commands"
