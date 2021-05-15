@@ -18,12 +18,14 @@ TODO battlecontroller
 - vote #5
 - add sub count to submissions output #16
 - switch battleName's to channel.id #25
-X stopsubs / stopvotes shorcuts 
+- !heylisten #30
+- !begonebot #31
 
 DONE
 - fix role issues #35
 - batledata restructure (see #22 for new direction)
 - BattleTestData.json
+X stopsubs / stopvotes shorcuts 
 X areSubsOpen()
 X areVotesOpen()
 X setSubDeadline(battleName, timestamp)
