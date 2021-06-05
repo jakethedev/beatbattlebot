@@ -12,6 +12,7 @@ TODO battlecachedao
 - resetCache() to deregister all voters for battle
 
 TODO battlecontroller
+- shuffle subs #51
 - getballot #20
     this is gonna be a chunky one
 - results #8
