@@ -275,9 +275,15 @@ let vote = function(input, msg){
     return `Usage: #TODO usage info`
   }
   if (msg.guild) {
-    return `not implemented yet`
-  } else {
     return MSG_SERVER_ONLY
+  } else {
+    const battleName = `${msg.guild.name}_${msg.channel.name}`
+    if (battledao.isVotingOpen){
+
+    } else {
+      const dl = battledao.getVotingDeadline(battleName)
+      return `voting closed for this battle at ${dl}, `
+    }
   }
 }
 
