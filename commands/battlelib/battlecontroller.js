@@ -279,10 +279,18 @@ let vote = function(input, msg){
   } else {
     const battleName = `${msg.guild.name}_${msg.channel.name}`
     if (battledao.isVotingOpen){
-
+      //TODO if !registered: getballot CTA
+      let voteItems = input.split(','), parsedVotes = []
+      for (let i in voteItems){
+        if (!parseInt(i)){
+          return "sorry, this vote was entered wrong: please make sure your entries are COMMA-SEPARATED numbers in the list you got from running \`!getballot\` (spaces are ignored)" 
+        }
+        parsedVotes.push(parseInt(i))
+      }
+      battledao.voteAndDeregister(msg.author.id, parsedVotes)
     } else {
       const dl = battledao.getVotingDeadline(battleName)
-      return `voting closed for this battle at ${dl}, `
+      return `voting closed for this battle at ${dl}, your vote has not been saved`
     }
   }
 }

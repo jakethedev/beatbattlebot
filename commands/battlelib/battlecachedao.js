@@ -5,6 +5,12 @@ const day = require('../../util/dayjs')
 const _cacheFile = 'battlecache.json'
 const debug = msg => console.log(`bcache: ${msg}`)
 
+const VOTEREGKEY = "votereg"
+
+// Constant for use as a return code on getBattleIDbyVoter, see usages in battlecontroller
+const USERNOTREGISTERED = "nobodyhome"
+exports.USERNOTREGISTERED = USERNOTREGISTERED
+
 let battleMap = {}
 
 // Load old cache on init
@@ -40,8 +46,8 @@ function _isBattleInProgress(battleName){
   return battleHasEntries
 }
 
-function _deregisterVoter(battleName, userID){
-  //TODO
+function _deregisterVoter(userID){
+  delete battleMap[VOTEREGKEY][userID]
 }
 
 // Trick for using this function locally and as export
@@ -134,14 +140,24 @@ exports.getEntriesFor = function(battleName){
   return battleMap[battleName].entries
 }
 
-exports.registerVoter = function(battleName, userID){
-  //TODO
+function getBattleIDbyVoter(userID){
+  return battleMap[VOTEREGKEY][userID] || USERNOTREGISTERED
+}
+exports.getBattleIDbyVoter = getBattleIDbyVoter
+
+exports.registerVoter = function(userID, battleName){
+  battleMap[VOTEREGKEY][userID] = battleName
 }
 
-exports.voteAndDeregister = function(battleName, userID, voteIdxArray){
-  //TODO
+exports.voteAndDeregister = function(userID, voteIdxArray){
+  const battleName = getBattleIDbyVoter(userID)
+  if (battleName == USERNOTREGISTERED) {
+    return USERNOTREGISTERED
+  }
+  battleMap[battleName]["votes"][userID] = voteIdxArray
+  _deregisterVoter(userID)
+  return `your vote has been cast for entries ${voteIdxArray} listed above!\nRun \`!getballot\` in a battle channel if you want to change your vote or vote in a new battle!` 
 }
-
 
 exports.getPodium = function(battleName, entrantCap = 10){
   //TODO
