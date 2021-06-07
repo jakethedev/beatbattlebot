@@ -120,24 +120,20 @@ exports.deadlines = function(input, msg){
     return `Usage: #TODO usage info`
   }
   if (msg.guild) {
-    if (discordutil.isPowerfulMember(msg)){
-      let battleName = `${msg.guild.name}_${msg.channel.name}`
-      let subdl = battledao.getSubDeadline(battleName)
-      let votedl = battledao.getVotingDeadline(battleName)
-      let response = "deadlines for this battle:\n"
-      if (subdl) {
-        response += `ENTRIES: Submissions are due ${subdl.fromNow()} (at ${day.fmtAsPST(subdl)})\n`
-      }
-      if (votedl) {
-        response += `VOTING: If subs are closed, votes are due ${votedl.fromNow()} (${day.fmtAsPST(votedl)})\n`
-      }
-      if (!subdl && !votedl) {
-        response += 'No deadlines set! Mods can use `!setdeadline` and `!votingends` to set them'
-      }
-      return response
-    } else {
-      return MSG_MOD_ONLY
+    let battleName = `${msg.guild.name}_${msg.channel.name}`
+    let subdl = battledao.getSubDeadline(battleName)
+    let votedl = battledao.getVotingDeadline(battleName)
+    let response = "deadlines for this battle:\n"
+    if (subdl) {
+      response += `ENTRIES: Submissions are due ${subdl.fromNow()} (at ${day.fmtAsPST(subdl)})\n`
     }
+    if (votedl) {
+      response += `VOTING: If subs are closed, votes are due ${votedl.fromNow()} (${day.fmtAsPST(votedl)})\n`
+    }
+    if (!subdl && !votedl) {
+      response += 'No deadlines set! Mods can use `!setdeadline` and `!votingends` to set them'
+    }
+    return response
   } else {
     return MSG_SERVER_ONLY
   }

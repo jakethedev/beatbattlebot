@@ -5,25 +5,26 @@
 TODO battlecachedao
 - 100% test coverage
     mock discord message, user, channel
-- _deregisterVoter(user)
-- registerVoter(user,battleName)
 - voteAndDeregister(user,entries)
 - getResults(battleName) // should this have an option to end the battle early?
 - resetCache() to deregister all voters for battle
 
 TODO battlecontroller
-- getballot #20
+. vote #5
+. getballot #20
     this is gonna be a chunky one
-- results #8
-- vote #5
+. results #8
 - add sub count to submissions output #16
 - switch battleName's to channel.id #25
 X stopsubs / stopvotes shorcuts 
 
 DONE
-- fix role issues #35
-- batledata restructure (see #22 for new direction)
-- BattleTestData.json
+X dao: registerVoter(user,battleName)
+X dao: _deregisterVoter(user)
+X FIX DEADLINES PERMISSIONS #52
+X fix role issues #35
+X batledata restructure (see #22 for new direction)
+X BattleTestData.json
 X areSubsOpen()
 X areVotesOpen()
 X setSubDeadline(battleName, timestamp)

@@ -30,13 +30,6 @@ function _saveBattleState(){
   }
 }
 
-// Just for readability below
-function _battleSize(battleName){
-  if (battleMap[battleName])
-    return Object.keys(battleMap[battleName].entries).length
-  return 0
-}
-
 // Quick util for seeing if a battle is active
 function _isBattleInProgress(battleName){
   let battleExists = !!battleMap[battleName]
@@ -46,11 +39,12 @@ function _isBattleInProgress(battleName){
   return battleHasEntries
 }
 
-function _deregisterVoter(userID){
-  delete battleMap[VOTEREGKEY][userID]
-}
-
 // Trick for using this function locally and as export
+function _battleSize(battleName){
+  if (battleMap[battleName])
+    return Object.keys(battleMap[battleName].entries).length
+  return 0
+}
 exports.getBattleSize = _battleSize
 
 exports.isBattleActive = function(battleName){
@@ -155,7 +149,8 @@ exports.voteAndDeregister = function(userID, voteIdxArray){
     return USERNOTREGISTERED
   }
   battleMap[battleName]["votes"][userID] = voteIdxArray
-  _deregisterVoter(userID)
+  // Revoking vote registration tag
+  delete battleMap[VOTEREGKEY][userID]
   return `your vote has been cast for entries ${voteIdxArray} listed above!\nRun \`!getballot\` in a battle channel if you want to change your vote or vote in a new battle!` 
 }
 
