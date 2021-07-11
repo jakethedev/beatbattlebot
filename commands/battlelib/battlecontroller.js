@@ -2,6 +2,7 @@ const { Message } = require('discord.js')
 const discordutil = require('../../util/discord')
 const battledao = require('./battlecachedao')
 const day = require('../../util/dayjs')
+const rand = require('../../util/random')
 
 const MSG_SERVER_ONLY = "this command needs to be run in a server channel where this bot is active"
 const MSG_MOD_ONLY = "this is a mod-only command"
@@ -55,7 +56,7 @@ exports.submit = function(input, msg) {
 //exports.
 let modsubmit = function(input, msg) {
   if (input.toLowerCase() == 'help') {
-    return `Usage: !modsubmit \@discordmember https://their-link - this is a mod-only command for special case entries that need to be added after a submission deadline` 
+    return `Usage: !modsubmit \@discordmember https://their-link - this is a mod-only command for special case entries that need to be added after a submission deadline`
   }
   if (msg.guild) {
     if (discordutil.isPowerfulMember(msg)){
@@ -76,7 +77,8 @@ exports.submissions = function(input, msg) {
   if (msg.guild) {
     let battleName = `${msg.guild.name}_${msg.channel.name}`
     if (battledao.isBattleActive(battleName)){
-      const submissionMapObj = battledao.getEntriesFor(battleName)
+      const rawSubs = battledao.getEntriesFor(battleName)
+      const submissionMapObj = rand.getShuffledCopyOfObject(rawSubs)
       // First gnarly hack of the bot: battle entry lists break the 2000 character limit pretty easily, so 
       // this is a cheap way to paginate the response, bot.js knows to msg.reply the first entry of an array
       // and the rest are just sent to the channel the command was received in
@@ -117,7 +119,7 @@ exports.submissions = function(input, msg) {
 
 exports.deadlines = function(input, msg){
   if (input.toLowerCase() == 'help') {
-    return `Usage: #TODO usage info`
+    return `Usage: \`!deadlines\` to print submission and voting deadlines for this battle (if they're set)\n\nMods can use \`!setdeadline SPAN\` and \`!votingends SPAN\` to set these, see help for those commands for more info`
   }
   if (msg.guild) {
     let battleName = `${msg.guild.name}_${msg.channel.name}`
@@ -141,7 +143,7 @@ exports.deadlines = function(input, msg){
 
 exports.setdeadline = function(input, msg){
   if (input.toLowerCase() == 'help') {
-    return `Usage: !setdeadline SPAN to set the submission deadline of this battle to SPAN time from now! You can use numbers, w, d, h, and m to specify how long in weeks, days, hours, and minutes the battle should run\nExample: \`!setdeadline 1w2d3h15m\` will set the deadline to 1 week, 2 days, 3 hours, and 15 minutes from now (days and hours are rounded forward to the next clean hour)`
+    return `Usage: \`!setdeadline SPAN\` to set the submission deadline of this battle to SPAN time from now! You can use numbers, w, d, h, and m to specify how long in weeks, days, hours, and minutes the battle should run\nExample: \`!setdeadline 1w2d3h15m\` will set the deadline to 1 week, 2 days, 3 hours, and 15 minutes from now (days and hours are rounded forward to the next clean hour)`
   }
   if (msg.guild) {
     if (discordutil.isPowerfulMember(msg)){

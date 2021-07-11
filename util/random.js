@@ -15,6 +15,17 @@ function _randArrIdx(array) {
   }
 }
 
+function _randomizedCopyOfArray(inputArray) {
+  let array = inputArray.slice(0) //Quick clone
+  for (var i = array.length - 1; i > 0; i--) {
+    var j = Math.floor(Math.random() * (i + 1));
+    var temp = array[i];
+    array[i] = array[j];
+    array[j] = temp;
+  }
+  return array;
+}
+
 exports.randIntMinOne = function(inclusiveMax) {
   return _randPosInt(inclusiveMax, 1);
 }
@@ -41,13 +52,15 @@ exports.choice = function(array = [], numChoices = 1) {
 
 //https://stackoverflow.com/a/12646864/6794180 - No native shuffle functions. Bummer.
 //Needed to smash up our data arrays for randomness
-exports.shuffleArray = function(inputArray) {
-  let array = inputArray.slice(0) //Quick clone
-  for (var i = array.length - 1; i > 0; i--) {
-    var j = Math.floor(Math.random() * (i + 1));
-    var temp = array[i];
-    array[i] = array[j];
-    array[j] = temp;
+exports.getShuffledCopyOfArray = function(inputArray) {
+  return _randomizedCopyOfArray(inputArray)
+}
+
+exports.getShuffledCopyOfObject = function(someJson) {
+  let output = {}
+  let randKeys = _randomizedCopyOfArray(Object.keys(someJson))
+  for (let key of randKeys){
+    output[key] = someJson[key]
   }
-  return array;
+  return output
 }

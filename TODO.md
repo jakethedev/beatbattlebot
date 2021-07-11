@@ -14,11 +14,22 @@ TODO battlecontroller
 . getballot #20
     this is gonna be a chunky one
 . results #8
+- subgroovy #41
+- modsubmit 
+- shuffle submissions output #51
+  submissions count in output #16
+- sumbissions #53
 - add sub count to submissions output #16
 - switch battleName's to channel.id #25
-X stopsubs / stopvotes shorcuts 
+- !rules 'msg' #47
+- !globalwinners !champions #50 #48
+- !battle summary cmd #32
+- begonebot/heylisten #31/#30
+- !botmod #49
+- discordutil.ispowerful roles #15
 
 DONE
+X stopsubs / stopvotes shorcuts 
 X dao: registerVoter(user,battleName)
 X dao: _deregisterVoter(user)
 X FIX DEADLINES PERMISSIONS #52
