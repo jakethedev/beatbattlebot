@@ -3,11 +3,12 @@
 ### See the issues page for actual tasks, this is a notepad for active work
 
 TODO battlecachedao
+. deactivate battles in channel #57
+- resetCache() to deregister all voters for battle
 - 100% test coverage
     mock discord message, user, channel
 - voteAndDeregister(user,entries)
 - getResults(battleName) // should this have an option to end the battle early?
-- resetCache() to deregister all voters for battle
 
 TODO battlecontroller
 . vote #5
@@ -16,10 +17,7 @@ TODO battlecontroller
 . results #8
 - subgroovy #41
 - modsubmit 
-- shuffle submissions output #51
-  submissions count in output #16
 - sumbissions #53
-- add sub count to submissions output #16
 - switch battleName's to channel.id #25
 - !rules 'msg' #47
 - !globalwinners !champions #50 #48
@@ -29,6 +27,10 @@ TODO battlecontroller
 - discordutil.ispowerful roles #15
 
 DONE
+X submissions count in output #16
+X shuffle submissions output #51
+X fix no-battle crashes #54
+X send logic back to controller #55
 X stopsubs / stopvotes shorcuts 
 X dao: registerVoter(user,battleName)
 X dao: _deregisterVoter(user)
