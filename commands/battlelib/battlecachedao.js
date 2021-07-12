@@ -31,6 +31,19 @@ function _saveBattleState(){
   }
 }
 
+// Utility for clearing out battle registrations at the end of a battle
+function _resetBattleRegistration(battleName) {
+  if (!VOTEREGKEY in battleMap) {
+    battleMap[VOTEREGKEY] = {}
+  }
+  let voteRegistry = battleMap[VOTEREGKEY]
+  for (let entrant in voteRegistry) {
+    if (voteRegistry[entrant] == battleName) {
+      delete voteRegistry[entrant]
+    }
+  }
+}
+
 // Battle data reset and core "structure" setup
 function _resetBattleState(battleName) {
   //TODO mv disk cache to cache.backup
