@@ -174,6 +174,7 @@ function _getBattleIDbyVoter(userID){
   return battleMap[VOTEREGKEY][userID] || USERNOTREGISTERED
 }
 exports.getBattleIDbyVoter = _getBattleIDbyVoter
+exports.isVoterRegistered = (userid) => _getBattleIDbyVoter(userid) != USERNOTREGISTERED
 
 exports.registerVoter = function(userID, battleName){
   if (!VOTEREGKEY in battleMap) {

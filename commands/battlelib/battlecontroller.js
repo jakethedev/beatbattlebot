@@ -182,8 +182,7 @@ exports.setdeadline = function(input, msg){
   }
 }
 
-//exports.
-let votingends = function(input, msg){
+exports.votingends = function(input, msg){
   if (input.toLowerCase() == 'help') {
     return `Usage: !votingends SPAN to set the voting deadline of this battle to SPAN time from now! You can use numbers, w, d, h, and m to specify how long in weeks, days, hours, and minutes the voting period should run\nExample: \`!votingends 1w5d2h30m\` will set the deadline to 1 week, 5 days, 2 hours, and 30 minutes from now (days and hours are rounded forward to the next clean hour)`
   }
@@ -204,8 +203,7 @@ let votingends = function(input, msg){
   }
 }
 
-//exports.
-let stopbattle = function(input, msg){
+exports.stopbattle = function(input, msg){
   if (input.toLowerCase() == 'help') {
     return `Usage: !stopbattle sets the submission AND voting deadlines to right now, stopping the battle in its *tracks*`
   }
@@ -250,8 +248,7 @@ exports.stopsubs = function(input, msg){
   }
 }
 
-//exports.
-let stopvotes = function(input, msg){
+exports.stopvotes = function(input, msg){
   if (input.toLowerCase() == 'help') {
     return `Usage: !stopvotes sets the voting deadline to right now, locking in the current podium`
   }
@@ -293,13 +290,11 @@ let maxvotes = function(input, msg){
   }
 }
 
-//exports.
-let getballot = function(input, msg){
+exports.getballot = function(input, msg){
   if (input.toLowerCase() == 'help') {
-    return `Usage: #TODO usage info`
+    return `Usage: !getballot to register to vote for a winner in a battle where the submission deadline is over`
   }
   if (msg.guild) {
-    //TODO THIS IS WHERE THE SAUSAGE GETS MADE
     let battleName = `${msg.guild.name}_${msg.channel.name}`
     if (!battledao.isBattleChannel(battleName)){
       return MSG_BATTLE_INACTIVE
@@ -310,8 +305,7 @@ let getballot = function(input, msg){
   }
 }
 
-//exports.
-let vote = function(input, msg){
+exports.vote = function(input, msg){
   if (input.toLowerCase() == 'help') {
     return `Usage: #TODO usage info`
   }
@@ -320,7 +314,9 @@ let vote = function(input, msg){
   } else {
     const battleName = `${msg.guild.name}_${msg.channel.name}`
     if (battledao.isVotingOpen){
-      //TODO if !registered: getballot CTA
+      if (!battledao.isVoterRegistered(msg.author.id)) {
+        return `you haven't registered to vote for a battle yet. Run !getballot in a battle channel to register, you can re-vote but you have to register for every vote`
+      }
       let voteItems = input.split(','), parsedVotes = []
       for (let i in voteItems){
         if (!parseInt(i)){
@@ -336,8 +332,7 @@ let vote = function(input, msg){
   }
 }
 
-//exports.
-let results = function(input, msg){
+exports.results = function(input, msg){
   if (input.toLowerCase() == 'help') {
     return `Usage: #TODO usage info`
   }
@@ -347,6 +342,14 @@ let results = function(input, msg){
       if (!battledao.isBattleChannel(battleName)){
         return MSG_BATTLE_INACTIVE
       }
+      // get max entrants
+      //    max entrants getter: if (!battle.maxvotes) default 10
+      // get indexed subs
+      // get votes
+      // sum votes by sub index
+      // get max entrants by sum
+      //    tie for last: config.handleBattleTies: alpha,chrono,random
+      // format response
       return `not implemented yet`
     } else {
       return MSG_MOD_ONLY
