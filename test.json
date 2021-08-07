@@ -1,0 +1,8 @@
+{
+  "client": {},
+  "msgs": [
+    { "content": "submissions", "author": { "username": "jake", "id": "ID_FOR_JAKE", "send":"console.log" }, "reply": "console.log", "channel": { "name": "bot", "id": "ID_FOR_CHANNEL_BOT" }, "guild":true },
+    { "content": "submit https://my.song", "author": { "username": "jake", "id": "ID_FOR_JAKE", "send":"console.log"  }, "reply": "console.log", "channel": { "name": "bot", "id": "ID_FOR_CHANNEL_BOT" }, "guild":true }
+  ]
+}
+
