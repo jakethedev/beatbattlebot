@@ -15,6 +15,7 @@ TODO battlecontroller
 . getballot #20
     this is gonna be a chunky one
 . results #8
+- !votemax NUM #33
 - subgroovy #41
 - modsubmit 
 - sumbissions #53

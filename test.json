@@ -1,5 +1,5 @@
 {
-  "client": {},
+  "client": { "login": "console.log('INFO: test login, no-op')"},
   "msgs": [
     { "content": "newbattle", "author": { "username": "jake", "id": "ID_FOR_JAKE", "send":"console.log" }, "member":{"permissions":["ADMINISTRATOR"]}, "reply": "console.log", "channel": { "name": "bot", "id": "ID_FOR_CHANNEL_BOT" }, "guild":true },
     { "content": "submissions", "author": { "username": "jake", "id": "ID_FOR_JAKE", "send":"console.log" }, "member":{"permissions":["ADMINISTRATOR"]}, "reply": "console.log", "channel": { "name": "bot", "id": "ID_FOR_CHANNEL_BOT" }, "guild":true },
