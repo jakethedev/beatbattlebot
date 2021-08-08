@@ -305,9 +305,9 @@ exports.getballot = function(input, msg){
     }
     battledao.registerVoter(msg.author.id, battleName)
     const entries = battledao.getEntriesFor(battleName)
-    const msgArray = discordutil.formatBallotToArray(entries)
-    for (let msg in msgArray) {
-      msg.author.send(msg)
+    const respArray = discordutil.formatBallotToArray(entries)
+    for (let respMsg of respArray) {
+      msg.author.send(respMsg)
     }
     return 'success'
   } else {
@@ -316,8 +316,9 @@ exports.getballot = function(input, msg){
 }
 
 exports.vote = function(input, msg){
-  const battleName = `${msg.channel.id}`
+  const battleName = battledao.getBattleIdByVoter(msg.author.id)
   const ballotSize = battledao.getBallotSize(battleName)
+  const numEntries = battledao.getBattleSize(battleName)
   if (input.toLowerCase() == 'help') {
     return `Usage: After submissions are closed, if there is a voting period, you can run !getballot in the channel where the battle occurred to recieve a numbered list of entries via DM. Once you have the list, DM back with "!vote N" or "!vote N1, N2, N3" to vote for your favorite ${max_entries} entries. `
   }
@@ -325,21 +326,28 @@ exports.vote = function(input, msg){
     return MSG_SERVER_ONLY
   } else {
     if (battledao.isVotingOpen){
+      //Validation code until the next comments
       if (!battledao.isVoterRegistered(msg.author.id)) {
         return `you haven't registered to vote for a battle yet. Run !getballot in a battle channel to register, you can re-vote but you have to register for every vote`
       }
-      let voteItems = input.split(','), parsedVotes = []
+      let voteItems = input.split(','), voteSet = new Set(), voteArrayValidated = []
       if (voteItems.length > ballotSize) {
         return `the max number of tracks you can vote for is ${ballotSize}, please slap a limiter on your votes and try again`
       }
-      for (let i in voteItems){
+      for (let i of voteItems){
         if (!parseInt(i)){
-          return `sorry, this vote was not formatted right: please make sure your entries are **comma-separated numbers** from the list provided by \`!getballot\`.\n\nExamples: \`!vote 7\`, \`!vote 1, 2, 3\` `
+          return `sorry, this vote was not formatted right: please make sure your entries are **comma-separated positive numbers** from the list provided by \`!getballot\`.\n\nExamples: \`!vote 7\`, \`!vote 1, 2, 3\` `
         }
-        parsedVotes.push(parseInt(i))
+        const voteEntryId = Math.abs(parseInt(i)) // no room for negativity
+        if (voteEntryId > numEntries) {
+          return `you voted for entry number [${voteEntryId}], but we only have ${numEntries} track(s)... Please double check the numbers and try again`
+        }
+        //Actually counting each vote, ignoring multiple votes for the same entry
+        voteSet.add(voteEntryId)
       }
-      battledao.voteAndDeregister(msg.author.id, parsedVotes)
-      return `your vote for track(s) [${parsedVotes.join(', ')}] has been counted! if you need to change your vote before the deadline is over, you need to run \`!getballot\` in the battle channel again` 
+      voteSet.forEach((v) => voteArrayValidated.push(v))
+      battledao.voteAndDeregister(msg.author.id, voteArrayValidated)
+      return `your vote for track(s) [${voteArrayValidated.join(', ')}] has been counted! if you need to change your vote before the deadline is over, you need to run \`!getballot\` in the battle channel again` 
     } else {
       const dl = battledao.getVotingDeadline(battleName)
       return `voting closed for this battle at ${dl}, your vote has not been saved`

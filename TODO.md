@@ -8,6 +8,7 @@ TODO battlecachedao
 - getResults(battleName) // should this have an option to end the battle early?
 
 TODO battlecontroller
+. 334: parsedVotes needs Set() properties
 . getballot #20
     this is gonna be a chunky one
 . results #8
@@ -23,6 +24,7 @@ TODO battlecontroller
 - !botmod #49
 - modsubmit 
 - sumbissions #53
+- nicer output from !vote, 'votes for artist1, artist2...'
 
 NEEDS TESTING
 X resetCache() to deregister all voters for battle

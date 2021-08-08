@@ -12,7 +12,7 @@ const VOTEREGKEY = "votereg"
 const SUB_DL_KEY = "subdeadline"
 const VOTE_DL_KEY = "votedeadline"
 
-// Constant for use as a return code on getBattleIDbyVoter, see usages in battlecontroller
+// Constant for use as a return code on getBattleIdByVoter, see usages in battlecontroller
 const USERNOTREGISTERED = "nobodyhome"
 exports.USERNOTREGISTERED = USERNOTREGISTERED
 
@@ -88,7 +88,8 @@ exports.isBattleChannel = _isBattleChannel
 // Trick for using this function locally and as export
 function _battleSize(battleName) {
   if (_isBattleChannel(battleName)) {
-    return Object.keys(battleMap[battleName][ENTRYKEY]).length
+    const numEntries = Object.keys(battleMap[battleName][ENTRYKEY]).length 
+    return numEntries
   }
   return 0
 }
@@ -170,33 +171,33 @@ exports.getEntriesFor = function(battleName){
   return battleMap[battleName][ENTRYKEY]
 }
 
-function _getBattleIDbyVoter(userID){
+function _getBattleIdByVoter(userId){
   if (!VOTEREGKEY in battleMap){
     battleMap[VOTEREGKEY] = {} // JIT assumption management
   }
-  return battleMap[VOTEREGKEY][userID] || USERNOTREGISTERED
+  return battleMap[VOTEREGKEY][userId] || USERNOTREGISTERED
 }
-exports.getBattleIDbyVoter = _getBattleIDbyVoter
-exports.isVoterRegistered = (userid) => _getBattleIDbyVoter(userid) != USERNOTREGISTERED
+exports.getBattleIdByVoter = _getBattleIdByVoter
+exports.isVoterRegistered = (userid) => _getBattleIdByVoter(userid) != USERNOTREGISTERED
 
-exports.registerVoter = function(userID, battleName){
+exports.registerVoter = function(userId, battleName){
   if (!VOTEREGKEY in battleMap) {
     battleMap[VOTEREGKEY] = {} // JIT assumption management
   }
-  // mapping by userID like this avoids dual-registration
-  battleMap[VOTEREGKEY][userID] = battleName
+  // mapping by userId like this avoids dual-registration
+  battleMap[VOTEREGKEY][userId] = battleName
   _saveBattleState()
 }
 
-exports.voteAndDeregister = function(userID, voteIdxArray){
-  const battleName = getBattleIDbyVoter(userID)
+exports.voteAndDeregister = function(userId, voteIdxArray){
+  const battleName = _getBattleIdByVoter(userId)
   // TODO finalize where this validation goes
   if (battleName == USERNOTREGISTERED) {
     return USERNOTREGISTERED
   }
-  battleMap[battleName][VOTEKEY][userID] = voteIdxArray
+  battleMap[battleName][VOTEKEY][userId] = voteIdxArray
   // Revoking vote registration tag
-  delete battleMap[VOTEREGKEY][userID]
+  delete battleMap[VOTEREGKEY][userId]
   _saveBattleState()
   // TODO no UI logic in the database what is this rookie hour? jeepers
   return `your vote has been cast for entries ${voteIdxArray} listed above!\nRun \`!getballot\` in a battle channel if you want to change your vote or vote in a new battle!` 

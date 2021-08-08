@@ -38,7 +38,7 @@ exports.formatSubmissionsToArray = function(entryJson, shuffle = true) {
 }
 
 exports.formatBallotToArray = function(entryJson) {
-  return ['ohdear']
+  return ['ohdear', 'whyme' ]
 }
 
 exports.formatPodiumToArray = function(entryJson) {
