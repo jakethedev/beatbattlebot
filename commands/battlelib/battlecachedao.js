@@ -3,6 +3,9 @@ const day = require('../../util/dayjs')
 const _cacheFile = 'battlecache.json'
 const log = msg => console.log(`bcache: ${msg}`)
 
+const BALLOT_SIZE_DEFAULT = 3
+const PODIUM_SIZE_DEFAULT = 15
+
 const ENTRYKEY = "entries"
 const VOTEKEY = "votes"
 const VOTEREGKEY = "votereg"
@@ -187,6 +190,7 @@ exports.registerVoter = function(userID, battleName){
 
 exports.voteAndDeregister = function(userID, voteIdxArray){
   const battleName = getBattleIDbyVoter(userID)
+  // TODO finalize where this validation goes
   if (battleName == USERNOTREGISTERED) {
     return USERNOTREGISTERED
   }
@@ -194,9 +198,24 @@ exports.voteAndDeregister = function(userID, voteIdxArray){
   // Revoking vote registration tag
   delete battleMap[VOTEREGKEY][userID]
   _saveBattleState()
+  // TODO no UI logic in the database what is this rookie hour? jeepers
   return `your vote has been cast for entries ${voteIdxArray} listed above!\nRun \`!getballot\` in a battle channel if you want to change your vote or vote in a new battle!` 
 }
 
-exports.getPodium = function(battleName, entrantCap = 10){
-  //TODO
+//TODO getter AND SETTER for both of these
+exports.getPodiumSize = function(battleName){
+  return PODIUM_SIZE_DEFAULT
+}
+let setPodiumSize = function(battleName) {
+  //TODO get this right
+  debug("THIS IS NOT READY OMG")
+}
+
+exports.getBallotSize = function(battleName) {
+  //TODO get this right
+  return BALLOT_SIZE_DEFAULT
+}
+let setBallotSize = function(battleName) {
+  //TODO get this right
+  debug("THIS IS NOT READY OMG")
 }

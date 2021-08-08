@@ -1,9 +1,59 @@
 {
-  "client": { "login": "console.log('INFO: test login, no-op')"},
-  "msgs": [
-    { "content": "newbattle", "author": { "username": "jake", "id": "ID_FOR_JAKE", "send":"console.log" }, "member":{"permissions":["ADMINISTRATOR"]}, "reply": "console.log", "channel": { "name": "bot", "id": "ID_FOR_CHANNEL_BOT" }, "guild":true },
-    { "content": "submissions", "author": { "username": "jake", "id": "ID_FOR_JAKE", "send":"console.log" }, "member":{"permissions":["ADMINISTRATOR"]}, "reply": "console.log", "channel": { "name": "bot", "id": "ID_FOR_CHANNEL_BOT" }, "guild":true },
-    { "content": "submit https://my.song", "author": { "username": "jake", "id": "ID_FOR_JAKE", "send":"console.log"  }, "reply": "console.log", "channel": { "name": "bot", "id": "ID_FOR_CHANNEL_BOT" }, "guild":true }
-  ]
+    "client": {
+        "login": "console.log('INFO: test login, no-op')"
+    },
+    "msgs": [
+        {
+            "author": {
+                "id": "ID_FOR_JAKE",
+                "send": "console.log",
+                "username": "jake"
+            },
+            "channel": {
+                "id": "BATTLE_ID_ONE",
+                "name": "bot"
+            },
+            "content": "newbattle",
+            "guild": true,
+            "member": {
+                "permissions": {
+                    "any":  "console.log"
+                }
+            },
+            "reply": "console.log"
+        },
+        {
+            "author": {
+                "id": "ID_FOR_JAKE",
+                "send": "console.log",
+                "username": "jake"
+            },
+            "channel": {
+                "id": "BATTLE_ID_ONE",
+                "name": "bot"
+            },
+            "content": "submissions",
+            "guild": true,
+            "member": {
+                "permissions": {
+                    "any":  "console.log"
+                }
+            },
+            "reply": "console.log"
+        },
+        {
+            "author": {
+                "id": "ID_FOR_JAKE",
+                "send": "console.log",
+                "username": "jake"
+            },
+            "channel": {
+                "id": "BATTLE_ID_ONE",
+                "name": "bot"
+            },
+            "content": "submit https://my.song",
+            "guild": true,
+            "reply": "console.log"
+        }
+    ]
 }
-

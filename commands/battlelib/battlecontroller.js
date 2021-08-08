@@ -7,7 +7,6 @@ const rand = require('../../util/random')
 const MSG_SERVER_ONLY = "this command needs to be run in a server channel where this bot is active"
 const MSG_MOD_ONLY = "this is a mod-only command"
 const MSG_BATTLE_INACTIVE = "there is no active battle for this channel, ask a mod if that's a surprise"
-const MAX_VOTE_DEFAULT = 3
 
 let debug = msg => console.log(`battlecmds: ${msg}`)
 
@@ -21,6 +20,7 @@ exports.newbattle = function(input, msg) {
       if (battledao.isBattleActive(battleName) && input !== 'letsgo') {
         return `heads up, this resets the current battle. Are you ready for a new round? \`!newbattle letsgo\` to confirm!`
       }
+      // TODO if input: setDeadline(input)
       return battledao.newBattle(battleName)
     } else {
       return MSG_MOD_ONLY
@@ -113,7 +113,7 @@ exports.submissions = function(input, msg) {
         response[curIdx] += miniBuffer
       }
       response[curIdx+1] = `--> Heads up, there's a lot of heat in this list :fire: <--`
-      debug(`pages of response: ${curIdx}`)
+      debug(`pages of response: ${response.length}`)
       // If we've got a small battle or someone says "here", print to the channel
       let largeBattle = Object.entries(submissionMapObj).length > 10
       let printInChannel = !largeBattle || input.includes('here')
@@ -282,6 +282,7 @@ let maxvotes = function(input, msg){
       if (!battledao.isBattleChannel(battleName)){
         return MSG_BATTLE_INACTIVE
       }
+      // battledao.setBallotSize(battleName, input)
       return `not implemented yet`
     } else {
       return MSG_MOD_ONLY
@@ -292,42 +293,53 @@ let maxvotes = function(input, msg){
 }
 
 exports.getballot = function(input, msg){
+  const battleName = `${msg.channel.id}`
+  // use this in output sent to user
+  const ballotSize = battledao.getBallotSize(battleName)
   if (input.toLowerCase() == 'help') {
-    const max_entries = MAX_VOTE_DEFAULT
     return `Usage: After submissions are closed, if there is a voting period, you can run \`!getballot\` in the channel where the battle occurred to recieve a numbered list of entries via DM. Once you have the list, DM back with \`!vote N\` or \`!vote N1, N2, Nmax\` to vote for your favorite ${max_entries} entries. `
   }
   if (msg.guild) {
-    const battleName = `${msg.channel.id}`
     if (!battledao.isBattleChannel(battleName)){
       return MSG_BATTLE_INACTIVE
     }
-    return `not implemented yet`
+    battledao.registerVoter(msg.author.id, battleName)
+    const entries = battledao.getEntriesFor(battleName)
+    const msgArray = discordutil.formatBallotToArray(entries)
+    for (let msg in msgArray) {
+      msg.author.send(msg)
+    }
+    return 'success'
   } else {
     return MSG_SERVER_ONLY
   }
 }
 
 exports.vote = function(input, msg){
+  const battleName = `${msg.channel.id}`
+  const ballotSize = battledao.getBallotSize(battleName)
   if (input.toLowerCase() == 'help') {
-    const max_entries = MAX_VOTE_DEFAULT
     return `Usage: After submissions are closed, if there is a voting period, you can run !getballot in the channel where the battle occurred to recieve a numbered list of entries via DM. Once you have the list, DM back with "!vote N" or "!vote N1, N2, N3" to vote for your favorite ${max_entries} entries. `
   }
   if (msg.guild) {
     return MSG_SERVER_ONLY
   } else {
-    const battleName = `${msg.channel.id}`
     if (battledao.isVotingOpen){
       if (!battledao.isVoterRegistered(msg.author.id)) {
         return `you haven't registered to vote for a battle yet. Run !getballot in a battle channel to register, you can re-vote but you have to register for every vote`
       }
       let voteItems = input.split(','), parsedVotes = []
+      if (voteItems.length > ballotSize) {
+        return `the max number of tracks you can vote for is ${ballotSize}, please slap a limiter on your votes and try again`
+      }
       for (let i in voteItems){
         if (!parseInt(i)){
-          return "sorry, this vote was entered wrong: please make sure your entries are COMMA-SEPARATED numbers in the list you got from running \`!getballot\` (spaces are ignored)" 
+          return `sorry, this vote was not formatted right: please make sure your entries are **comma-separated numbers** from the list provided by \`!getballot\`.\n\nExamples: \`!vote 7\`, \`!vote 1, 2, 3\` `
         }
         parsedVotes.push(parseInt(i))
       }
       battledao.voteAndDeregister(msg.author.id, parsedVotes)
+      return `your vote for track(s) [${parsedVotes.join(', ')}] has been counted! if you need to change your vote before the deadline is over, you need to run \`!getballot\` in the battle channel again` 
     } else {
       const dl = battledao.getVotingDeadline(battleName)
       return `voting closed for this battle at ${dl}, your vote has not been saved`
@@ -336,12 +348,13 @@ exports.vote = function(input, msg){
 }
 
 exports.results = function(input, msg){
+  const battleName = `${msg.channel.id}`
+  const podiumCapacity = battledao.getPodiumSize(battleName)
   if (input.toLowerCase() == 'help') {
-    return `Usage: #TODO usage info`
+    return `Usage: \`!results\` can be run by a mod after the voting deadline has passed to get the top `
   }
   if (msg.guild) {
     if (discordutil.isPowerfulMember(msg)){
-      const battleName = `${msg.channel.id}`
       if (!battledao.isBattleChannel(battleName)){
         return MSG_BATTLE_INACTIVE
       }
