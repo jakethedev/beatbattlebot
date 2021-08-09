@@ -12,10 +12,6 @@ const VOTEREGKEY = "votereg"
 const SUB_DL_KEY = "subdeadline"
 const VOTE_DL_KEY = "votedeadline"
 
-// Constant for use as a return code on getBattleIdByVoter, see usages in battlecontroller
-const USERNOTREGISTERED = "nobodyhome"
-exports.USERNOTREGISTERED = USERNOTREGISTERED
-
 let battleMap = {}
 
 // Load old cache on init
@@ -36,7 +32,8 @@ function _saveBattleState(){
 
 // Utility for clearing out battle registrations at the end of a battle
 function _resetBattleRegistration(battleName) {
-  if (!VOTEREGKEY in battleMap) {
+  if (!battleMap[VOTEREGKEY]) {
+    log('adding vote reg first time')
     battleMap[VOTEREGKEY] = {}
   }
   let voteRegistry = battleMap[VOTEREGKEY]
@@ -45,11 +42,15 @@ function _resetBattleRegistration(battleName) {
       delete voteRegistry[entrant]
     }
   }
+  _saveBattleState()
 }
 
 // Battle data reset and core "structure" setup
 function _resetBattleState(battleName) {
   //TODO mv disk cache to cache.backup
+  _resetBattleRegistration(battleName)
+  log(`map state after resetreg before inProgress:`)
+  console.dir(battleMap)
   let battleExisted = _isBattleInProgress(battleName)
   // Super simple template
   battleMap[battleName] = {
@@ -97,8 +98,8 @@ exports.getBattleSize = _battleSize
 
 // Quick util for seeing if a battle is active
 function _isBattleInProgress(battleName) {
-  log(`checking progress for ${battleName}`)
   if (!_isBattleChannel(battleName)) {
+    log(`notice: '${battleName}' checked for activity and is not in the map or has no entries`)
     return false
   }
   let battleHasEntries = _battleSize(battleName) > 0
@@ -150,7 +151,7 @@ function _isVotingOpen(battleName){
 }
 exports.isVotingOpen = _isVotingOpen
 
-exports.addEntry = function(entrantId, entrantName, link, battleName){
+exports.addEntry = function(entrantId, entrantName, link, battleName) {
   // Expects caller to verify that submissions are allowed
   let entryExisted = !!battleMap[battleName][ENTRYKEY][entrantId] // For smarter output
   battleMap[battleName][ENTRYKEY][entrantId] = {
@@ -167,18 +168,28 @@ exports.addEntry = function(entrantId, entrantName, link, battleName){
   }
 }
 
-exports.getEntriesFor = function(battleName){
+exports.getEntriesFor = function(battleName) {
   return battleMap[battleName][ENTRYKEY]
 }
 
-function _getBattleIdByVoter(userId){
+exports.getTopXResults = function(battleName) {
+  const entryMap = battleMap[battleName][ENTRYKEY]
+  // const votes = 
+  // const voteCounter = {}
+  // for i from 1 to battleSize: voteCounter[`${i}`] = 0
+  // for vote in votes: vote.forEach((v) => voteCounter[`${v}`]++
+  // TODO holy shit this is one of THOSE fuck you np complete my ass
+  // return topEntryMap
+}
+
+function _getBattleIdByVoter(userId) {
   if (!VOTEREGKEY in battleMap){
     battleMap[VOTEREGKEY] = {} // JIT assumption management
   }
-  return battleMap[VOTEREGKEY][userId] || USERNOTREGISTERED
+  return battleMap[VOTEREGKEY][userId] || null
 }
 exports.getBattleIdByVoter = _getBattleIdByVoter
-exports.isVoterRegistered = (userid) => _getBattleIdByVoter(userid) != USERNOTREGISTERED
+exports.isVoterRegistered = (userid) => _getBattleIdByVoter(userid) != null
 
 exports.registerVoter = function(userId, battleName){
   if (!VOTEREGKEY in battleMap) {
@@ -192,8 +203,11 @@ exports.registerVoter = function(userId, battleName){
 exports.voteAndDeregister = function(userId, voteIdxArray){
   const battleName = _getBattleIdByVoter(userId)
   // TODO finalize where this validation goes
-  if (battleName == USERNOTREGISTERED) {
-    return USERNOTREGISTERED
+  if (!battleName) {
+    return null
+  }
+  if (!battleMap[battleName][VOTEKEY]) {
+    battleMap[battleName][VOTEKEY] = {}
   }
   battleMap[battleName][VOTEKEY][userId] = voteIdxArray
   // Revoking vote registration tag
