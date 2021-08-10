@@ -10,7 +10,11 @@
     "battles", 
     "beat-challenge-submissions", 
     "beat-battle", 
-    "beat-battle-vc"
+    "beat-battle-vc",
+    "submissions",
+    "battle-rules",
+    "battle-general",
+    "battlechat"
   ],
   "gameStatus": "beat battles | !help for cmds"
 }
