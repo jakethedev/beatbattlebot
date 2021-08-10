@@ -363,10 +363,12 @@ exports.results = function(input, msg) {
       }
       if (!battledao.isVotingOpen(battleName)){
         const voteCountObj = battledao.getVoteCountForBattle(battleName)
-        console.dir(voteCountObj)
         const submissionMapObj = battledao.getEntriesFor(battleName)
         const response = discordutil.formatPodiumToArray(submissionMapObj, voteCountObj, podiumCapacity)
-        return response
+        for (let respMsg of response) {
+          msg.author.send(respMsg)
+        }
+        return 'trophy'
       } else {
         const vdl = battledao.getVotingDeadline(battleName)
         return `sorry but voting has not closed yet - voting is over for this battle at ${day.fmtAsPST(vdl)}, you can get official results then!`

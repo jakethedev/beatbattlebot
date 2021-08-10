@@ -6,6 +6,7 @@ HIPRI
 - results: needs to work for 0+ votes and 0+ entries
 
 BUGS
+- stopbattle and stopsubs and stopvotes should leave deadline alone if in the past
 - guide update: submissions shuf[fled] to switch it up
 - newbattle on empty battle is bork
 - isVotingOpen should check subs are closed
@@ -19,8 +20,10 @@ TODO battlecachedao
 
 TODO battlecontroller
 . results output formattign #8
-- subgroovy #41
 . deactivate battles #57
+- subgroovy #41
+- config.handleVotingTies: alpha, chrono, expandleaderboar
+    - perserver config
 - begonebot/heylisten #31/#30
 - newbattle: if input, setDeadline(input)
 - discordutil.ispowerful roles #15

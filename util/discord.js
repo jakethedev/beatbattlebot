@@ -23,7 +23,8 @@ const reactionmap = {
   'skip': '⏩',
   'fire': '�',
   'question': '❔',
-  'heart': '�'
+  'heart': '�',
+  'trophy': '🏆'
 }
 
 const reactionkeys = Object.keys(reactionmap)
@@ -91,15 +92,44 @@ Heads up: once you vote, you'll need to run \`!getballot\` in the same channel i
 }
 
 exports.formatPodiumToArray = function(entryJson, voteCountObj, maxResults) {
+  if (true)
+    return ['still under construction, but very nearly done!']
   //TODO Handle ties
   //TODO Handle not-enough-entrants for podium
-        // get max entrants
-        //    max entrants getter: if (!battle.maxvotes) default 10
-        // get indexed subs
-        // get votes
-        // sum votes by sub index
         // get max entrants by sum
         //    tie for last: config.handleBattleTies: alpha,chrono,random
         // format response
-  return ['geewillikers']
+  const numResults = Math.min(sortedVoteIndexes.length, maxResults) // TODO: yeet 0-vote entries
+  /* //From notebook sesh
+   * let place = 1
+   * for (let voteidx in Object.keys(sortedVoteIndexes)) {
+   *   entryKeyIdx = parseInt(voteidx) - 1 // voteidx was adjusted for user interaction
+   *   entryKey = Object.keys(entryJson)[entryKeyIdx] // MAGIC!
+   *   entryDetails = entryJson[entryKey]
+   *   response += `Rank ${place}: entryDetails`
+   *   if place == numresults:
+   *      break
+   * }
+   */
+  let responseHeader = `Here are the highest voted ${maxResults} tracks of ${numEntries} entries:\n`
+  let response = [responseHeader]
+  // Sort the vote indexes, then we have the order
+  const sortedVoteIndexes = Object.entries(voteCountObj).sort(([,a],[,b]) => a-b) // Comparator based on vote count, expects voteCounter to look like {'1':15,'2':7,'3':11} where id is the index of the entry, key is votes
+
+  // Run through sorted entries to buffer them to strings for user response
+  let pageIdx = 0, entryOutputCounter = 0
+  for (const [id, entry] of Object.entries(entryJson)) { // { key=user: value=link }
+    if (response[pageIdx].length + miniBuffer.length >= 1600){
+      pageIdx++
+      response[pageIdx] = '' // *ding* typewriter sounds
+    }
+    response[pageIdx] += miniBuffer
+    if (entryOutputCounter == entrySize && entryCounter < podiumSize) {
+      //note: not enough entries to fill the podium 
+      log(`not enough entries for podium, expected ${podiumSize} but got puny ${entrySize}`)
+    }
+  }
+  response[pageIdx+1] = `\nThanks for using battlebot! If you'd like to run another one, just run \`!newbattle letsgo\` in your battle channel :boxing_glove:`
+  debug(`podium pages: ${response.length}`)
+  return response
 }
