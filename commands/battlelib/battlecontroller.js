@@ -8,6 +8,7 @@ const MSG_SERVER_ONLY = "this command needs to be run in a server channel where 
 const MSG_DM_ONLY = "this command needs to be sent to the bot via DM"
 const MSG_MOD_ONLY = "this is a mod-only command"
 const MSG_BATTLE_INACTIVE = "there is no active battle for this channel, ask a mod if that's a surprise"
+const MSG_BATTLE_CLOSED = "the battle in this channel is over and done, hope to see you next time!"
 
 let debug = msg => console.log(`battlecmds: ${msg}`)
 
@@ -47,7 +48,7 @@ exports.submit = function(input, msg) {
     debug(`${entrantName} has submitted ${link} for battle[${battleName}]`)
     if (!battledao.isSubmitOpen(battleName)){
       const subdl = battledao.getSubDeadline(battleName)
-      return `sorry but this battle is closed, the deadline was ${day.fmtAsPST(subdl)}`
+      return `sorry but this battle is closed, the submission deadline was ${day.fmtAsPST(subdl)}`
     }
     if (!link.includes('https')) {
       return `the first word after submit doesn't look like a valid link, make sure it's an *https* address then try again!`
@@ -304,13 +305,21 @@ exports.getballot = function(input, msg){
     if (!battledao.isBattleChannel(battleName)){
       return MSG_BATTLE_INACTIVE
     }
-    battledao.registerVoter(msg.author.id, battleName)
-    const entries = battledao.getEntriesFor(battleName)
-    const respArray = discordutil.formatBallotToArray(entries)
-    for (let respMsg of respArray) {
-      msg.author.send(respMsg)
+    if (battledao.isVotingOpen(battleName)) {
+      battledao.registerVoter(msg.author.id, battleName)
+      const entries = battledao.getEntriesFor(battleName)
+      const respArray = discordutil.formatBallotToArray(entries)
+      for (let respMsg of respArray) {
+        msg.author.send(respMsg)
+      }
+      return 'success'
+    } else if (battledao.isSubmitOpen(battleName)) {
+      const subdl = battledao.getSubDeadline(battleName)
+      const output = `this battle is still taking submissions until ${day.fmtAsPST(subdl)}, so you can't start voting until then!`
+      return output
+    } else {
+      return MSG_BATTLE_CLOSED
     }
-    return 'success'
   } else {
     return MSG_SERVER_ONLY
   }
@@ -371,22 +380,19 @@ exports.results = function(input, msg){
       if (!battledao.isBattleChannel(battleName)){
         return MSG_BATTLE_INACTIVE
       }
-      if (battledao.isVotingOpen(battleName)){
-        // the real code here: battledao.getPoduim()?
+      if (!battledao.isVotingOpen(battleName)){
+        // get max entrants
+        //    max entrants getter: if (!battle.maxvotes) default 10
+        // get indexed subs
+        // get votes
+        // sum votes by sub index
+        // get max entrants by sum
+        //    tie for last: config.handleBattleTies: alpha,chrono,random
+        // format response
       } else {
         const vdl = battledao.getVotingDeadline(battleName)
-        return `sorry but voting closed for this battle at ${day.fmtAsPST(vdl)}, any new votes are ignored`
+        return `sorry but voting has not closed yet - voting is over for this battle at ${day.fmtAsPST(vdl)}, you can get official results then!`
       }
-      // if votind is open
-      //    return aye chill we're still workin on it
-      // get max entrants
-      //    max entrants getter: if (!battle.maxvotes) default 10
-      // get indexed subs
-      // get votes
-      // sum votes by sub index
-      // get max entrants by sum
-      //    tie for last: config.handleBattleTies: alpha,chrono,random
-      // format response
       return `not implemented yet`
     } else {
       return MSG_MOD_ONLY

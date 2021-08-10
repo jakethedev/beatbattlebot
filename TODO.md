@@ -2,16 +2,26 @@
 
 ### See the issues page for actual tasks, this is a notepad for active work
 
+HIPRI
+- results: needs to work for 0+ votes and 0+ entries
+- ballot: output needs written
+
+BUGS
+_ getballot needs to respect isVotingOpen
+- newbattle on empty battle is bork
+- isVotingOpen should check subs are closed
+- setVoteDeadline should sane-error if setting before sub deadline
+- submit: subdl passed output should be smarter with votedl
+
 TODO battlecachedao
+. podium(x) response
 - 100% test coverage
     mock discord message, user, channel
 - getResults(battleName) // should this have an option to end the battle early?
 
 TODO battlecontroller
-. 334: parsedVotes needs Set() properties
-. getballot #20
-    this is gonna be a chunky one
-. results #8
+. getballot #20 formatting and output
+. results output formattign #8
 - subgroovy #41
 . deactivate battles #57
 - begonebot/heylisten #31/#30
@@ -28,10 +38,10 @@ TODO battlecontroller
 
 NEEDS TESTING
 X resetCache() to deregister all voters for battle
-X con.vote #5
 X dao.voteAndDeregister(user,entries)
 
 DONE
+X con.vote #5
 X switch battleName's to channel.id #25
 X submissions count in output #16
 X shuffle submissions output #51
