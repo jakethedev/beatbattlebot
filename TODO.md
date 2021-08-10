@@ -4,10 +4,9 @@
 
 HIPRI
 - results: needs to work for 0+ votes and 0+ entries
-- ballot: output needs written
 
 BUGS
-_ getballot needs to respect isVotingOpen
+- guide update: submissions shuf[fled] to switch it up
 - newbattle on empty battle is bork
 - isVotingOpen should check subs are closed
 - setVoteDeadline should sane-error if setting before sub deadline
@@ -17,10 +16,8 @@ TODO battlecachedao
 . podium(x) response
 - 100% test coverage
     mock discord message, user, channel
-- getResults(battleName) // should this have an option to end the battle early?
 
 TODO battlecontroller
-. getballot #20 formatting and output
 . results output formattign #8
 - subgroovy #41
 . deactivate battles #57
@@ -41,6 +38,8 @@ X resetCache() to deregister all voters for battle
 X dao.voteAndDeregister(user,entries)
 
 DONE
+X getballot #20 formatting and output
+X submissions shuffle opt instead of order
 X con.vote #5
 X switch battleName's to channel.id #25
 X submissions count in output #16

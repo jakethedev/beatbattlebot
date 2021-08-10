@@ -49,8 +49,6 @@ function _resetBattleRegistration(battleName) {
 function _resetBattleState(battleName) {
   //TODO mv disk cache to cache.backup
   _resetBattleRegistration(battleName)
-  log(`map state after resetreg before inProgress:`)
-  console.dir(battleMap)
   let battleExisted = _isBattleInProgress(battleName)
   // Super simple template
   battleMap[battleName] = {
@@ -191,9 +189,6 @@ exports.getVoteCountForBattle = function(battleName) {
 }
 
 function _getBattleIdByVoter(userId) {
-  if (!VOTEREGKEY in battleMap){
-    battleMap[VOTEREGKEY] = {} // JIT assumption management
-  }
   return battleMap[VOTEREGKEY][userId] || null
 }
 exports.getBattleIdByVoter = _getBattleIdByVoter
@@ -212,17 +207,14 @@ exports.voteAndDeregister = function(userId, voteIdxArray){
   const battleName = _getBattleIdByVoter(userId)
   // TODO finalize where this validation goes
   if (!battleName) {
-    return null
-  }
-  if (!battleMap[battleName][VOTECACHEKEY]) {
-    battleMap[battleName][VOTECACHEKEY] = {}
+    return false
   }
   battleMap[battleName][VOTECACHEKEY][userId] = voteIdxArray
   // Revoking vote registration tag
   delete battleMap[VOTEREGKEY][userId]
   _saveBattleState()
   // TODO no UI logic in the database what is this rookie hour? jeepers
-  return `your vote has been cast for entries ${voteIdxArray} listed above!\nRun \`!getballot\` in a battle channel if you want to change your vote or vote in a new battle!` 
+  return true
 }
 
 //TODO getter AND SETTER for both of these

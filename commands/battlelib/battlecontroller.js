@@ -90,43 +90,20 @@ exports.submissions = function(input, msg) {
     }
     if (battledao.isBattleActive(battleName)){
       let submissionMapObj = battledao.getEntriesFor(battleName)
-      const ordered = input.includes('chron')
-      if (!ordered) {
+      const largeBattle = Object.entries(submissionMapObj).length > 10
+      const shuffled = input.includes('shuf')
+      const printInChannel = !largeBattle || input.includes('here')
+      if (shuffled) {
         submissionMapObj = rand.getShuffledCopyOfObject(submissionMapObj)
       }
-      // Just to explain: battle entry lists break the 2000 character limit pretty fast, so 
-      // this is a fast way to paginate the response, bot.js knows to msg.reply the first entry of an array
-      // and the rest are just sent to the channel the command was received in
-      let numEntries = Object.keys(submissionMapObj).length
-      let responseHeader = `${numEntries} total, check em out!\n`
-      if (ordered) {
-        responseHeader = `${numEntries} total, these are in the same order I got them in!\n`
-      }
-      let response = [responseHeader]
-      let curIdx = 0
-      // TODO move to subroutine or dao, perhaps discordutil.prepareLargeRespone?
-      for (const [id, entry] of Object.entries(submissionMapObj)) { // { key=user: value=link }
-        const { link, displayname } = entry
-        let miniBuffer = ` - ${displayname} -> <${link}>\n`
-        if (response[curIdx].length + miniBuffer.length >= 1600){
-          curIdx++
-          response[curIdx] = '' // *ding* typewriter sounds
-        }
-        response[curIdx] += miniBuffer
-      }
-      response[curIdx+1] = `--> Heads up, there's a lot of heat in this list :fire: <--`
-      debug(`pages of response: ${response.length}`)
+      const response = discordutil.formatSubmissionsToArray(submissionMapObj, shuffled)
       // If we've got a small battle or someone says "here", print to the channel
-      let largeBattle = Object.entries(submissionMapObj).length > 10
-      let printInChannel = !largeBattle || input.includes('here')
       if (printInChannel) {
         return response
       }
       // At this point we have a big battle, reply via dm with a confirmation to channel
-      msg.author.send(response[0])
-      response.shift()
-      for (const otherItem of response){
-        msg.author.send(otherItem)
+      for (const responseChunk of response){
+        msg.author.send(responseChunk)
       }
       return discordutil.SUCCESS
     } else {
@@ -308,7 +285,7 @@ exports.getballot = function(input, msg){
     if (battledao.isVotingOpen(battleName)) {
       battledao.registerVoter(msg.author.id, battleName)
       const entries = battledao.getEntriesFor(battleName)
-      const respArray = discordutil.formatBallotToArray(entries)
+      const respArray = discordutil.formatBallotToArray(entries, ballotSize)
       for (let respMsg of respArray) {
         msg.author.send(respMsg)
       }
@@ -331,7 +308,7 @@ exports.vote = function(input, msg){
     return MSG_DM_ONLY
   }
   if (!battledao.isVoterRegistered(msg.author.id)) {
-    return `you haven't registered to vote for a battle yet. Run !getballot in a battle channel to register, you can re-vote if you like - but you have to register for every vote`
+    return `you haven't registered to vote for a battle yet. Run \`!getballot\` in a battle channel to register, you can re-vote if you like - but you have to register for every vote`
   }
   // This REQUIRES a registered voter, must go with isVoterRegistered
   const battleName = battledao.getBattleIdByVoter(msg.author.id)
@@ -361,8 +338,12 @@ exports.vote = function(input, msg){
       voteSet.add(voteEntryId)
     }
     voteSet.forEach((v) => voteArrayValidated.push(v))
-    battledao.voteAndDeregister(msg.author.id, voteArrayValidated)
-    return `your vote for track(s) **[ ${voteArrayValidated.join(', ')} ]** has been counted! if you need to change your vote before the deadline is over, you need to run \`!getballot\` in the battle channel again` 
+    if (battledao.voteAndDeregister(msg.author.id, voteArrayValidated)) {
+      return `your vote for track(s) **[ ${voteArrayValidated.join(', ')} ]** has been counted! if you need to change your vote before the deadline is over, you need to run \`!getballot\` in the battle channel again` 
+    } else {
+      log(`odd behavior: voteAndDereg failed for user [${msg.author.id}] in battle [${battleName}]`)
+      return `...well this is awkward but the voting machine is jammed, ping jakebelow directly below this message for support`
+    }
   } else {
     const vdl = battledao.getVotingDeadline(battleName)
     return `sorry but voting closed for this battle at ${day.fmtAsPST(vdl)}, any new votes are ignored`
@@ -383,20 +364,13 @@ exports.results = function(input, msg) {
       if (!battledao.isVotingOpen(battleName)){
         const voteCountObj = battledao.getVoteCountForBattle(battleName)
         console.dir(voteCountObj)
-        // get max entrants
-        //    max entrants getter: if (!battle.maxvotes) default 10
-        // get indexed subs
-        // get votes
-        // sum votes by sub index
-        // get max entrants by sum
-        //    tie for last: config.handleBattleTies: alpha,chrono,random
-        // format response
-        return 'yeet'
+        const submissionMapObj = battledao.getEntriesFor(battleName)
+        const response = discordutil.formatPodiumToArray(submissionMapObj, voteCountObj, podiumCapacity)
+        return response
       } else {
         const vdl = battledao.getVotingDeadline(battleName)
         return `sorry but voting has not closed yet - voting is over for this battle at ${day.fmtAsPST(vdl)}, you can get official results then!`
       }
-      return `not implemented yet`
     } else {
       return MSG_MOD_ONLY
     }
