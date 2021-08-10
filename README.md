@@ -13,7 +13,7 @@ To see a current list of available commands, run `!help` in a bot channel or as 
 
 ## Development
 
-Install Node.js 12+, fork this project, npm install, set up an app token (as above), add the token to a NEW file at `.token.json` in the project root, then invite the bot to a server for testing.
+Install Node.js 12+, fork this project, npm install, set up an app token (see 'Running the Bot' section), add the token to a NEW file at `.token.json` in the project root, then invite the bot to a server for testing.
 
 'npm start' will run the bot in the foreground, 'npm run devbot' will run a hot-reloading bot instance, and 'npm test' should run quietly with no issues if everything's set up correctly. 'npm run verbosetest' will show you the npm test output, which should look like Discord-formatted responses.
 

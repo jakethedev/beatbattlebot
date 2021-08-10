@@ -2,10 +2,13 @@ const { Message } = require('discord.js')
 const discordutil = require('../../util/discord')
 const battledao = require('./battlecachedao')
 const day = require('../../util/dayjs')
+const rand = require('../../util/random')
 
 const MSG_SERVER_ONLY = "this command needs to be run in a server channel where this bot is active"
+const MSG_DM_ONLY = "this command needs to be sent to the bot via DM"
 const MSG_MOD_ONLY = "this is a mod-only command"
 const MSG_BATTLE_INACTIVE = "there is no active battle for this channel, ask a mod if that's a surprise"
+const MSG_BATTLE_CLOSED = "the battle in this channel is over and done, hope to see you next time!"
 
 let debug = msg => console.log(`battlecmds: ${msg}`)
 
@@ -15,11 +18,12 @@ exports.newbattle = function(input, msg) {
   }
   if (msg.guild){
     if (discordutil.isPowerfulMember(msg)){
-      let battleName = `${msg.guild.name}_${msg.channel.name}`
+      const battleName = `${msg.channel.id}`
       if (battledao.isBattleActive(battleName) && input !== 'letsgo') {
         return `heads up, this resets the current battle. Are you ready for a new round? \`!newbattle letsgo\` to confirm!`
       }
-      return battledao.resetCache(battleName)
+      // TODO if input: setDeadline(input)
+      return battledao.newBattle(battleName)
     } else {
       return MSG_MOD_ONLY
     }
@@ -33,18 +37,21 @@ exports.submit = function(input, msg) {
     return `Usage: Post a new message that starts with \`!submit https://link.to.your/beat\` to enter the battle in this channel! Make sure there's a space after your link if you want to write more in your message, otherwise it might not save right` 
   }
   if (msg.guild) {
-    let entrantId = msg.member.id
+    const battleName = `${msg.channel.id}`
+    if (!battledao.isBattleChannel(battleName)){
+      return MSG_BATTLE_INACTIVE
+    }
     // Note: nickname changes take time to propagate, so nickchange -> submit can result in the old nick saving instead
+    let entrantId = msg.member.id
     let entrantName = msg.member.nickname || msg.member.user.username
-    let battleName = `${msg.guild.name}_${msg.channel.name}`
     const link = input.split(' ')[0].trim()
     debug(`${entrantName} has submitted ${link} for battle[${battleName}]`)
-    if (!link.includes('https')) {
-      return `the first word after submit doesn't look like a valid link, make sure it's an *https* address then try again!`
-    }
     if (!battledao.isSubmitOpen(battleName)){
       const subdl = battledao.getSubDeadline(battleName)
-      return `sorry but this battle is closed, the deadline was ${day.fmtAsPST(subdl)}`
+      return `sorry but this battle is closed, the submission deadline was ${day.fmtAsPST(subdl)}`
+    }
+    if (!link.includes('https')) {
+      return `the first word after submit doesn't look like a valid link, make sure it's an *https* address then try again!`
     }
     return battledao.addEntry(entrantId, entrantName, link, battleName)
   } else {
@@ -55,11 +62,14 @@ exports.submit = function(input, msg) {
 //exports.
 let modsubmit = function(input, msg) {
   if (input.toLowerCase() == 'help') {
-    return `Usage: !modsubmit \@discordmember https://their-link - this is a mod-only command for special case entries that need to be added after a submission deadline` 
+    return `Usage: !modsubmit \@discordmember https://their-link - this is a mod-only command for special case entries that need to be added after a submission deadline`
   }
   if (msg.guild) {
+    const battleName = `${msg.channel.id}`
+    if (!battledao.isBattleChannel(battleName)){
+      return MSG_BATTLE_INACTIVE
+    }
     if (discordutil.isPowerfulMember(msg)){
-      let battleName = `${msg.guild.name}_${msg.channel.name}`
       return `not implemented yet`
     } else {
       return MSG_MOD_ONLY
@@ -74,41 +84,30 @@ exports.submissions = function(input, msg) {
     return `Post \`!submissions\` to see this battle's entries! Use \`!submissions here\` to print entries to this channel (no matter how big the list is)`
   }
   if (msg.guild) {
-    let battleName = `${msg.guild.name}_${msg.channel.name}`
+    const battleName = `${msg.channel.id}`
+    if (!battledao.isBattleChannel(battleName)){
+      return MSG_BATTLE_INACTIVE
+    }
     if (battledao.isBattleActive(battleName)){
-      const submissionMapObj = battledao.getEntriesFor(battleName)
-      // First gnarly hack of the bot: battle entry lists break the 2000 character limit pretty easily, so 
-      // this is a cheap way to paginate the response, bot.js knows to msg.reply the first entry of an array
-      // and the rest are just sent to the channel the command was received in
-      let response = [`here are the current submissions:\n`]
-      let curIdx = 0
-      // TODO move to subroutine or dao, perhaps discordutil.prepareLargeRespone?
-      for (const [id, entry] of Object.entries(submissionMapObj)) { // { key=user: value=link }
-        const { link, displayname } = entry
-        let miniBuffer = ` - ${displayname} -> <${link}>\n`
-        if (response[curIdx].length + miniBuffer.length >= 1600){
-          curIdx++
-          response[curIdx] = '' // *ding* typewriter sounds
-        }
-        response[curIdx] += miniBuffer
+      let submissionMapObj = battledao.getEntriesFor(battleName)
+      const largeBattle = Object.entries(submissionMapObj).length > 10
+      const shuffled = input.includes('shuf')
+      const printInChannel = !largeBattle || input.includes('here')
+      if (shuffled) {
+        submissionMapObj = rand.getShuffledCopyOfObject(submissionMapObj)
       }
-      response[curIdx+1] = "Be careful, there's a lot of heat in this list :fire:"
-      debug(`pages of response: ${curIdx}`)
+      const response = discordutil.formatSubmissionsToArray(submissionMapObj, shuffled)
       // If we've got a small battle or someone says "here", print to the channel
-      let largeBattle = Object.entries(submissionMapObj).length > 10
-      let printInChannel = !largeBattle || input.toLowerCase() == 'here'
       if (printInChannel) {
         return response
       }
       // At this point we have a big battle, reply via dm with a confirmation to channel
-      msg.author.send(response[0])
-      response.shift()
-      for (const otherItem of response){
-        msg.author.send(otherItem)
+      for (const responseChunk of response){
+        msg.author.send(responseChunk)
       }
       return discordutil.SUCCESS
     } else {
-      return MSG_BATTLE_INACTIVE
+      return `there are no submissions yet, but you could be the one to change that!`
     }
   } else {
     return MSG_SERVER_ONLY
@@ -117,27 +116,26 @@ exports.submissions = function(input, msg) {
 
 exports.deadlines = function(input, msg){
   if (input.toLowerCase() == 'help') {
-    return `Usage: #TODO usage info`
+    return `Usage: \`!deadlines\` to print submission and voting deadlines for this battle (if they're set)\n\nMods can use \`!setdeadline SPAN\` and \`!votingends SPAN\` to set these, see help for those commands for more info`
   }
   if (msg.guild) {
-    if (discordutil.isPowerfulMember(msg)){
-      let battleName = `${msg.guild.name}_${msg.channel.name}`
-      let subdl = battledao.getSubDeadline(battleName)
-      let votedl = battledao.getVotingDeadline(battleName)
-      let response = "deadlines for this battle:\n"
-      if (subdl) {
-        response += `ENTRIES: Submissions are due ${subdl.fromNow()} (at ${day.fmtAsPST(subdl)})\n`
-      }
-      if (votedl) {
-        response += `VOTING: If subs are closed, votes are due ${votedl.fromNow()} (${day.fmtAsPST(votedl)})\n`
-      }
-      if (!subdl && !votedl) {
-        response += 'No deadlines set! Mods can use `!setdeadline` and `!votingends` to set them'
-      }
-      return response
-    } else {
-      return MSG_MOD_ONLY
+    const battleName = `${msg.channel.id}`
+    if (!battledao.isBattleChannel(battleName)){
+      return MSG_BATTLE_INACTIVE
     }
+    let subdl = battledao.getSubDeadline(battleName)
+    let votedl = battledao.getVotingDeadline(battleName)
+    let response = "deadlines for this battle:\n"
+    if (subdl) {
+      response += `ENTRIES: Submissions are due ${subdl.fromNow()} (at ${day.fmtAsPST(subdl)})\n`
+    }
+    if (votedl) {
+      response += `VOTING: If subs are closed, votes are due ${votedl.fromNow()} (${day.fmtAsPST(votedl)})\n`
+    }
+    if (!subdl && !votedl) {
+      response += 'No deadlines set! Mods can use `!setdeadline` and `!votingends` to set them'
+    }
+    return response
   } else {
     return MSG_SERVER_ONLY
   }
@@ -145,11 +143,14 @@ exports.deadlines = function(input, msg){
 
 exports.setdeadline = function(input, msg){
   if (input.toLowerCase() == 'help') {
-    return `Usage: !setdeadline SPAN to set the submission deadline of this battle to SPAN time from now! You can use numbers, w, d, h, and m to specify how long in weeks, days, hours, and minutes the battle should run\nExample: \`!setdeadline 1w2d3h15m\` will set the deadline to 1 week, 2 days, 3 hours, and 15 minutes from now (days and hours are rounded forward to the next clean hour)`
+    return `Usage: \`!setdeadline SPAN\` to set the submission deadline of this battle to SPAN time from now! You can use numbers, w, d, h, and m to specify how long in weeks, days, hours, and minutes the battle should run\nExample: \`!setdeadline 1w2d3h15m\` will set the deadline to 1 week, 2 days, 3 hours, and 15 minutes from now (days and hours are rounded forward to the next clean hour)`
   }
   if (msg.guild) {
     if (discordutil.isPowerfulMember(msg)){
-      let battleName = `${msg.guild.name}_${msg.channel.name}`
+      const battleName = `${msg.channel.id}`
+      if (!battledao.isBattleChannel(battleName)){
+        return MSG_BATTLE_INACTIVE
+      }
       const deadline = day.addTimespan(input)
       battledao.setSubDeadline(battleName, deadline)
       return `Submission deadline changed, entries due ${deadline.fromNow()}! (${day.fmtAsPST(deadline)})`
@@ -161,14 +162,16 @@ exports.setdeadline = function(input, msg){
   }
 }
 
-//exports.
-let votingends = function(input, msg){
+exports.votingends = function(input, msg){
   if (input.toLowerCase() == 'help') {
     return `Usage: !votingends SPAN to set the voting deadline of this battle to SPAN time from now! You can use numbers, w, d, h, and m to specify how long in weeks, days, hours, and minutes the voting period should run\nExample: \`!votingends 1w5d2h30m\` will set the deadline to 1 week, 5 days, 2 hours, and 30 minutes from now (days and hours are rounded forward to the next clean hour)`
   }
   if (msg.guild) {
     if (discordutil.isPowerfulMember(msg)){
-      let battleName = `${msg.guild.name}_${msg.channel.name}`
+      const battleName = `${msg.channel.id}`
+      if (!battledao.isBattleChannel(battleName)){
+        return MSG_BATTLE_INACTIVE
+      }
       const deadline = day.addTimespan(input)
       battledao.setVotingDeadline(battleName, deadline)
       return `Voting deadline changed, votes are due ${deadline.fromNow()}! (${day.fmtAsPST(deadline)})`
@@ -180,14 +183,16 @@ let votingends = function(input, msg){
   }
 }
 
-//exports.
-let stopbattle = function(input, msg){
+exports.stopbattle = function(input, msg){
   if (input.toLowerCase() == 'help') {
     return `Usage: !stopbattle sets the submission AND voting deadlines to right now, stopping the battle in its *tracks*`
   }
   if (msg.guild) {
     if (discordutil.isPowerfulMember(msg)){
-      let battleName = `${msg.guild.name}_${msg.channel.name}`
+      const battleName = `${msg.channel.id}`
+      if (!battledao.isBattleChannel(battleName)){
+        return MSG_BATTLE_INACTIVE
+      }
       const deadline = new day.dayjs()
       battledao.setSubDeadline(battleName, deadline)
       if (battledao.isVotingOpen(battleName)) {
@@ -208,7 +213,10 @@ exports.stopsubs = function(input, msg){
   }
   if (msg.guild) {
     if (discordutil.isPowerfulMember(msg)){
-      let battleName = `${msg.guild.name}_${msg.channel.name}`
+      const battleName = `${msg.channel.id}`
+      if (!battledao.isBattleChannel(battleName)){
+        return MSG_BATTLE_INACTIVE
+      }
       const deadline = new day.dayjs()
       battledao.setSubDeadline(battleName, deadline)
       return `submissions for this battle are now CLOSED! \`!submissions\` to see the final list of entries`
@@ -220,14 +228,16 @@ exports.stopsubs = function(input, msg){
   }
 }
 
-//exports.
-let stopvotes = function(input, msg){
+exports.stopvotes = function(input, msg){
   if (input.toLowerCase() == 'help') {
     return `Usage: !stopvotes sets the voting deadline to right now, locking in the current podium`
   }
   if (msg.guild) {
     if (discordutil.isPowerfulMember(msg)){
-      let battleName = `${msg.guild.name}_${msg.channel.name}`
+      const battleName = `${msg.channel.id}`
+      if (!battledao.isBattleChannel(battleName)){
+        return MSG_BATTLE_INACTIVE
+      }
       const deadline = new day.dayjs()
       battledao.setVotingDeadline(battleName, deadline)
       return `voting for this battle is now CLOSED! Mods can use \`!results X\` to see the top X entries ranked by votes`
@@ -239,7 +249,7 @@ let stopvotes = function(input, msg){
   }
 }
 
-// TODO Whiteboard this idea
+// TODO This is ez #33
 //exports.
 let maxvotes = function(input, msg){
   if (input.toLowerCase() == 'help') {
@@ -247,6 +257,11 @@ let maxvotes = function(input, msg){
   }
   if (msg.guild) {
     if (discordutil.isPowerfulMember(msg)){
+      const battleName = `${msg.channel.id}`
+      if (!battledao.isBattleChannel(battleName)){
+        return MSG_BATTLE_INACTIVE
+      }
+      // battledao.setBallotSize(battleName, input)
       return `not implemented yet`
     } else {
       return MSG_MOD_ONLY
@@ -256,40 +271,108 @@ let maxvotes = function(input, msg){
   }
 }
 
-//exports.
-let getballot = function(input, msg){
+exports.getballot = function(input, msg){
+  const battleName = `${msg.channel.id}`
+  const numEntries = battledao.getBattleSize(battleName)
+  const ballotSize = battledao.getBallotSize(battleName)  // used in output sent to user
   if (input.toLowerCase() == 'help') {
-    return `Usage: #TODO usage info`
+    return `Usage: After submissions are closed, if there is a voting period, you can run \`!getballot\` in the channel where the battle occurred to recieve a numbered list of entries via DM. Once you have the list, DM back with \`!vote N\` or \`!vote N1, N2, Nmax\` to vote for your favorite ${numEntries} entries. `
   }
   if (msg.guild) {
-    //TODO THIS IS WHERE THE SAUSAGE GETS MADE
-    return `not implemented yet`
+    if (!battledao.isBattleChannel(battleName)){
+      return MSG_BATTLE_INACTIVE
+    }
+    if (battledao.isVotingOpen(battleName)) {
+      battledao.registerVoter(msg.author.id, battleName)
+      const entries = battledao.getEntriesFor(battleName)
+      const respArray = discordutil.formatBallotToArray(entries, ballotSize)
+      for (let respMsg of respArray) {
+        msg.author.send(respMsg)
+      }
+      return 'success'
+    } else if (battledao.isSubmitOpen(battleName)) {
+      const subdl = battledao.getSubDeadline(battleName)
+      const output = `this battle is still taking submissions until ${day.fmtAsPST(subdl)}, so you can't start voting until then!`
+      return output
+    } else {
+      return MSG_BATTLE_CLOSED
+    }
   } else {
     return MSG_SERVER_ONLY
   }
 }
 
-//exports.
-let vote = function(input, msg){
-  if (input.toLowerCase() == 'help') {
-    return `Usage: #TODO usage info`
-  }
+exports.vote = function(input, msg){
+  // Validation and text for help output and rest of voting process
   if (msg.guild) {
-    return `not implemented yet`
+    return MSG_DM_ONLY
+  }
+  if (!battledao.isVoterRegistered(msg.author.id)) {
+    return `you haven't registered to vote for a battle yet. Run \`!getballot\` in a battle channel to register, you can re-vote if you like - but you have to register for every vote`
+  }
+  // This REQUIRES a registered voter, must go with isVoterRegistered
+  const battleName = battledao.getBattleIdByVoter(msg.author.id)
+  const ballotSize = battledao.getBallotSize(battleName)
+  const numEntries = battledao.getBattleSize(battleName)
+  if (input.toLowerCase() == 'help') {
+    return `Usage: After submissions are closed, if there is a voting period, you can run \`!getballot\` in the channel where the battle occurred to recieve a numbered list of entries via DM. Once you have the list, DM back with \`!vote N\` or \`!vote N1, N2, Nmax\` to vote for your favorite ${numEntries} entries. `
+  }
+  if (!battledao.isBattleActive(battleName)){
+    return MSG_BATTLE_INACTIVE
+  }
+  if (battledao.isVotingOpen(battleName)){
+    //Validation code until the next comments
+    let voteItems = input.split(','), voteSet = new Set(), voteArrayValidated = []
+    if (voteItems.length > ballotSize) {
+      return `the max number of tracks you can vote for is ${ballotSize}, please slap a limiter on your votes and try again`
+    }
+    for (let i of voteItems){
+      if (!parseInt(i)){
+        return `sorry, this vote was not formatted right: please make sure your entries are **comma-separated positive numbers** from the list provided by \`!getballot\`.\n\nExamples: \`!vote 7\`, \`!vote 1, 2, 3\` `
+      }
+      const voteEntryId = Math.abs(parseInt(i)) // no room for negativity
+      if (voteEntryId > numEntries) {
+        return `you voted for entry number [${voteEntryId}], but we only have ${numEntries} track(s)... Please double check the numbers and try again`
+      }
+      //Actually counting each vote, ignoring multiple votes for the same entry
+      voteSet.add(voteEntryId)
+    }
+    voteSet.forEach((v) => voteArrayValidated.push(v))
+    if (battledao.voteAndDeregister(msg.author.id, voteArrayValidated)) {
+      return `your vote for track(s) **[ ${voteArrayValidated.join(', ')} ]** has been counted! if you need to change your vote before the deadline is over, you need to run \`!getballot\` in the battle channel again` 
+    } else {
+      log(`odd behavior: voteAndDereg failed for user [${msg.author.id}] in battle [${battleName}]`)
+      return `...well this is awkward but the voting machine is jammed, ping jakebelow directly below this message for support`
+    }
   } else {
-    return MSG_SERVER_ONLY
+    const vdl = battledao.getVotingDeadline(battleName)
+    return `sorry but voting closed for this battle at ${day.fmtAsPST(vdl)}, any new votes are ignored`
   }
 }
 
-//exports.
-let results = function(input, msg){
+exports.results = function(input, msg) {
+  const battleName = `${msg.channel.id}`
+  const podiumCapacity = battledao.getPodiumSize(battleName)
   if (input.toLowerCase() == 'help') {
-    return `Usage: #TODO usage info`
+    return `Usage: \`!results\` can be run by a mod after the voting deadline has passed to get the top `
   }
   if (msg.guild) {
     if (discordutil.isPowerfulMember(msg)){
-      let battleName = `${msg.guild.name}_${msg.channel.name}`
-      return `not implemented yet`
+      if (!battledao.isBattleChannel(battleName)){
+        return MSG_BATTLE_INACTIVE
+      }
+      if (!battledao.isVotingOpen(battleName)){
+        const voteCountObj = battledao.getVoteCountForBattle(battleName)
+        const submissionMapObj = battledao.getEntriesFor(battleName)
+        const response = discordutil.formatPodiumToArray(submissionMapObj, voteCountObj, podiumCapacity)
+        for (let respMsg of response) {
+          msg.author.send(respMsg)
+        }
+        return 'trophy'
+      } else {
+        const vdl = battledao.getVotingDeadline(battleName)
+        return `sorry but voting has not closed yet - voting is over for this battle at ${day.fmtAsPST(vdl)}, you can get official results then!`
+      }
     } else {
       return MSG_MOD_ONLY
     }

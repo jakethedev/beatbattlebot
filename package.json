@@ -1,6 +1,6 @@
 {
   "name": "beatbattlebot",
-  "version": "1.0.7",
+  "version": "1.0.8",
   "description": "Discord.js bot for organizing and handling beat battle submissions on music servers",
   "main": "bot.js",
   "scripts": {
@@ -15,6 +15,7 @@
     "url": "https://github.com/jakethedev/beatbattlebot"
   },
   "keywords": [
+    "music competition",
     "beat battle",
     "music",
     "organizer",
