@@ -369,7 +369,7 @@ exports.vote = function(input, msg){
   }
 }
 
-exports.results = function(input, msg){
+exports.results = function(input, msg) {
   const battleName = `${msg.channel.id}`
   const podiumCapacity = battledao.getPodiumSize(battleName)
   if (input.toLowerCase() == 'help') {
@@ -381,6 +381,8 @@ exports.results = function(input, msg){
         return MSG_BATTLE_INACTIVE
       }
       if (!battledao.isVotingOpen(battleName)){
+        const voteCountObj = battledao.getVoteCountForBattle(battleName)
+        console.dir(voteCountObj)
         // get max entrants
         //    max entrants getter: if (!battle.maxvotes) default 10
         // get indexed subs
@@ -389,6 +391,7 @@ exports.results = function(input, msg){
         // get max entrants by sum
         //    tie for last: config.handleBattleTies: alpha,chrono,random
         // format response
+        return 'yeet'
       } else {
         const vdl = battledao.getVotingDeadline(battleName)
         return `sorry but voting has not closed yet - voting is over for this battle at ${day.fmtAsPST(vdl)}, you can get official results then!`

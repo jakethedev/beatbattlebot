@@ -7,7 +7,7 @@ const BALLOT_SIZE_DEFAULT = 3
 const PODIUM_SIZE_DEFAULT = 15
 
 const ENTRYKEY = "entries"
-const VOTEKEY = "votes"
+const VOTECACHEKEY = 'votes'
 const VOTEREGKEY = "votereg"
 const SUB_DL_KEY = "subdeadline"
 const VOTE_DL_KEY = "votedeadline"
@@ -55,7 +55,7 @@ function _resetBattleState(battleName) {
   // Super simple template
   battleMap[battleName] = {
     ENTRYKEY: {},
-    VOTEKEY: {},
+    VOTECACHEKEY: {},
     SUB_DL_KEY: false,
     VOTE_DL_KEY: false
   }
@@ -172,14 +172,22 @@ exports.getEntriesFor = function(battleName) {
   return battleMap[battleName][ENTRYKEY]
 }
 
-exports.getTopXResults = function(battleName) {
-  const entryMap = battleMap[battleName][ENTRYKEY]
-  // const votes = 
-  // const voteCounter = {}
-  // for i from 1 to battleSize: voteCounter[`${i}`] = 0
-  // for vote in votes: vote.forEach((v) => voteCounter[`${v}`]++
-  // TODO holy shit this is one of THOSE fuck you np complete my ass
-  // return topEntryMap
+exports.getVoteCountForBattle = function(battleName) {
+  const battleData = battleMap[battleName]
+  const entryMap = battleData[ENTRYKEY]
+  const votes = battleData[VOTECACHEKEY]
+  // Set up a way to store counters: TODO store this per entry
+  let voteCounter = {}
+  for (let i = 1; i <= _battleSize(battleName); i++ ) {
+    voteCounter[`${i}`] = 0
+  }
+  // Count all the votes, find the top X, return ordered list of votes
+  for (let voterID in votes) {
+    for (let vote of votes[voterID]) {
+      voteCounter[`${vote}`]++
+    }
+  }
+  return voteCounter
 }
 
 function _getBattleIdByVoter(userId) {
@@ -206,10 +214,10 @@ exports.voteAndDeregister = function(userId, voteIdxArray){
   if (!battleName) {
     return null
   }
-  if (!battleMap[battleName][VOTEKEY]) {
-    battleMap[battleName][VOTEKEY] = {}
+  if (!battleMap[battleName][VOTECACHEKEY]) {
+    battleMap[battleName][VOTECACHEKEY] = {}
   }
-  battleMap[battleName][VOTEKEY][userId] = voteIdxArray
+  battleMap[battleName][VOTECACHEKEY][userId] = voteIdxArray
   // Revoking vote registration tag
   delete battleMap[VOTEREGKEY][userId]
   _saveBattleState()
