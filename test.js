@@ -4,12 +4,20 @@
 const rand = require('./util/random')
 const fs = require('fs')
 const { ops, meta } = require('./commands')
+const log = (msg) => console.log(`>>>>> ${msg}`)
 
-// Set up commands
-console.dir(ops)
+// Mock raw data for client, users, and messages
+let { client , users, message_texts } = require('./test.json')
 
-// Mock client and messages: todo load from file
-let { client , msgs } = require('./test.json')
+// Generating mock objects "similar" to discord.js API
+let msgs = []
+for (content of message_texts) {
+  let msg_obj = {
+    "content": content
+  }
+  msgs[msgs.length] = msg_obj
+}
+log(`Testing with ${msgs.length} messages`)
 
 for (let msg of msgs) {
   console.log(msg)
@@ -32,4 +40,12 @@ for (let msg of msgs) {
   } else {
     console.log(`ERR: can't find operation ${cmd} for input (${input})`)
   }
+}
+
+function test_message(text, author, channel) {
+  console.log('hoisted')
+}
+
+function test_user(name = 'test_user', id = 'ID_TEST_USER', admin = true) {
+  
 }

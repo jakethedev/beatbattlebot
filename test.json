@@ -1,59 +1,32 @@
 {
-    "client": {
-        "login": "console.log('INFO: test login, no-op')"
+  "client": {
+    "login": "console.log('INFO: test login, no-op')"
+  },
+  "users": {
+    "admin": {
+      "name": "ADMINUSER",
+      "id": "ID_ADMIN_USER",
+      "admin": true,
+      "roles": [
+        "admin",
+        "moderator",
+        "everyone"
+      ]
     },
-    "msgs": [
-        {
-            "author": {
-                "id": "ID_FOR_JAKE",
-                "send": "console.log",
-                "username": "jake"
-            },
-            "channel": {
-                "id": "BATTLE_ID_ONE",
-                "name": "bot"
-            },
-            "content": "newbattle",
-            "guild": true,
-            "member": {
-                "permissions": {
-                    "any":  "console.log"
-                }
-            },
-            "reply": "console.log"
-        },
-        {
-            "author": {
-                "id": "ID_FOR_JAKE",
-                "send": "console.log",
-                "username": "jake"
-            },
-            "channel": {
-                "id": "BATTLE_ID_ONE",
-                "name": "bot"
-            },
-            "content": "submissions",
-            "guild": true,
-            "member": {
-                "permissions": {
-                    "any":  "console.log"
-                }
-            },
-            "reply": "console.log"
-        },
-        {
-            "author": {
-                "id": "ID_FOR_JAKE",
-                "send": "console.log",
-                "username": "jake"
-            },
-            "channel": {
-                "id": "BATTLE_ID_ONE",
-                "name": "bot"
-            },
-            "content": "submit https://my.song",
-            "guild": true,
-            "reply": "console.log"
-        }
-    ]
+    "standard": {
+      "name": "SIMPLEUSER",
+      "id": "ID_SIMPLE_USER",
+      "admin": false,
+      "roles": [
+        "everyone"
+      ]
+    }
+  },
+  "message_texts": [
+    "!invalidtestcommand",
+    "!submit https://mysong",
+    "!serverstats",
+    "!serverstats",
+    "!"
+  ]
 }

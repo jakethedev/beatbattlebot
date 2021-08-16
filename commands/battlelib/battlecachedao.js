@@ -12,6 +12,7 @@ const VOTEREGKEY = "votereg"
 const SUB_DL_KEY = "subdeadline"
 const VOTE_DL_KEY = "votedeadline"
 
+// Barebones default state
 let battleMap = {}
 
 // Load old cache on init
