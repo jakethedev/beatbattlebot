@@ -4,6 +4,9 @@
 
 HIPRI
 - results: needs to work for 0+ votes and 0+ entries
+- tests: offline dev is the win here
+    mock discord message, user, channel
+    getenv() for user type, allows npm run testadmin/testanyone
 
 BUGS
 - stopbattle and stopsubs and stopvotes should leave deadline alone if in the past
@@ -16,7 +19,6 @@ BUGS
 TODO battlecachedao
 . podium(x) response
 - 100% test coverage
-    mock discord message, user, channel
 
 TODO battlecontroller
 . results output formattign #8
