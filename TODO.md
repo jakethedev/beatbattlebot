@@ -19,8 +19,9 @@ TODO battlecachedao
     mock discord message, user, channel
 
 TODO battlecontroller
-. results output formatting #8
+. results output formattign #8
 . deactivate battles #57
+- delegate message parse to discordutil #
 - subgroovy #41
 - config.handleVotingTies: alpha, chrono, expandleaderboar
     - perserver config
@@ -56,7 +57,6 @@ X FIX DEADLINES PERMISSIONS #52
 X fix role issues #35
 X batledata restructure (see #22 for new direction)
 X BattleTestData.json
-
 X areSubsOpen()
 X areVotesOpen()
 X setSubDeadline(battleName, timestamp)

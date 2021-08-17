@@ -10,10 +10,12 @@ const log = (msg) => console.log(`>>>>> ${msg}`)
 let { client , users, message_texts } = require('./test.json')
 
 // Generating mock objects "similar" to discord.js API
+let testuser = users['admin']
 let msgs = []
 for (content of message_texts) {
   let msg_obj = {
-    "content": content
+    "content": content,
+    "author": testuser
   }
   msgs[msgs.length] = msg_obj
 }
@@ -42,10 +44,19 @@ for (let msg of msgs) {
   }
 }
 
-function test_message(text, author, channel) {
-  console.log('hoisted')
+/////////////////
+// Helper Funcs
+/////////////////
+
+function mockDiscordMessage(text, author, channel) {
+  return {
+    "content": text,
+    "author": author,
+    "channel": channel
+  }
 }
 
-function test_user(name = 'test_user', id = 'ID_TEST_USER', admin = true) {
-  
+function mockDiscordUser(rawUserObj) {
+  let {name, id, admin, roles} = rawUserObj
+  return {}
 }
