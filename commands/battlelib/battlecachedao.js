@@ -52,12 +52,13 @@ function _resetBattleState(battleName) {
   _resetBattleRegistration(battleName)
   let battleExisted = _isBattleInProgress(battleName)
   // Super simple template
-  battleMap[battleName] = {
-    `${ENTRYKEY}`: {},
-    `${VOTECACHEKEY}`: {},
-    `${SUB_DL_KEY}`: false,
-    `${VOTE_DL_KEY}`: false
-  }
+  let battleTemplate = {}
+  battleTemplate[ENTRYKEY] = {}
+  battleTemplate[VOTECACHEKEY] = {}
+  battleTemplate[SUB_DL_KEY] = false
+  battleTemplate[VOTE_DL_KEY] = false
+  // BAM lock and load!
+  battleMap[battleName] = battleTemplate
   _saveBattleState()
   if (!battleExisted) {
     return `looks like the first battle in this channel, lets goooo!`
