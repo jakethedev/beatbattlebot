@@ -91,14 +91,10 @@ Heads up: once you vote, you'll need to run \`!getballot\` in the same channel i
   return response
 }
 
-exports.formatPodiumToArray = function(entryJson, voteCountObj, maxResults) {
-  if (true)
-    return ['still under construction, but very nearly done!']
+exports.formatPodiumToArray = function(entryJson, voteCountObj, maxResults, showVoteCount = false) {
   //TODO Handle ties
+  //    tie for last: config.handleBattleTies: alpha,chrono,random
   //TODO Handle not-enough-entrants for podium
-        // get max entrants by sum
-        //    tie for last: config.handleBattleTies: alpha,chrono,random
-        // format response
   const numResults = Math.min(sortedVoteIndexes.length, maxResults) // TODO: yeet 0-vote entries
   /* //From notebook sesh
    * let place = 1
@@ -111,25 +107,35 @@ exports.formatPodiumToArray = function(entryJson, voteCountObj, maxResults) {
    *      break
    * }
    */
-  let responseHeader = `Here are the highest voted ${maxResults} tracks of ${numEntries} entries:\n`
-  let response = [responseHeader]
-  // Sort the vote indexes, then we have the order
+  let responseHeader = `Here are the highest voted ${numResults} tracks of ${numEntries} entries:\n`
+  let response = [responseHeader], pageIdx = 0, podiumPlace = 1
+  // Sort the vote indexes, then we have the order - winner declared!
   const sortedVoteIndexes = Object.entries(voteCountObj).sort(([,a],[,b]) => a-b) // Comparator based on vote count, expects voteCounter to look like {'1':15,'2':7,'3':11} where id is the index of the entry, key is votes
-
-  // Run through sorted entries to buffer them to strings for user response
-  let pageIdx = 0, entryOutputCounter = 0
-  for (const [id, entry] of Object.entries(entryJson)) { // { key=user: value=link }
+  // TODO: optional: showVoteCount
+  for (let voteidx in Object.keys(sortedVoteIndexes)) {
+    // Now to format each of the sorted entries into output!
+    let entryKeyIdx = parseInt(voteidx) - 1 // voteidx was adjusted for user interaction
+    let entryKey = Object.keys(entryJson)[entryKeyIdx] // MAGIC!
+    // TODO get these details { broken up } and set in miniBuffer in a cute way
+    let entryDetails = entryJson[entryKey]
+    let miniBuffer = `Rank ${podiumPlace}: ${entryDetails}`
+    // This could still be a couple pages depending on server settings for max podium size
     if (response[pageIdx].length + miniBuffer.length >= 1600){
       pageIdx++
       response[pageIdx] = '' // *ding* typewriter sounds
     }
     response[pageIdx] += miniBuffer
+    // TODO correct this if
     if (entryOutputCounter == entrySize && entryCounter < podiumSize) {
       //note: not enough entries to fill the podium 
       log(`not enough entries for podium, expected ${podiumSize} but got puny ${entrySize}`)
     }
+    if (podiumPlace == numResults) {
+      // Better luck next time to everyone who didn't make it
+      break
+    }
   }
-  response[pageIdx+1] = `\nThanks for using battlebot! If you'd like to run another one, just run \`!newbattle letsgo\` in your battle channel :boxing_glove:`
+  response[pageIdx+1] = `\nThanks for using battlebot! :blue_heart: If you'd like to start another battle, just run \`!newbattle letsgo\` in your battle channel :boxing_glove:`
   debug(`podium pages: ${response.length}`)
   return response
 }

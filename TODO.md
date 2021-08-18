@@ -4,6 +4,9 @@
 
 HIPRI
 - results: needs to work for 0+ votes and 0+ entries
+- tests: offline dev is the win here
+    mock discord message, user, channel
+    getenv() for user type, allows npm run testadmin/testanyone
 
 BUGS
 - stopbattle and stopsubs and stopvotes should leave deadline alone if in the past
@@ -16,11 +19,11 @@ BUGS
 TODO battlecachedao
 . podium(x) response
 - 100% test coverage
-    mock discord message, user, channel
 
 TODO battlecontroller
-. results output formatting #8
+. results output formattign #8
 . deactivate battles #57
+- delegate message parse to discordutil #
 - subgroovy #41
 - config.handleVotingTies: alpha, chrono, expandleaderboar
     - perserver config
@@ -56,7 +59,6 @@ X FIX DEADLINES PERMISSIONS #52
 X fix role issues #35
 X batledata restructure (see #22 for new direction)
 X BattleTestData.json
-
 X areSubsOpen()
 X areVotesOpen()
 X setSubDeadline(battleName, timestamp)
