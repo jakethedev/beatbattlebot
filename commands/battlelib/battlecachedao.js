@@ -7,7 +7,7 @@ const BALLOT_SIZE_DEFAULT = 3
 const PODIUM_SIZE_DEFAULT = 15
 
 const ENTRYKEY = "entries"
-const VOTECACHEKEY = 'votes'
+const VOTECACHEKEY = "votes"
 const VOTEREGKEY = "votereg"
 const SUB_DL_KEY = "subdeadline"
 const VOTE_DL_KEY = "votedeadline"
@@ -53,10 +53,10 @@ function _resetBattleState(battleName) {
   let battleExisted = _isBattleInProgress(battleName)
   // Super simple template
   battleMap[battleName] = {
-    ENTRYKEY: {},
-    VOTECACHEKEY: {},
-    SUB_DL_KEY: false,
-    VOTE_DL_KEY: false
+    `${ENTRYKEY}`: {},
+    `${VOTECACHEKEY}`: {},
+    `${SUB_DL_KEY}`: false,
+    `${VOTE_DL_KEY}`: false
   }
   _saveBattleState()
   if (!battleExisted) {
@@ -87,8 +87,8 @@ exports.isBattleChannel = _isBattleChannel
 
 // Trick for using this function locally and as export
 function _battleSize(battleName) {
-  if (_isBattleChannel(battleName)) {
-    const numEntries = Object.keys(battleMap[battleName][ENTRYKEY]).length 
+  if (_isBattleChannel(battleName) && battleMap[battleName][ENTRYKEY]) {
+    const numEntries = Object.keys(battleMap[battleName][ENTRYKEY]).length
     return numEntries
   }
   return 0
