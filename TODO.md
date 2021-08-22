@@ -17,13 +17,12 @@ BUGS
 - submit: subdl passed output should be smarter with votedl
 
 TODO battlecachedao
-. podium(x) response
 - 100% test coverage
 
 TODO battlecontroller
 . results output formattign #8
 . deactivate battles #57
-- delegate message parse to discordutil #
+- delegate message parse to discordutil for testing easy #
 - subgroovy #41
 - config.handleVotingTies: alpha, chrono, expandleaderboar
     - perserver config
