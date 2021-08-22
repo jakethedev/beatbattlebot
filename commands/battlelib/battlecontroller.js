@@ -34,7 +34,7 @@ exports.newbattle = function(input, msg) {
 
 exports.submit = function(input, msg) {
   if (input.toLowerCase() == 'help') {
-    return `Usage: Post a new message that starts with \`!submit https://link.to.your/beat\` to enter the battle in this channel! Make sure there's a space after your link if you want to write more in your message, otherwise it might not save right` 
+    return `Usage: Post a new message that starts with \`!submit https://link.to.your/beat\` to enter the battle in this channel! Make sure there's a space after your link if you want to write more in your message, otherwise it might not save right`
   }
   if (msg.guild) {
     const battleName = `${msg.channel.id}`
@@ -339,7 +339,7 @@ exports.vote = function(input, msg){
     }
     voteSet.forEach((v) => voteArrayValidated.push(v))
     if (battledao.voteAndDeregister(msg.author.id, voteArrayValidated)) {
-      return `your vote for track(s) **[ ${voteArrayValidated.join(', ')} ]** has been counted! if you need to change your vote before the deadline is over, you need to run \`!getballot\` in the battle channel again` 
+      return `your vote for track(s) **[ ${voteArrayValidated.join(', ')} ]** has been counted! if you need to change your vote before the deadline is over, you need to run \`!getballot\` in the battle channel again`
     } else {
       log(`odd behavior: voteAndDereg failed for user [${msg.author.id}] in battle [${battleName}]`)
       return `...well this is awkward but the voting machine is jammed, ping jakebelow directly below this message for support`
@@ -352,7 +352,7 @@ exports.vote = function(input, msg){
 
 exports.results = function(input, msg) {
   const battleName = `${msg.channel.id}`
-  const podiumCapacity = battledao.getPodiumSize(battleName)
+  let podiumCapacity = battledao.getPodiumSize(battleName)
   if (input.toLowerCase() == 'help') {
     return `Usage: \`!results\` can be run by a mod after the voting deadline has passed to get the top `
   }
@@ -364,14 +364,23 @@ exports.results = function(input, msg) {
       if (!battledao.isVotingOpen(battleName)){
         const voteCountObj = battledao.getVoteCountForBattle(battleName)
         const submissionMapObj = battledao.getEntriesFor(battleName)
-        const response = discordutil.formatPodiumToArray(submissionMapObj, voteCountObj, podiumCapacity)
+        // Quick parameter handling if you just want top winner or whatev
+        if (input && parseInt(input)) {
+          podiumCapacity = parseInt(input)
+        }
+        const showVotes = false
+        const response = discordutil.formatPodiumToArray(submissionMapObj, voteCountObj, podiumCapacity, showVotes)
         for (let respMsg of response) {
           msg.author.send(respMsg)
         }
         return 'trophy'
       } else {
+        // Creative message generation
+        const now = new day.dayjs()
+        const subdl = battledao.getSubDeadline(battleName)
+        const subovertxt = subdl? ` submissions are over ${now.to(subdl)} and` : ''
         const vdl = battledao.getVotingDeadline(battleName)
-        return `sorry but voting has not closed yet - voting is over for this battle at ${day.fmtAsPST(vdl)}, you can get official results then!`
+        return `sorry but the battle has not concluded -${subovertxt} voting ends at ${day.fmtAsPST(vdl)}, you can get official results then!`
       }
     } else {
       return MSG_MOD_ONLY

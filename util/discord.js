@@ -38,7 +38,7 @@ for (let key of reactionkeys){
 }
 
 exports.formatSubmissionsToArray = function(entryJson, shuffled = false) {
-  // Just to explain: battle entry lists break the 2000 character limit pretty fast, so 
+  // Just to explain: battle entry lists break the 2000 character limit pretty fast, so
   // this is a fast way to paginate the response, bot.js knows to msg.reply the first entry of an array
   // and the rest are just sent to the channel the command was received in
   let numEntries = Object.keys(entryJson).length
@@ -82,10 +82,10 @@ exports.formatBallotToArray = function(entryJson, ballotSize) {
   response[pageIdx+1] = `\n\n***How to Vote!***
 Send a DM to me formatted just like \`!vote X\` or \`!vote X, Y, Z\`. Replace X (and Y and Z) with the **[number]** of the track(s) you like. You can vote for a MAXIMUM of **${ballotSize}** track(s) in this battle. Voting for the same track multiple times will only count as one vote, so choose wisely!
 
-Examples: 
+Examples:
   \`!vote 13\`
   \`!vote 6, 9, 420\`
-    
+
 Heads up: once you vote, you'll need to run \`!getballot\` in the same channel if you need to change your vote`
   debug(`ballot pages: ${response.length}`)
   return response
@@ -95,29 +95,22 @@ exports.formatPodiumToArray = function(entryJson, voteCountObj, maxResults, show
   //TODO Handle ties
   //    tie for last: config.handleBattleTies: alpha,chrono,random
   //TODO Handle not-enough-entrants for podium
-  const numResults = Math.min(sortedVoteIndexes.length, maxResults) // TODO: yeet 0-vote entries
-  /* //From notebook sesh
-   * let place = 1
-   * for (let voteidx in Object.keys(sortedVoteIndexes)) {
-   *   entryKeyIdx = parseInt(voteidx) - 1 // voteidx was adjusted for user interaction
-   *   entryKey = Object.keys(entryJson)[entryKeyIdx] // MAGIC!
-   *   entryDetails = entryJson[entryKey]
-   *   response += `Rank ${place}: entryDetails`
-   *   if place == numresults:
-   *      break
-   * }
-   */
-  let responseHeader = `Here are the highest voted ${numResults} tracks of ${numEntries} entries:\n`
-  let response = [responseHeader], pageIdx = 0, podiumPlace = 1
-  // Sort the vote indexes, then we have the order - winner declared!
+  // Sort the vote indexes, then we have the order - winner declared! The rest is formatting and tie mgmt
+  const numEntries = Object.keys(entryJson).length
   const sortedVoteIndexes = Object.entries(voteCountObj).sort(([,a],[,b]) => a-b) // Comparator based on vote count, expects voteCounter to look like {'1':15,'2':7,'3':11} where id is the index of the entry, key is votes
-  // TODO: optional: showVoteCount
+  const podiumSize = Math.min(sortedVoteIndexes.length, maxResults)
+  // TODO: yeet 0-vote entries, output tiebreak method
+  let responseHeader = `Here are the highest voted ${podiumSize} tracks of ${numEntries} entries:\n`
+  // Response is our output array, pageIdx is for paginating that array for discord msg constraints,
+  //   entryOutputCounter is num entries added to response, podiumPlace differs from count due to ties
+  let response = [responseHeader], pageIdx = 0, entryOutputCounter = 0, podiumPlace = 1
   for (let voteidx in Object.keys(sortedVoteIndexes)) {
     // Now to format each of the sorted entries into output!
     let entryKeyIdx = parseInt(voteidx) - 1 // voteidx was adjusted for user interaction
     let entryKey = Object.keys(entryJson)[entryKeyIdx] // MAGIC!
     // TODO get these details { broken up } and set in miniBuffer in a cute way
     let entryDetails = entryJson[entryKey]
+    // TODO: optional: showVoteCount
     let miniBuffer = `Rank ${podiumPlace}: ${entryDetails}`
     // This could still be a couple pages depending on server settings for max podium size
     if (response[pageIdx].length + miniBuffer.length >= 1600){
@@ -125,12 +118,13 @@ exports.formatPodiumToArray = function(entryJson, voteCountObj, maxResults, show
       response[pageIdx] = '' // *ding* typewriter sounds
     }
     response[pageIdx] += miniBuffer
-    // TODO correct this if
-    if (entryOutputCounter == entrySize && entryCounter < podiumSize) {
-      //note: not enough entries to fill the podium 
+    entryOutputCounter++
+    if (entryOutputCounter == numEntries && entryOutputCounter < podiumSize) {
+      //note: not enough entries to fill the podium
       log(`not enough entries for podium, expected ${podiumSize} but got puny ${entrySize}`)
     }
-    if (podiumPlace == numResults) {
+    // TODO this cuts off hard at podiumSize, no tie sanity or anything
+    if (entryOutputCounter == podiumSize) {
       // Better luck next time to everyone who didn't make it
       break
     }
