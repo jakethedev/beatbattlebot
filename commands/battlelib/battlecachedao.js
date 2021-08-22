@@ -129,7 +129,9 @@ function _getDeadlineByName(battleName, dlname){
 }
 var _getSubDeadline = (battlename) => _getDeadlineByName(battlename, SUB_DL_KEY)
 var _getVoteDeadline = (battlename) => _getDeadlineByName(battlename, VOTE_DL_KEY)
+// returns tuned dayjs object
 exports.getSubDeadline = _getSubDeadline
+// returns tuned dayjs object
 exports.getVotingDeadline = _getVoteDeadline
 
 function _isSubmitOpen(battleName) {

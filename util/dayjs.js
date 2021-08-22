@@ -11,7 +11,7 @@ dayjs.extend(require('dayjs/plugin/utc'))
 dayjs.extend(require('dayjs/plugin/timezone'))
 
 let parseTimespanToObject = function(timespan){
-  let parsedSpan = { 
+  let parsedSpan = {
     'w': 0,
     'd': 0,
     'h': 0,
@@ -40,7 +40,7 @@ exports.addTimespan = function(timespan, from = new dayjs()){
   let minutesAdded = parsedSpanObj['m']
   // If minutes specifed, they're relative to now
   // If no minutes, and the hour = now's hour, round forward 1 hour
-  if (minutesAdded) { 
+  if (minutesAdded) {
     minutesAdded += from.minute()
   } else if (hoursAdded == now.hour() && daysAdded < 1) {
     hoursAdded += 1 // Round forward to next hour
