@@ -7,10 +7,17 @@ const { ops, meta } = require('./commands')
 const log = (msg) => console.log(`>>>>> ${msg}`)
 
 // Mock raw data for client, users, and messages
-let { client , users, message_texts } = require('./test.json')
+let { client, users, suite_keys, message_suites } = require('./test.json')
+
+// Adjust this to suite: available options in test.json
+const TEST_USER_KEY = 'admin'
+let testuser = users[TEST_USER_KEY]
+
+// TODO: let msgs; for each suite_keys: msg.append(message_text, author=users[suitekey];
+
+let message_texts = message_suites[TEST_USER_KEY]
 
 // Generating mock objects "similar" to discord.js API
-let testuser = users['admin']
 let msgs = []
 for (content of message_texts) {
   let msg_obj = {

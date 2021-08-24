@@ -22,11 +22,26 @@
       ]
     }
   },
-  "message_texts": [
-    "!invalidtestcommand",
-    "!submit https://mysong",
-    "!serverstats",
-    "!serverstats",
-    "!"
-  ]
+  "suite_keys" : [
+    "admin",
+    "standard",
+    "novelty"
+  ],
+  "message_suites": {
+    "admin": [
+      "!invalidtestcommand",
+      "!help",
+      "!submit https://mysong"
+    ],
+    "standard": [
+      "!invalidtestcommand",
+      "!submit https://mysong",
+      "!help",
+      "!serverstats"
+    ],
+    "novelty": [
+      "!pick a,b,c",
+      "!coin"
+    ]
+  }
 }
