@@ -22,9 +22,9 @@ for (content of message_texts) {
 log(`Testing with ${msgs.length} messages`)
 
 for (let msg of msgs) {
-  console.log(msg)
-  let parts = msg.content.toLowerCase().split(/\s+/)
-  let cmd = parts[0]
+  console.log(`>> Testing msg: ${msg.content}`)
+  let parts = msg.content.trim().substring(1).split(/\s+/)
+  let cmd = parts[0].toLowerCase()
   let input = parts[1] ? parts.slice(1).join(' ') : '' //Some cmds have no input, this lets us use if(input)
   if (cmd in ops) {
     let execTime = new Date(Date.now()).toLocaleString() + ': ';
