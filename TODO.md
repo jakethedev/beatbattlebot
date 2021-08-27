@@ -7,6 +7,13 @@ HIPRI
 - tests: offline dev is the win here
     mock discord message, user, channel
     getenv() for user type, allows npm run testadmin/testanyone
+- Deadlines output
+ENTRIES: Submissions are OPEN, enter with `!submit https://your-track-link`! Submissions are due in 2 days (at August 29 at 00:00 PST)
+         Submissions are CLOSED! (2 days ago at August 25 at 00:00 PST)
+         Submissions are CLOSED, the deadline was 2 days ago at August 25 at 00:00 PST
+VOTING: Voting happens when submissions close, and will be open for ${(subdl.to(votedl, true))}
+        Voting is OPEN, run `!getballot` to vote by DM, votes are due ${now.to(votedl)} (by September 1 at 00:00 PST)
+        Voting has CLOSED!
 
 BUGS
 - stopbattle and stopsubs and stopvotes should leave deadline alone if in the past
