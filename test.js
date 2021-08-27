@@ -7,10 +7,17 @@ const { ops, meta } = require('./commands')
 const log = (msg) => console.log(`>>>>> ${msg}`)
 
 // Mock raw data for client, users, and messages
-let { client , users, message_texts } = require('./test.json')
+let { client, users, suite_keys, message_suites } = require('./test.json')
+
+// Adjust this to suite: available options in test.json
+const TEST_USER_KEY = 'admin'
+let testuser = users[TEST_USER_KEY]
+
+// TODO: let msgs; for each suite_keys: msg.append(message_text, author=users[suitekey];
+
+let message_texts = message_suites[TEST_USER_KEY]
 
 // Generating mock objects "similar" to discord.js API
-let testuser = users['admin']
 let msgs = []
 for (content of message_texts) {
   let msg_obj = {
@@ -22,9 +29,9 @@ for (content of message_texts) {
 log(`Testing with ${msgs.length} messages`)
 
 for (let msg of msgs) {
-  console.log(msg)
-  let parts = msg.content.toLowerCase().split(/\s+/)
-  let cmd = parts[0]
+  console.log(`>> Testing msg: ${msg.content}`)
+  let parts = msg.content.trim().substring(1).split(/\s+/)
+  let cmd = parts[0].toLowerCase()
   let input = parts[1] ? parts.slice(1).join(' ') : '' //Some cmds have no input, this lets us use if(input)
   if (cmd in ops) {
     let execTime = new Date(Date.now()).toLocaleString() + ': ';
