@@ -1,5 +1,6 @@
 const fs = require('fs')
 
+const discord = require('discord.js')
 const rand = require('./util/random')
 const battlecon = require('../commands/battlelib/battlecontroller')
 
@@ -16,7 +17,7 @@ test('test data loading and validation should be standard practice', () => {
 
 test('new battle from nothing', () => {
   expect(battlecon.newbattle("help")).toBeTruthy()
-  const mockMessage = jest.createMockFromModule('node_modules/discord.js/src/structure/Message.js')
+  //TODO This will just not fucking work, so, use the custom mock implementation that's already half baked
+  const mockMessage = jest.createMockFromModule(discord.Message)
   battlecon.newbattle(mockMessage.channel.id)
-  expect(true).toBeTruth()
 })
