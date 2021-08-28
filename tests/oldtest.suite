@@ -7,7 +7,7 @@ const { ops, meta } = require('./commands')
 const log = (msg) => console.log(`>>>>> ${msg}`)
 
 // Mock raw data for client, users, and messages
-let { client, users, suite_keys, message_suites } = require('./test.json')
+let { client, users, suite_keys, message_suites } = require('./mockdata.json')
 
 // Adjust this to suite: available options in test.json
 const TEST_USER_KEY = 'admin'
