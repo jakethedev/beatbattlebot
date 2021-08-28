@@ -13,6 +13,9 @@ let { client, users, suite_keys, message_suites } = require('./test.json')
 const TEST_USER_KEY = 'admin'
 let testuser = users[TEST_USER_KEY]
 
+const TEST_CHANNEL_KEY = 'battles'
+let testchannel = mockDiscordChannel(TEST_USER_KEY)
+
 // TODO: let msgs; for each suite_keys: msg.append(message_text, author=users[suitekey];
 
 let message_texts = message_suites[TEST_USER_KEY]
@@ -20,11 +23,7 @@ let message_texts = message_suites[TEST_USER_KEY]
 // Generating mock objects "similar" to discord.js API
 let msgs = []
 for (content of message_texts) {
-  let msg_obj = {
-    "content": content,
-    "author": testuser
-  }
-  msgs[msgs.length] = msg_obj
+  msgs[msgs.length] = mockDiscordMessage(content, testuser, testchannel)
 }
 log(`Testing with ${msgs.length} messages`)
 
@@ -59,11 +58,29 @@ function mockDiscordMessage(text, author, channel) {
   return {
     "content": text,
     "author": author,
-    "channel": channel
+    "channel": channel,
+    "reply": console.log
+  }
+}
+
+function mockDiscordChannel(name) {
+  const channelid = `ID_FOR_${name]`
+  return {
+    "id": channelid,
+    "name": name,
+    "send": console.log
   }
 }
 
 function mockDiscordUser(rawUserObj) {
   let {name, id, admin, roles} = rawUserObj
-  return {}
+  let rolesContains = roles.includes
+  return {
+    "id": id,
+    "name": name,
+    "admin": admin,
+    "roles" {
+      "any": roles.includes
+    }
+  }
 }

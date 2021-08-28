@@ -6,8 +6,12 @@
   "scripts": {
     "start": "node bot.js",
     "devbot": "nodemon bot.js",
-    "test": "node test.js > /dev/null",
-    "verbosetest": "node test.js",
+    "jestkillcache": "jest --clearCache",
+    "jestdocs": "echo Check out the jest docs at https://jestjs.io/docs",
+    "jestcov": "jest --coverage --config=./.jestconfig.js tests/*",
+    "jestverbose": "jest --expand --config=./.jestconfig.js tests/*",
+    "jestwatch": "jest --watchAll --config=./.jestconfig.js tests/*",
+    "test": "jest --config=./.jestconfig.js tests/*",
     "build": "echo Placeholder text for smushing libs into a bot.js for web page usage"
   },
   "repository": {
@@ -38,6 +42,7 @@
     "node": ">=12.0.0"
   },
   "devDependencies": {
+    "jest": "^27.1.0",
     "nodemon": "^2.0.6"
   }
 }

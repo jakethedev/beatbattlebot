@@ -41,5 +41,6 @@ exports.pick = function(input) {
 exports.roll = function(input) {
   if (!input || isNaN(input))
     input = 100
+  input = Math.abs(parseInt(input))
   return `on a ${input}-sided die, you rolled a ${rand.randIntMinOne(input)}`
 }
