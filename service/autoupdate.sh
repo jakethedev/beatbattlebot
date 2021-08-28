@@ -2,7 +2,7 @@
 set -e
 
 ###################################
-# Set as a root cron job, with the
+# Set as a BOT USER cron job, with the
 # correct path, and your bot will
 # auto update if there's a version
 # change (or any package change)
@@ -17,5 +17,5 @@ set -e
 
 cd /opt/deploy/beatbattlebot
 cp package.json package.old
-git pull > /dev/null 2> /dev/null
+git pull &> /dev/null
 diff -w package.old package.json || systemctl restart beatbattlebot

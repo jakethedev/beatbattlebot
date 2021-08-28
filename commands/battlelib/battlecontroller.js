@@ -366,7 +366,7 @@ exports.results = function(input, msg) {
         const submissionMapObj = battledao.getEntriesFor(battleName)
         // Quick parameter handling if you just want top winner or whatev
         if (input && parseInt(input)) {
-          podiumCapacity = parseInt(input)
+          podiumCapacity = Math.max(parseInt(input), 1) // simple input filter
         }
         const showVotes = false
         const response = discordutil.formatPodiumToArray(submissionMapObj, voteCountObj, podiumCapacity, showVotes)

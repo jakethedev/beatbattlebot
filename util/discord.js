@@ -91,27 +91,28 @@ Heads up: once you vote, you'll need to run \`!getballot\` in the same channel i
   return response
 }
 
-exports.formatPodiumToArray = function(entryJson, voteCountObj, maxResults, showVoteCount = false) {
+exports.formatPodiumToArray = function(entryJson, voteCountObj, podiumCapacity, showVoteCount = false) {
   //TODO Handle ties
   //    tie for last: config.handleBattleTies: alpha,chrono,random
   //TODO Handle not-enough-entrants for podium
   // Sort the vote indexes, then we have the order - winner declared! The rest is formatting and tie mgmt
   const numEntries = Object.keys(entryJson).length
-  const sortedVoteIndexes = Object.entries(voteCountObj).sort(([,a],[,b]) => a-b) // Comparator based on vote count, expects voteCounter to look like {'1':15,'2':7,'3':11} where id is the index of the entry, key is votes
-  const podiumSize = Math.min(sortedVoteIndexes.length, maxResults)
+  const sortedVoteIndexes = Object.entries(voteCountObj).sort(([,a],[,b]) => parseInt(b) - parseInt(a)) // Comparator based on vote count, expects voteCounter to look like {'1':15,'2':7,'3':11} where id is the index of the entry, key is votes
+  const podiumSize = Math.min(sortedVoteIndexes.length, podiumCapacity)
   // TODO: yeet 0-vote entries, output tiebreak method
-  let responseHeader = `Here are the highest voted ${podiumSize} tracks of ${numEntries} entries:\n`
+  let responseHeader = `**-- THE RESULTS ARE IN --**\nHere are the highest voted ${podiumSize} tracks of ${numEntries} entries:\n\n`
   // Response is our output array, pageIdx is for paginating that array for discord msg constraints,
   //   entryOutputCounter is num entries added to response, podiumPlace differs from count due to ties
   let response = [responseHeader], pageIdx = 0, entryOutputCounter = 0, podiumPlace = 1
-  for (let voteidx in Object.keys(sortedVoteIndexes)) {
+  for (let [ voteidx, votecount ] of sortedVoteIndexes) {
     // Now to format each of the sorted entries into output!
     let entryKeyIdx = parseInt(voteidx) - 1 // voteidx was adjusted for user interaction
-    let entryKey = Object.keys(entryJson)[entryKeyIdx] // MAGIC!
+    let entryKey = Object.keys(entryJson)[entryKeyIdx] // MAGIC! ES6 objects maintain order, we can rely on this
     // TODO get these details { broken up } and set in miniBuffer in a cute way
-    let entryDetails = entryJson[entryKey]
+    let { displayname, link } = entryJson[entryKey]
+    debug(`formatpodium: user ${displayname} had ${votecount} votes`)
     // TODO: optional: showVoteCount
-    let miniBuffer = `Rank ${podiumPlace}: ${entryDetails}`
+    let miniBuffer = `> Rank ${podiumPlace}: ${displayname}'s track ${link}\n\n`
     // This could still be a couple pages depending on server settings for max podium size
     if (response[pageIdx].length + miniBuffer.length >= 1600){
       pageIdx++
@@ -119,6 +120,7 @@ exports.formatPodiumToArray = function(entryJson, voteCountObj, maxResults, show
     }
     response[pageIdx] += miniBuffer
     entryOutputCounter++
+    podiumPlace++
     if (entryOutputCounter == numEntries && entryOutputCounter < podiumSize) {
       //note: not enough entries to fill the podium
       log(`not enough entries for podium, expected ${podiumSize} but got puny ${entrySize}`)

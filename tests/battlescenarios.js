@@ -18,6 +18,6 @@ test('test data loading and validation should be standard practice', () => {
 test('new battle from nothing', () => {
   expect(battlecon.newbattle("help")).toBeTruthy()
   //TODO This will just not fucking work, so, use the custom mock implementation that's already half baked
-  const mockMessage = jest.createMockFromModule(discord.Message)
-  battlecon.newbattle(mockMessage.channel.id)
+  // const mockMessage = jest.createMockFromModule(discord.Message)
+  // battlecon.newbattle(mockMessage.channel.id)
 })
