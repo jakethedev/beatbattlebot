@@ -24,11 +24,12 @@ BUGS
 - submit: subdl passed output should be smarter with votedl
 
 TODO battlecachedao
-- 100% test coverage
+- 100% test coverage #59
 
 TODO battlecontroller
 . results output formattign #8
 . deactivate battles #57
+- 100% test coverage #59
 - delegate message parse to discordutil for testing easy #
 - subgroovy #41
 - config.handleVotingTies: alpha, chrono, expandleaderboar
@@ -41,7 +42,7 @@ TODO battlecontroller
 - !battle summary cmd #32
 - !globalwinners !champions #50 #48
 - !botmod #49
-- modsubmit 
+- modsubmit
 - sumbissions #53
 - nicer output from !vote, 'votes for artist1, artist2...'
 
@@ -58,7 +59,7 @@ X submissions count in output #16
 X shuffle submissions output #51
 X fix no-battle crashes #54
 X send logic back to controller #55
-X stopsubs / stopvotes shorcuts 
+X stopsubs / stopvotes shorcuts
 X dao: registerVoter(user,battleName)
 X dao: _deregisterVoter(user)
 X FIX DEADLINES PERMISSIONS #52
@@ -72,6 +73,6 @@ X setVotingDeadline(battleName, timestamp)
 X setdeadline #13, votingends #19
 X deadlines cmd #18
 X date formatter code in util/datefmt (pull in day.js?) #34
-X format funcs: 
+X format funcs:
     fmtAsPST: short PST date
 X fmtAsUTC for good measure
