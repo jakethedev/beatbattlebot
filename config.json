@@ -1,6 +1,6 @@
 {
-  "version": "1.0.9",
-  "releasenotes": "Let the voting commence, your podium (!results) awaits!",
+  "version": "1.10.0",
+  "releasenotes": "Voting, stability, and simplicity were the big changes this time around",
   "issuelink": "https://github.com/jakethedev/beatbattlebot/issues",
   "botkey": "!",
   "activeChannels": [
