@@ -3,10 +3,17 @@
 
 ## About beatbattlebot
 
-This is a discord bot for managing beat battles, or really any other community-oriented
-song contests. If you're a discord mod/admin and you're looking for a quick manual or
-tutorial, I'll have one posted on my website (as soon as i finish upgrading the site) at
-jakethedev dot com. Keep an eye on this spot, I'll update it with a link when I've got one :)
+This is a discord bot for managing beat battles, or really any other community-oriented song
+contests. If you're a discord mod/admin and you're looking for an always-updated guide, you
+can [check it out here](https://gist.github.com/jakethedev/82865525164fb7fc64117751611bf597)
+
+### Features
+
+- Per-channel battles with submissions and submission deadlines
+- Voter registration and vote submission (optional, after a submission deadline)
+- Submission viewing for contestants, voting results for moderators
+- Gift exchange functionality as the result of a Sample Pack Secret Santa held in 2020
+- Novelty functions such as coin flipping and decision making
 
 ## Running the bot
 
