@@ -2,6 +2,18 @@
 
 ### See the issues page for actual tasks, this is a notepad for minor things and a reminder of how far we've come
 
+CURRENT TODO
+- npm i --save chancejs, replace internal random lib
+- review and redo milestones, should only have "RC" and "Next time"
+    but maybe a priority system makes sense?
+    - deleting input messages is a
+    - sample ex
+    - feedback
+    - crush 3+ bugs
+    - finish mock generator, write 1 good test
+- 
+
+
 BUGS
 - stopbattle and stopsubs and stopvotes should leave deadline alone if in the past
 - guide update: submissions shuf[fled] to switch it up
