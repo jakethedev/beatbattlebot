@@ -4,15 +4,44 @@
 
 CURRENT TODO
 - npm i --save chancejs, replace internal random lib
-- review and redo milestones, should only have "RC" and "Next time"
-    but maybe a priority system makes sense?
-    - deleting input messages is a
+- review and redo milestones, should only have "RC" and "Next time" but maybe a priority system makes sense?
     - sample ex
     - feedback
     - crush 3+ bugs
     - finish mock generator, write 1 good test
-- 
+    - finish serverdao core structure
+    - deleting input messages is a good stretch goal
 
+TODO FOR util/serverdao.js
+  ✔ move to todo.md!
+  add issue numbers to each of these or create an issue
+  function template(input, serverid, channelid)
+  notes
+    dao-side no permission logic, that goes in controller
+    call save in every change function
+  () status that sends summary of all below info via dm, for mod use only
+    () set, get data per server
+    () initialize, sets defaults for listen, battle, podium, repeat, maxVotes, and feedbackCooldownTimer
+  list of GIVEABLE roles in a server
+    () add, remove, containsOneOf(list or obj) (default: none)
+  list of mod roles in a server
+    () add, remove, containsOneOf(list or obj) (default: none)
+  list of listen channels in a server
+    () add, remove, containsChannel(id) (default: bot, botspam?)
+  list of battle channels in a server
+    () add, remove, containsChannel(id) (default: any?)
+  preferredTimezone
+    () set, get (default: 'America/Los_Angeles')
+  battlePodiumSize
+    () set, get (default: 15)
+  allowRepeatWinners
+    () set, get (default: false)
+  battleWinners
+    () add, get (default: {})
+  maxVotesPerBattle
+    () set, get (default: 3)
+  feedbackCooldownPeriod
+    () set, get (default: 2 weeks, set: unimplemented error for now)
 
 BUGS
 - stopbattle and stopsubs and stopvotes should leave deadline alone if in the past

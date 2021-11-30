@@ -70,10 +70,7 @@ particular file, follow all of these steps to add a new library folder to the bo
 
 If you see the above issue during 'npm install', just run 'sudo apt install python-dev'
 
-### Vague "app crashed" error
+### Other Issues
 
-An issue with the bot, while testing new commands, is that you have to be very aware of
-what might throw an error. I don't have error handling set up correctly yet, even though
-I'm following the recommended client.on('error', callback) approach, so I apologize if
-this bites you. If you know a way to make node/discord.js run in a hella verbose way,
-I'd gladly add that to the `npm run devbot` script
+If you run into other problems, click the link at the top of this readme to report an issue
+and we can discuss the issue in the comments
