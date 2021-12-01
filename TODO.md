@@ -7,10 +7,12 @@ CURRENT TODO
 - review and redo milestones, should only have "RC" and "Next time" but maybe a priority system makes sense?
     - sample ex
     - feedback
+    - `!results` with no zero-vote entries
     - crush 3+ bugs
     - finish mock generator, write 1 good test
     - finish serverdao core structure
     - deleting input messages is a good stretch goal
+    - `!submissions here` should be mod-only and just for pin help
 
 TODO FOR util/serverdao.js
   ✔ move to todo.md!
@@ -22,6 +24,8 @@ TODO FOR util/serverdao.js
   () status that sends summary of all below info via dm, for mod use only
     () set, get data per server
     () initialize, sets defaults for listen, battle, podium, repeat, maxVotes, and feedbackCooldownTimer
+  tiebreakMethod
+    () set, get (default: chrono, options: oldest, newest, random)
   list of GIVEABLE roles in a server
     () add, remove, containsOneOf(list or obj) (default: none)
   list of mod roles in a server
