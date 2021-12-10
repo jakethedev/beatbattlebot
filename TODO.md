@@ -16,6 +16,7 @@ CURRENT TODO
 
 TODO FOR util/serverdao.js
   ✔ move to todo.md!
+  write issue for the <t:UNIXTIME> autotime messages
   add issue numbers to each of these or create an issue
   function template(input, serverid, channelid)
   notes
