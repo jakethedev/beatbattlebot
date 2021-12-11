@@ -14,6 +14,21 @@ CURRENT TODO
     - deleting input messages is a good stretch goal
     - `!submissions here` should be mod-only and just for pin help
 
+NOTE FOR LATER: a way to simplify command metadata! OMG THIS SOLVES SLASH COMMANDS TOO but how would
+  it work with help text data being referenced in the function itself?
+  ALTERNATIVE: separated distinct maps of help, modOnlyNess, etc...
+  BUT thats a coupling that doesn't need to happen since these are intrinsic points
+    command = {
+    isModOnly: true,
+    run: function(p) {
+        //logic goes here
+        console.log(p);
+        }
+    }
+    if(command.isModOnly) {
+        return command.run('hello LA')
+    }
+
 TODO FOR util/serverdao.js
   ✔ move to todo.md!
   write issue for the <t:UNIXTIME> autotime messages
