@@ -20,3 +20,4 @@ coverage/
 battlecache.json
 .token.json
 battlecache.json.bak
+sketch*.js
