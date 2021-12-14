@@ -178,7 +178,7 @@ exports.getVoteCountForBattle = function(battleName) {
   const battleData = battleMap[battleName]
   const entryMap = battleData[ENTRYKEY]
   const votes = battleData[VOTECACHEKEY]
-  // Set up a way to store counters: TODO store this per entry
+  // Set up a way to store counters
   let voteCounter = {}
   for (let i = 1; i <= _battleSize(battleName); i++ ) {
     voteCounter[`${i}`] = 0

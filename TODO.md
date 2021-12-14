@@ -1,19 +1,67 @@
 # todolist
 
-### See the issues page for actual tasks, this is a notepad for active work
+### See the issues page for actual tasks, this is a notepad for minor things and a reminder of how far we've come
 
-HIPRI
-- results: needs to work for 0+ votes and 0+ entries
-- tests: offline dev is the win here
-    mock discord message, user, channel
-    getenv() for user type, allows npm run testadmin/testanyone
-- Deadlines output
-ENTRIES: Submissions are OPEN, enter with `!submit https://your-track-link`! Submissions are due in 2 days (at August 29 at 00:00 PST)
-         Submissions are CLOSED! (2 days ago at August 25 at 00:00 PST)
-         Submissions are CLOSED, the deadline was 2 days ago at August 25 at 00:00 PST
-VOTING: Voting happens when submissions close, and will be open for ${(subdl.to(votedl, true))}
-        Voting is OPEN, run `!getballot` to vote by DM, votes are due ${now.to(votedl)} (by September 1 at 00:00 PST)
-        Voting has CLOSED!
+CURRENT TODO
+- npm i --save chancejs, replace internal random lib
+- review and redo milestones, should only have "RC" and "Next time" but maybe a priority system makes sense?
+    - sample ex
+    - feedback
+    - `!results` with no zero-vote entries
+    - crush 3+ bugs
+    - finish mock generator, write 1 good test
+    - finish serverdao core structure
+    - deleting input messages is a good stretch goal
+    - `!submissions here` should be mod-only and just for pin help
+
+NOTE FOR LATER: a way to simplify command metadata! OMG THIS SOLVES SLASH COMMANDS TOO but how would
+  it work with help text data being referenced in the function itself?
+  ALTERNATIVE: separated distinct maps of help, modOnlyNess, etc...
+  BUT thats a coupling that doesn't need to happen since these are intrinsic points
+    command = {
+    isModOnly: true,
+    run: function(p) {
+        //logic goes here
+        console.log(p);
+        }
+    }
+    if(command.isModOnly) {
+        return command.run('hello LA')
+    }
+
+TODO FOR util/serverdao.js
+  ✔ move to todo.md!
+  write issue for the <t:UNIXTIME> autotime messages
+  add issue numbers to each of these or create an issue
+  function template(input, serverid, channelid)
+  notes
+    dao-side no permission logic, that goes in controller
+    call save in every change function
+  () status that sends summary of all below info via dm, for mod use only
+    () set, get data per server
+    () initialize, sets defaults for listen, battle, podium, repeat, maxVotes, and feedbackCooldownTimer
+  tiebreakMethod
+    () set, get (default: chrono, options: oldest, newest, random)
+  list of GIVEABLE roles in a server
+    () add, remove, containsOneOf(list or obj) (default: none)
+  list of mod roles in a server
+    () add, remove, containsOneOf(list or obj) (default: none)
+  list of listen channels in a server
+    () add, remove, containsChannel(id) (default: bot, botspam?)
+  list of battle channels in a server
+    () add, remove, containsChannel(id) (default: any?)
+  preferredTimezone
+    () set, get (default: 'America/Los_Angeles')
+  battlePodiumSize
+    () set, get (default: 15)
+  allowRepeatWinners
+    () set, get (default: false)
+  battleWinners
+    () add, get (default: {})
+  maxVotesPerBattle
+    () set, get (default: 3)
+  feedbackCooldownPeriod
+    () set, get (default: 2 weeks, set: unimplemented error for now)
 
 BUGS
 - stopbattle and stopsubs and stopvotes should leave deadline alone if in the past
@@ -22,40 +70,19 @@ BUGS
 - isVotingOpen should check subs are closed
 - setVoteDeadline should sane-error if setting before sub deadline
 - submit: subdl passed output should be smarter with votedl
-
-TODO battlecachedao
-- 100% test coverage #59
-
-TODO battlecontroller
-. results output formattign #8
-. deactivate battles #57
-- 100% test coverage #59
-- delegate message parse to discordutil for testing easy #
-- subgroovy #41
-- config.handleVotingTies: alpha, chrono, expandleaderboar
-    - perserver config
-- begonebot/heylisten #31/#30
-- newbattle: if input, setDeadline(input)
-- discordutil.ispowerful roles #15
-- !votemax NUM #33
-- !rules 'msg' #47
-- !battle summary cmd #32
-- !globalwinners !champions #50 #48
-- !botmod #49
-- modsubmit
-- sumbissions #53
 - nicer output from !vote, 'votes for artist1, artist2...'
 
-NEEDS TESTING
-X resetCache() to deregister all voters for battle
-X dao.voteAndDeregister(user,entries)
-
 DONE
+X results output formattign #8
+X deactivate battles #57
+X simplify stop commands #66
 X getballot #20 formatting and output
 X submissions shuffle opt instead of order
 X con.vote #5
 X switch battleName's to channel.id #25
 X submissions count in output #16
+X test: resetCache() to deregister all voters for battle
+X test: dao.voteAndDeregister(user,entries)
 X shuffle submissions output #51
 X fix no-battle crashes #54
 X send logic back to controller #55
