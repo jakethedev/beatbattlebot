@@ -166,7 +166,7 @@ exports.stopbattle = function(input, msg){
   }
 }
 
-exports.stopsubs = function(input, msg){
+exports.sd = function(input, msg){
   if (input.toLowerCase() == 'help') {
     return `Usage: !stopsubs sets the submission deadline to right now, preventing further submissions`
   }
@@ -192,8 +192,9 @@ exports.stopsubs = function(input, msg){
     return MSG_SERVER_ONLY
   }
 }
+exports.stopsubs = exports.sd // TODO Keep the old alias for a release then ditch it
 
-exports.stopvotes = function(input, msg){
+exports.vd = function(input, msg){
   if (input.toLowerCase() == 'help') {
     return `Usage: !stopvotes sets the voting deadline to right now, locking in the current podium`
   }
@@ -219,6 +220,7 @@ exports.stopvotes = function(input, msg){
     return MSG_SERVER_ONLY
   }
 }
+exports.stopvotes = exports.vd // TODO Keep the old alias for a release then ditch it
 
 // TODO This is ez #33
 //exports.
