@@ -22,7 +22,7 @@ exports.newbattle = function(input, msg) {
       if (battledao.isBattleActive(battleName) && input !== 'letsgo') {
         return `heads up, this resets the current battle. Are you ready for a new round? \`!newbattle letsgo\` to confirm!`
       }
-      // TODO if input: stopsubs(input) #69
+      // TODO if input: stopsubs(input); return contextual response #69
       return battledao.newBattle(battleName)
     } else {
       return MSG_MOD_ONLY
@@ -113,6 +113,7 @@ exports.submissions = function(input, msg) {
     return MSG_SERVER_ONLY
   }
 }
+exports.subs = exports.sumbissions = exports.submissions
 
 exports.deadlines = function(input, msg){
   if (input.toLowerCase() == 'help') {
