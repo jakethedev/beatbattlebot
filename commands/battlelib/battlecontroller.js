@@ -167,8 +167,9 @@ exports.stopbattle = function(input, msg){
 }
 
 exports.sd = function(input, msg){
+  usage = "Usage: `!sd timespan` (or `!stopsubs timespan`) sets the submission deadline to `timespan` amount of time from the current hour. Example spans: 1w3d6h for 1 week, 3 days, and 6 hours; 1d12h for 36 hours; 90m for a real short deadline. You can use `!sd now` to set the deadline to right now too"
   if (input.toLowerCase() == 'help') {
-    return `Usage: !stopsubs sets the submission deadline to right now, preventing further submissions`
+    return usage
   }
   if (msg.guild) {
     if (discordutil.isPowerfulMember(msg)){
@@ -176,14 +177,16 @@ exports.sd = function(input, msg){
       if (!battledao.isBattleChannel(battleName)){
         return MSG_BATTLE_INACTIVE
       }
-      if (!input || input.toLowerCase() == 'now') {
+      if (input && input.toLowerCase() == 'now') {
         const deadline = new day.dayjs()
         battledao.setSubDeadline(battleName, deadline)
         return `submissions for this battle are now CLOSED! \`!submissions\` to see the final list of entries`
-      } else {
+      } else if (input){
         const deadline = day.addTimespan(input)
         battledao.setSubDeadline(battleName, deadline)
         return `submissions are now due ${deadline.fromNow()}! (${day.fmtAsPST(deadline)})`
+      } else {
+        return usage
       }
     } else {
       return MSG_MOD_ONLY
@@ -195,8 +198,9 @@ exports.sd = function(input, msg){
 exports.stopsubs = exports.sd // TODO Keep the old alias for a release then ditch it
 
 exports.vd = function(input, msg){
+  usage = "Usage: `!vd timespan` (or `!stopvotes timespan`) sets the voting deadline to `timespan` from now. Example spans: 1w1d for 8 days; 1d12h for 36 hours; 90m for a real short deadline. You can use `!vd now` to set the deadline to right now too"
   if (input.toLowerCase() == 'help') {
-    return `Usage: !stopvotes sets the voting deadline to right now, locking in the current podium`
+    return usage
   }
   if (msg.guild) {
     if (discordutil.isPowerfulMember(msg)){
@@ -204,14 +208,16 @@ exports.vd = function(input, msg){
       if (!battledao.isBattleChannel(battleName)){
         return MSG_BATTLE_INACTIVE
       }
-      if (!input || input.toLowerCase() == 'now') {
+      if (input && input.toLowerCase() == 'now') {
         const deadline = new day.dayjs()
         battledao.setVotingDeadline(battleName, deadline)
         return `voting for this battle is now CLOSED! Mods can use \`!results X\` to see the top X entries ranked by votes`
-      } else {
+      } else if (input) {
         const deadline = day.addTimespan(input)
         battledao.setVotingDeadline(battleName, deadline)
         return `votes are now due ${deadline.fromNow()}! (${day.fmtAsPST(deadline)})`
+      } else {
+        return usage
       }
     } else {
       return MSG_MOD_ONLY
