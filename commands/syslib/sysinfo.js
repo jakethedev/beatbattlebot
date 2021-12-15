@@ -1,13 +1,19 @@
 const os = require('os')
 const MBinB = 1048576
 const rand = require('../../util/random')
-const config = require('../../config')
+const config = require('../../util/config')
+
+// Handy guide link for easy pinning
+exports.guide = function() {
+  return `Check out the **always-updated guide** on Github at ${config.guidelink}!`
+}
 
 // Simple version, bug link, and release notes output
 exports.version = function() {
-  let response = `I am BeatBattleBot v**${config.version}**!\n\n`
-  response += `**Release notes**\n${config.releasenotes}\n\n`
-  response += `**Bug or feature request? Drop it here!**\n${config.issuelink}\n`
+  let response = `I am BeatBattleBot version **${config.version}**!\n\n`
+  response += `**HOW TO USE THE BOT:**\n<${config.guidelink}>\n\n`
+  response += `**Release notes:**\n${config.releasenotes}\n\n`
+  response += `**Bug or feature request? Drop it here:**\n<${config.issuelink}>\n`
   return response
 }
 
@@ -23,7 +29,7 @@ exports.serverstats = function() {
     let free = Math.round(os.freemem() / MBinB)
     let max = Math.round(os.totalmem() / MBinB)
     let uptime = Math.round(os.uptime() / 3600.0)
-    let desire = rand.choice(['raise', 'smoothie', 'piece of cake', 'new synth plugin', 'massage', 'day off', 'new manager', 'new xlr cable', 'hammer and some balloons'])
+    let desire = rand.choice(['goldfish', 'new synth', 'free collab', 'repost on instagram', 'raise', 'smoothie', 'piece of cake', 'new synth plugin', 'massage', 'day off', 'new manager', 'new xlr cable', 'hammer and some balloons'])
     return `I've been awake for ${uptime} hours, my workload looks like ${load}, I've got ${free} MB free of ${max}, and I really want a ${desire} - thanks for asking.`
   }
 }

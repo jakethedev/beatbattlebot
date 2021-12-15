@@ -2,7 +2,7 @@
 const fs = require('fs')
 const debug = (msg) => console.log(`MAIN: ${msg}`)
 // Config
-const { botkey, activeChannels, gameStatus } = JSON.parse(fs.readFileSync('config.json', 'utf-8'))
+const { botkey, activeChannels, gameStatus } = require('./util/config')
 const { token } = JSON.parse(fs.readFileSync('.token.json', 'utf-8'))
 // Instantiating the manifold
 const discord = require('discord.js')
