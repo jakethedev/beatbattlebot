@@ -9,12 +9,9 @@ set -e
 # auto update if there's a version
 # change (or any package change)
 #
-# I set mine for every 2 minutes with a daily log cleanup. Ex:
+# Recommended cron job structure:
+# */2 *  *   *   * /path/to/autoupdate.sh >> /var/log/botupdate.log 2>> /var/log/botupdate.log
 #
-# */2 *  *   *   * /path/to/this/autoupdate.sh >> /var/log/botupdate.log 2>> /var/log/botupdate.log
-# 0 2 * * * rm /var/log/botupdate.log
-#
-# - jakethedev
 ###################################
 
 cd /opt/deploy/beatbattlebot
