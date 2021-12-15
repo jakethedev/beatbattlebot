@@ -5,7 +5,7 @@
 	notifempty
 	compress
 	postrotate
-    systemctl restart beatbattlebot
+    systemctl --user restart beatbattlebot
 	endscript
 }
 

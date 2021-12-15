@@ -15,4 +15,4 @@ RestartSec=60s
 #StandardError=file:/var/log/bot.err
 
 [Install]
-WantedBy=multi-user.target
+WantedBy=default.target
