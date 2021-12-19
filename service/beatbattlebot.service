@@ -9,7 +9,7 @@ Environment=NODE_ENV=production
 WorkingDirectory=/opt/deploy/beatbattlebot
 ExecStart=/usr/bin/node bot.js >> /opt/deploy/beatbattlebot/LOGFILE
 Restart=on-failure
-RestartSec=60s
+RestartSec=30s
 #Only available in systemd 236+
 #StandardOutput=file:/var/log/bot.log
 #StandardError=file:/var/log/bot.err

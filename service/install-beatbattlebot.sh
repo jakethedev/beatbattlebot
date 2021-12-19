@@ -5,21 +5,24 @@
 # it's journalctl for you
 
 # Installation of the unit file
+echo "=== Systemd version: $(systemd --version) ==="
 TARGETDIR="$HOME/.config/systemd/user/"
-echo "Copying service file to user unit directory..."
-systemd --version
-cp beatbattlebot.service $TARGETDIR
+mkdir -p $TARGETDIR
+echo "=== Copying service file to user unit directory [$TARGETDIR] ==="
+ln -s $(pwd)/beatbattlebot.service $TARGETDIR
 
 # Enabling, activating, and kickstarting the unit file
 systemctl --user daemon-reload
-echo "=== The following should say 'not loaded', otherwise, good luck ==="
-systemctl --user status beatbattlebot # It should say 'not loaded'
+echo "=== The following should say 'not loaded' ==="
+systemctl --user status beatbattlebot
+echo "=== Enabling beatbattlebot service ==="
 systemctl --user enable beatbattlebot
+echo "=== Liftoff! ==="
 systemctl --user start beatbattlebot
-echo "Sleeping, then checking status"
+echo "=== Just one second, checking status ==="
 sleep 1
 systemctl --user status beatbattlebot # It should say 'not loaded'
 
 # Quick logging config
-# echo "Setting up logrotate"
-# sudo ln -s $(pwd)/logrotate.beatbattlebot /etc/logrotate.d/
+echo "Setting up logrotate"
+sudo ln -s $(pwd)/logrotate.beatbattlebot /etc/logrotate.d/
