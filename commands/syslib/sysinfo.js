@@ -13,12 +13,7 @@ exports.version = function() {
   let response = `I am BeatBattleBot version **${config.version}**!\n\n`
   response += `**HOW TO USE THE BOT:**\n<${config.guidelink}>\n\n`
   response += `**Release notes:**\n${config.releasenotes}\n\n`
-  response += `**Bug or feature request? Drop it here:**\n<${config.issuelink}>\n`
   return response
-}
-
-exports.feedback = function() {
-  return `got feedback, ideas, or bugs? Awesome! Let me know on github at ${config.issuelink}`
 }
 
 exports.serverstats = function() {
