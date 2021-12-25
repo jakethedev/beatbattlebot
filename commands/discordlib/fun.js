@@ -2,7 +2,7 @@ const rand = require('../../util/random')
 
 //For those tricky decisions
 exports.coin = function(input = 1) {
-  if (`${input}`.toLowerCase() == 'help') { 
+  if (`${input}`.toLowerCase() == 'help') {
     return `\`!coin [number]\` will flip one (or \`number\` of) coins`
   }
   if (isNaN(input) || input <= 1) {
@@ -21,7 +21,7 @@ exports.coin = function(input = 1) {
 }
 
 exports.pick = function(input) {
-  if (`${input}`.toLowerCase() == 'help') { 
+  if (`${input}`.toLowerCase() == 'help') {
     return `\`!pick thing1, thing2[, thing3...]\` will split the options by comma and pick a random one for you`
   }
   let inputArray = input.split(',')
@@ -44,3 +44,4 @@ exports.roll = function(input) {
   input = Math.abs(parseInt(input))
   return `on a ${input}-sided die, you rolled a ${rand.randIntMinOne(input)}`
 }
+exports.r = exports.roll
