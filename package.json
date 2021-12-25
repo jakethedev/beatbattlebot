@@ -1,6 +1,6 @@
 {
   "name": "beatbattlebot",
-  "version": "1.10.0",
+  "version": "1.10.1",
   "description": "Discord.js bot for organizing and handling beat battle submissions on music servers",
   "main": "bot.js",
   "scripts": {
