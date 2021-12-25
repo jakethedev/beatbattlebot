@@ -1,11 +1,11 @@
-/var/log/beatbattlebot.log /opt/deploy/beatbattlebot/LOGFILE {
+/var/log/beatbattlebot.log /opt/deploy/beatbattlebot/LOGFILE /opt/deploy/beatbattlebot/update.log {
 	rotate 2
 	daily
 	missingok
 	notifempty
 	compress
 	postrotate
-    systemctl restart beatbattlebot
+    systemctl --user restart beatbattlebot
 	endscript
 }
 

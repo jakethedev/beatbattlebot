@@ -1,3 +1,0 @@
-# Cron to keep the bot updated, only relevant if you like the idea of git-push deploying your code
-
-*/2 *  *   *   * /opt/deploy/beatbattlebot/service/autoupdate.sh >> /var/log/botupdate.log 2>> /var/log/botupdate.log

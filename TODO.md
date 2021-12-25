@@ -1,39 +1,12 @@
 # todolist
 
 ### See the issues page for actual tasks, this is a notepad for minor things and a reminder of how far we've come
-
-CURRENT TODO
-- npm i --save chancejs, replace internal random lib
-- review and redo milestones, should only have "RC" and "Next time" but maybe a priority system makes sense?
-    - sample ex
-    - feedback
-    - `!results` with no zero-vote entries
-    - crush 3+ bugs
-    - finish mock generator, write 1 good test
-    - finish serverdao core structure
-    - deleting input messages is a good stretch goal
-    - `!submissions here` should be mod-only and just for pin help
-
-NOTE FOR LATER: a way to simplify command metadata! OMG THIS SOLVES SLASH COMMANDS TOO but how would
-  it work with help text data being referenced in the function itself?
-  ALTERNATIVE: separated distinct maps of help, modOnlyNess, etc...
-  BUT thats a coupling that doesn't need to happen since these are intrinsic points
-    command = {
-    isModOnly: true,
-    run: function(p) {
-        //logic goes here
-        console.log(p);
-        }
-    }
-    if(command.isModOnly) {
-        return command.run('hello LA')
-    }
+GENERAL TODO
+    write issue for the <t:UNIXTIME> autotime messages
+    add issue numbers to each of below tasks or create an issue
+    function template(input, serverid, channelid)
 
 TODO FOR util/serverdao.js
-  ✔ move to todo.md!
-  write issue for the <t:UNIXTIME> autotime messages
-  add issue numbers to each of these or create an issue
-  function template(input, serverid, channelid)
   notes
     dao-side no permission logic, that goes in controller
     call save in every change function
@@ -65,14 +38,13 @@ TODO FOR util/serverdao.js
 
 BUGS
 - stopbattle and stopsubs and stopvotes should leave deadline alone if in the past
-- guide update: submissions shuf[fled] to switch it up
 - newbattle on empty battle is bork
 - isVotingOpen should check subs are closed
-- setVoteDeadline should sane-error if setting before sub deadline
+- stopvotes should sane-error if setting before sub deadline
 - submit: subdl passed output should be smarter with votedl
 - nicer output from !vote, 'votes for artist1, artist2...'
 
-DONE
+RECENTLY DONE
 X results output formattign #8
 X deactivate battles #57
 X simplify stop commands #66
