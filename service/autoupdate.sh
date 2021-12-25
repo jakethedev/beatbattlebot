@@ -14,7 +14,12 @@ set -xv
 #
 ###################################
 
+echo "Enterying deploy dir..."
 cd /opt/deploy/beatbattlebot
+echo "Backing up current package.json..."
 cp package.json package.old
+echo "Running update..."
 git pull &> /dev/null
+echo "Checking for changes and running restart..."
 diff -w package.old package.json || systemctl --user restart beatbattlebot.service
+echo "Update attempt complete"
