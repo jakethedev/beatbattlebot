@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+
 #### SYSTEMD SETUP
 # NOTE If you have 236+, uncomment the StandardOutput/Error lines in the
 # service if you'd like to output logs and errors to custom locations. Else
@@ -10,6 +11,12 @@ TARGETDIR="$HOME/.config/systemd/user/"
 mkdir -p $TARGETDIR
 echo "=== Copying service file to user unit directory [$TARGETDIR] ==="
 ln -s $(pwd)/beatbattlebot.service $TARGETDIR
+
+# Core user settings to enable long running operation
+echo "=== Setting linger for the current user ==="
+sudo loginctl enable-linger $USER
+echo "=== Exporting a helpful runtime var ==="
+export XDG_RUNTIME_DIR=/run/user/$(id -u)
 
 # Enabling, activating, and kickstarting the unit file
 systemctl --user daemon-reload
