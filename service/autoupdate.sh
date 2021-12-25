@@ -1,5 +1,5 @@
 #!/bin/bash
-set -e
+set -xv
 
 ###################################
 # Auto updater script for simple projects
@@ -10,7 +10,7 @@ set -e
 # change (or any package change)
 #
 # Recommended cron job structure:
-# */2 *  *   *   * /path/to/autoupdate.sh >> /var/log/botupdate.log 2>> /var/log/botupdate.log
+# */2 *  *   *   * /path/to/autoupdate.sh &> /var/log/botupdate.log
 #
 ###################################
 
