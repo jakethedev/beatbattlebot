@@ -2,7 +2,7 @@ const fs = require('fs')
 
 const discord = require('discord.js')
 const rand = require('./util/random')
-const battlecon = require('../commands/battlelib/battlecontroller')
+const battlecon = require('../commands/battle/battlecontroller')
 
 const TEST_USER_KEY = 'admin'
 const TEST_CHANNEL_ID = 'test-channel-ID'

@@ -27,8 +27,7 @@ function _saveFeedbackState(){
 
 // TODO: everything below this line
 
-// Utility for clearing out battle registrations at the end of a battle
-function _resetBattleRegistration(battleName) {
+function _resetCooldown(userid) {
   if (!battleMap[VOTEREGKEY]) {
     log('adding vote reg first time')
     battleMap[VOTEREGKEY] = {}
@@ -43,7 +42,7 @@ function _resetBattleRegistration(battleName) {
 }
 
 // Battle data reset and core "structure" setup
-function _resetBattleState(battleName) {
+function _setCooldown(userid) {
   //TODO mv disk cache to cache.backup
   _resetBattleRegistration(battleName)
   let battleExisted = _isBattleInProgress(battleName)
