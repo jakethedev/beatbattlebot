@@ -61,7 +61,7 @@ function _setCooldown(userid) {
     return `the old battle is OVER, a new round has started!`
   }
 }
-exports.newBattle = _resetBattleState
+//exports.newBattle = _resetBattleState
 
 // Stop battles for an active battle channel
 function _deactivateBattle(battleName) {
