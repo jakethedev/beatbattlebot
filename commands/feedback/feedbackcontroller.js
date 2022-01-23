@@ -12,8 +12,29 @@ const MSG_BATTLE_CLOSED = "the battle in this channel is over and done, hope to 
 
 let debug = msg => console.log(`feedbacklib: ${msg}`)
 
-exports.fb = function(input, msg, client) {
+function _submitFeedback (userid, link, notes){
+  // TODO
+  return 'feedback submissions disabled at the moment, stay tuned!'
+}
+
+exports.fb = function(input = '', msg, client) {
+  input = `${input}`
+  if (input.startsWith('https://')) {
+    let link = input
+    let notes = ''
+    if (/\s/.test(input)) {
+      // split first whitespace, reassign link, assign notes
+    }
+    return _submitFeedback(msg.author.id, link, notes)
+  } else if (input == 'go') {
+  } else if (input == 'chill') {
+  } else if (input == 'reset') {
+  } else {
+    debug('default case return help')
+  }
   // delete message upon success
+
+
   // options:
   //  !fb [help] for info and usage
   //  !fb link to submit for feedback, verifies user is not on cooldown for receiving fb and provides clear output
