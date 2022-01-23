@@ -1,8 +1,13 @@
 # todolist
 
 ### See the issues page for actual tasks, this is a notepad for minor things and a reminder of how far we've come
+CRITICAL TODO
+    ADD AUTOROLE BOT TO SERVER
+    <t:UNIX> TIME REFACTOR
+    feedback features (simplified)
+
 GENERAL TODO
-    write issue for the <t:UNIXTIME> autotime messages
+    take a gander at sqlite
     add issue numbers to each of below tasks or create an issue
     function template(input, serverid, channelid)
 

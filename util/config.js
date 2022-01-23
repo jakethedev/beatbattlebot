@@ -14,6 +14,12 @@ module.exports = {
     "submissions",
     "battle-rules",
     "battle-general",
+    "battle-rules-faq",
+    "battle-submissions",
+    "fb-submissions",
+    "gx-submissions",
+    "meme-energy",
+    "mod-chat",
     "battlechat"
   ],
   "gameStatus": "beat battles | !help for cmds"
