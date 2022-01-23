@@ -1,4 +1,5 @@
 const dao = require('../../commands/battle/battlecachedao.js')
+const con = require('../../commands/battle/battlecontroller.js')
 
 test('battle/battlecachedao:podiumsize operations', () => {
   // // Check some handy setters and getters

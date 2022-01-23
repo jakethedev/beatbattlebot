@@ -7,6 +7,7 @@ CRITICAL TODO
     feedback features (simplified)
 
 GENERAL TODO
+    notice duplicate command declarations and fail fast
     take a gander at sqlite
     add issue numbers to each of below tasks or create an issue
     function template(input, serverid, channelid)

@@ -22,7 +22,8 @@ exports.fb = function(input, msg, client) {
   return 'pong'
 }
 
-exports.submit = function(input, msg) {
+//exports.
+submit = function(input, msg) {
   if (input.toLowerCase() == 'help') {
     return `Usage: Post a new message that starts with \`!submit https://link.to.your/beat\` to enter the battle in this channel! Make sure there's a space after your link if you want to write more in your message, otherwise it might not save right`
   }
@@ -49,7 +50,8 @@ exports.submit = function(input, msg) {
   }
 }
 
-exports.fbget = function(input, msg) {
+//exports.
+fbget = function(input, msg) {
   if (input.toLowerCase() == 'help') {
     return `Post \`!submissions\` to see this battle's entries! Use \`!submissions here\` to print entries to this channel (no matter how big the list is)`
   }
