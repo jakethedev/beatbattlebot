@@ -58,7 +58,7 @@ client.on('message', msg => {
           }
         })
         .catch(function(err) {
-          msg.reply(`your command met with a terrible fate and I nearly died. Have an admin check the logs plz`)
+          msg.reply(`your command met with a terrible fate and I nearly died. Have Jake check the logs plz`)
           console.log(`${execTime}: ERR: ${err}`)
         })
     } else if (cmd == 'help') {
