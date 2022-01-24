@@ -12,9 +12,13 @@ const MSG_BATTLE_CLOSED = "the battle in this channel is over and done, hope to 
 
 let debug = msg => console.log(`feedbacklib: ${msg}`)
 
-function _submitFeedback (userid, link, notes){
+function _submitFeedback (userid, link, notes) {
   // TODO
   return 'feedback submissions disabled at the moment, stay tuned!'
+}
+
+function _getFeedbackEntryAndStageUser() {
+  // TODO get weighted list, 
 }
 
 exports.fb = function(input = '', msg, client) {
@@ -22,11 +26,12 @@ exports.fb = function(input = '', msg, client) {
   if (input.startsWith('https://')) {
     let link = input
     let notes = ''
-    if (/\s/.test(input)) {
+    if (/\s/g.test(input)) {
       // split first whitespace, reassign link, assign notes
     }
     return _submitFeedback(msg.author.id, link, notes)
   } else if (input == 'go') {
+    return _getFeedbackEntryAndStageUser()
   } else if (input == 'chill') {
   } else if (input == 'reset') {
   } else {
