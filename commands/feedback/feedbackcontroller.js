@@ -7,13 +7,18 @@ const rand = require('../../util/random')
 const MSG_SERVER_ONLY = "this command needs to be run in a server channel where this bot is active"
 const MSG_DM_ONLY = "this command needs to be sent to the bot via DM"
 const MSG_MOD_ONLY = "this is a mod-only command"
-const MSG_BATTLE_INACTIVE = "there is no active battle for this channel, ask a mod if that's a surprise"
+const MSG_CHANNEL_INACTIVE = "this channel is not open for feedback operations at the moment, reach out to a mod if that's a surprise"
 const MSG_BATTLE_CLOSED = "the battle in this channel is over and done, hope to see you next time!"
 
 let debug = msg => console.log(`feedbacklib: ${msg}`)
 
-function _submitFeedback (userid, link, notes) {
-  // TODO
+function _submitLink (userid, link) {
+  // TODO make safe before or after notes
+  return 'feedback submissions disabled at the moment, stay tuned!'
+}
+
+function _submitNotes (userid, notes) {
+  // TODO make safe before or after Link
   return 'feedback submissions disabled at the moment, stay tuned!'
 }
 
@@ -22,18 +27,29 @@ function _getFeedbackEntryAndStageUser() {
 }
 
 exports.fb = function(input = '', msg, client) {
-  input = `${input}`
+  input = `${input}` // typescript.diy
   if (input.startsWith('https://')) {
-    let link = input
-    let notes = ''
-    if (/\s/g.test(input)) {
-      // split first whitespace, reassign link, assign notes
+    // TODO verify user is not in cooldown  
+    inputarr = input.split(/\s/)
+    if (inputarr[1]) {
+      // _submitNotes(input.substring(indexof(/s/)))
     }
-    return _submitFeedback(msg.author.id, link, notes)
+    link = inputarr[0]
+    return _submitLink(msg.author.id, link.trim())
+  } else if (input == 'notes') {
+    // save notes to an entry spot, safe to do before or after entry
+    return _submitNotes(msg.author.id, input)
   } else if (input == 'go') {
-    return _getFeedbackEntryAndStageUser()
+    if (discordutil.isPowerfulMember(msg.author)) {
+      return _getFeedbackEntryAndStageUser()
+    }
+    return MSG_MOD_ONLY
   } else if (input == 'chill') {
+    // mod only, put userid: timestamp in the cooldown list
   } else if (input == 'reset') {
+    // mod only, wipe feedback data for this channel, require letsgo confirmation
+  } else if (input.startsWith('cooldown')) {
+    // mod only, adjust cooldown time
   } else {
     debug('default case return help')
   }
