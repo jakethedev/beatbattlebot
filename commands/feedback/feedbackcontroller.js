@@ -29,10 +29,10 @@ function _getFeedbackEntryAndStageUser() {
 exports.fb = function(input = '', msg, client) {
   input = `${input}` // typescript.diy
   if (input.startsWith('https://')) {
-    // TODO verify user is not in cooldown  
-    inputarr = input.split(/\s/)
-    if (inputarr[1]) {
-      // _submitNotes(input.substring(indexof(/s/)))
+    // TODO verify user is not in cooldown
+    [link, ...notes] = i.split(/\s/)
+    if (notes && notes.length > 0) {
+      _submitNotes()
     }
     link = inputarr[0]
     return _submitLink(msg.author.id, link.trim())
