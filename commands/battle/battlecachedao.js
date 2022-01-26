@@ -19,7 +19,7 @@ let battleMap = {}
 try {
   battleMap = JSON.parse(fs.readFileSync(_cacheFile))
 } catch (error) {
-  log(`if ENOENT this is totally ok - could not load JSON from old cache: ${error}`)
+  log(`if ENOENT this is expected - could not load battle data from old cache: ${error}`)
 }
 
 // Simple persistence layer

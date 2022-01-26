@@ -39,28 +39,26 @@ exports.fb = function(input = '', msg, client) {
   } else if (input == 'notes') {
     // save notes to an entry spot, safe to do before or after entry
     return _submitNotes(msg.author.id, input)
-  } else if (input == 'go') {
+  } else if (input == 'open') {
     if (discordutil.isPowerfulMember(msg.author)) {
       return _getFeedbackEntryAndStageUser()
     }
     return MSG_MOD_ONLY
-  } else if (input == 'chill') {
+  } else if (input == 'close') {
+    // mod only, stop accepting submissions
+  } else if (input.startsWith('cooldown')) {
+    // mod only, adjust cooldown time
+    // TODO: reset? clean cooldown list. int? set cooldown. else? error
+  } else if (input == 'start') {
+    // mod only, get a random entry for feedback
+  } else if (input == 'given') {
     // mod only, put userid: timestamp in the cooldown list
   } else if (input == 'reset') {
     // mod only, wipe feedback data for this channel, require letsgo confirmation
-  } else if (input.startsWith('cooldown')) {
-    // mod only, adjust cooldown time
   } else {
     debug('default case return help')
   }
   // delete message upon success
-
-
-  // options:
-  //  !fb [help] for info and usage
-  //  !fb link to submit for feedback, verifies user is not on cooldown for receiving fb and provides clear output
-  //  !fbget by a mod gets an entry by DM, sets lastuser to $userid
-  //  !fbcomplete/chill by a mod sets cooldown for $userid, leaves lastuser along
   return 'pong'
 }
 

@@ -13,7 +13,7 @@ let feedbackMap = {}
 try {
   feedbackMap = JSON.parse(fs.readFileSync(_cacheFile))
 } catch (error) {
-  log(`if ENOENT this is totally ok - could not load JSON from old cache: ${error}`)
+  log(`if ENOENT this is expected - could not load feedback data from old cache: ${error}`)
 }
 
 // Simple persistence layer
@@ -26,7 +26,6 @@ function _saveFeedbackState(){
 }
 
 // TODO: everything below this line
-
 function _resetCooldown(userid) {
   if (!battleMap[VOTEREGKEY]) {
     log('adding vote reg first time')
