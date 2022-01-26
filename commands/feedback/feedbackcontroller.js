@@ -26,15 +26,14 @@ function _getFeedbackEntryAndStageUser() {
   // TODO get weighted list, 
 }
 
-exports.fb = function(input = '', msg, client) {
+exports.fb = function(input = '', msg) {
   input = `${input}` // typescript.diy
   if (input.startsWith('https://')) {
     // TODO verify user is not in cooldown
-    [link, ...notes] = i.split(/\s/)
+    let [link, ...notes] = input.split(/\s/)
     if (notes && notes.length > 0) {
-      _submitNotes()
+      _submitNotes(notes.join(' '))
     }
-    link = inputarr[0]
     return _submitLink(msg.author.id, link.trim())
   } else if (input == 'notes') {
     // save notes to an entry spot, safe to do before or after entry
@@ -51,7 +50,7 @@ exports.fb = function(input = '', msg, client) {
     // TODO: reset? clean cooldown list. int? set cooldown. else? error
   } else if (input == 'start') {
     // mod only, get a random entry for feedback
-  } else if (input == 'given') {
+  } else if (input == 'done') {
     // mod only, put userid: timestamp in the cooldown list
   } else if (input == 'reset') {
     // mod only, wipe feedback data for this channel, require letsgo confirmation
