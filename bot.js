@@ -2,7 +2,7 @@
 const fs = require('fs')
 const debug = (msg) => console.log(`MAIN: ${msg}`)
 // Config
-const { botkey, activeChannels, gameStatus } = require('./util/config')
+const { botkey, activeChannels, gameStatus, version } = require('./util/config')
 const { token } = JSON.parse(fs.readFileSync('.token.json', 'utf-8'))
 // Instantiating the manifold
 const { Client, Intents } = require('discord.js')
@@ -34,7 +34,7 @@ client.on('ready', () => {
   } else {
     console.log(`NODE_ENV not set, running in dev mode`)
   }
-  console.log(`BeatBattleBot v${process.env.npm_package_version} has logged in as ${client.user.tag}!`)
+  console.log(`BeatBattleBot v${version} has logged in as ${client.user.tag}!`)
   client.user.setPresence({
     "status": "online",
     "game": { "name": gameStatus }
