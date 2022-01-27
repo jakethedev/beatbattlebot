@@ -25,16 +25,18 @@ const client = new Client({
 })
 
 // In case something happens, we'll want to see logs
-client.on("error", (e) => console.error(e))
+process.on('unhandledRejection', error => {
+	debug(`ERROR: Unhandled promise rejection: ${error}`);
+});
 
 // Startup callback
 client.on('ready', () => {
   if (process.env.NODE_ENV) {
-    console.log(`${process.env.NODE_ENV} mode activated!`)
+    debug(`${process.env.NODE_ENV} mode activated!`)
   } else {
-    console.log(`NODE_ENV not set, running in dev mode`)
+    debug(`NODE_ENV not set, running in dev mode`)
   }
-  console.log(`BeatBattleBot v${version} has logged in as ${client.user.tag}!`)
+  debug(`BeatBattleBot v${version} has logged in as ${client.user.tag}!`)
   client.user.setPresence({
     "status": "online",
     "game": { "name": gameStatus }
@@ -54,7 +56,7 @@ client.on('message', msg => {
     let execTime = new Date(Date.now()).toLocaleString();
     // If we have the requested op, send it - otherwise, log it quietly
     if (cmd in ops) {
-      console.log(execTime + ': running ' + cmd + '(' + input + ') for ' + msg.author.username)
+      debug(`INFO: ${execTime}: running ${cmd}(${input}) for ${msg.author.username}`)
       // Works for a string or a promise return. Sick. https://stackoverflow.com/a/27760489
       Promise.resolve( ops[cmd](input, msg, client) )
         .then(function(result) {
@@ -73,7 +75,7 @@ client.on('message', msg => {
         })
         .catch(function(err) {
           msg.reply(`your command met with a terrible fate and I nearly died. Have Jake check the logs plz`)
-          console.log(`${execTime}: ERR: ${err}`)
+          debug(`${execTime}: ERR: ${err}`)
         })
     } else if (cmd == 'help') {
       let fullHelp = `Here's the commands, type \`${botkey}oneofthecommands help\` for more details:\n`
@@ -89,7 +91,8 @@ client.on('message', msg => {
       fullHelp += `\nIf you notice something weird or broken, run **${botkey}feedback** for support info`
       msg.channel.send(fullHelp)
     } else {
-      console.log(`${execTime}: NOTICE: can't find ${cmd}(${input}) for ${msg.author.username}`)
+      debug(`${execTime}: NOTICE: can't find ${cmd}(${input}) for ${msg.author.username}`)
+      msg.react(discordutil.emojifromname('confused'))
     }
   }
 });

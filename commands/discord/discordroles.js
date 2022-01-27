@@ -1,4 +1,5 @@
 const discordutil = require('../../util/discord')
+const debug = (msg) => console.log(`DISCORDROLES: ${msg}`)
 const MSG_SERVER_ONLY = "this command needs to be run in a server channel where this bot is active"
 
 //Given a rolename as input, add it to the requestor if it doesn't result in new privileges
@@ -6,22 +7,25 @@ exports.giverole = function(input, message, client) {
   if (!input.trim() || input.toLowerCase() == 'help') return `Usage: giverole 'the role name' will try to add the role to your user. Optionally, you can tag one person (after the role name) to attempt to give them the role`
   // Allows us to add a role to someone, pinging them required
   if (message.guild) {
-    let expectedRoleName = input.toLowerCase().trim()
+    let expectedRoleName = input.trim()
     let requestorName = message.member.user.username
     let optionalMention = message.mentions.members.first()
     let targetMember = optionalMention ? optionalMention : message.member
     let targetName = targetMember.user.username
-    let roleToAdd = message.guild.roles.cache.find(role => expectedRoleName == role.name.toLowerCase())
-    if (!roleToAdd){
-      return `the role '${roleToAdd}' does not exist, check your spelling or reach out to a mod`
-    }
-    console.log(`Role '${roleToAdd.name}' requested by ${requestorName} for ${targetName}...`)
-    targetMember.roles.add(roleToAdd).then(result => {
-      message.reply(`${targetName} now has (or already had) the role ${roleToAdd.name}!`)
-    }).catch(err => {
+    const roleList = message.guild.roles.cache
+    const roleToAdd = Promise.resolve(roleList.filter(role => role.name == expectedRoleName))
+    debug(`Role '${expectedRoleName}' requested by ${requestorName} for ${targetName}...`)
+    // TODO verify this?
+    const result = Promise.resolve(targetMember.edit({
+      roles: [roleToAdd]
+    }))
+    if(result) {
+      debug(`${targetName} now has (or already had) the role ${expectedRoleName}!`)
+    }else {
       // Almost certainly a permission error
-      message.reply(`I can't add you to ${roleToAdd.name}, probably not allowed to. Contact an admin if this is unexpected`)
-    });
+      message.reply(`I can't add you to ${expectedRoleName}, probably doesn't exist or it's an admin role. Contact an admin if this is unexpected`)
+      debug(`INFO: ${targetName} asked for role ${expectedRoleName} and it failed`)
+    }
     return discordutil.SUCCESS
   } else {
     return MSG_SERVER_ONLY

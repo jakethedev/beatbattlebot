@@ -23,6 +23,7 @@ const reactionmap = {
   'skip': '⏩',
   'fire': '�',
   'question': '❔',
+  'confused': '❔',
   'heart': '�',
   'trophy': '🏆'
 }
