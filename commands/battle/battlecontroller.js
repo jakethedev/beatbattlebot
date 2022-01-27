@@ -68,10 +68,14 @@ exports.unsubmit = function(input, msg) {
     if (!battledao.isBattleChannel(battleName)){
       return MSG_BATTLE_INACTIVE
     }
-    let entrantName = msg.member.nickname || msg.member.user.username
-    let entrantId = msg.member.id
-    debug(`${entrantName} has unsubmitted for battle[${battleName}]`)
-    return battledao.removeEntry(entrantId, battleName)
+    //TODO: #105, we need to consider votes to allow unsubmission after the fact
+    if (battledao.isSubmitOpen(battleName)) {
+      let entrantName = msg.member.nickname || msg.member.user.username
+      let entrantId = msg.member.id
+      debug(`${entrantName} has unsubmitted for battle[${battleName}]`)
+      return battledao.removeEntry(entrantId, battleName)
+    }
+    return `sorry, the deadline has passed and we can't change the submissions after the deadline in case it messes with voting - this will likely work in the future though`
   } else {
     return MSG_SERVER_ONLY
   }
