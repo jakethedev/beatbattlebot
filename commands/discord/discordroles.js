@@ -7,26 +7,22 @@ exports.giverole = function(input, message, client) {
   if (!input.trim() || input.toLowerCase() == 'help') return `Usage: giverole 'the role name' will try to add the role to your user. Optionally, you can tag one person (after the role name) to attempt to give them the role`
   // Allows us to add a role to someone, pinging them required
   if (message.guild) {
-    let expectedRoleName = input.trim()
+    let rolename = input.trim()
+    let roleToAdd = discordutil.getRoleFromMessageGuild(rolename, message)
     let requestorName = message.member.user.username
     let optionalMention = message.mentions.members.first()
     let targetMember = optionalMention ? optionalMention : message.member
     let targetName = targetMember.user.username
-    const roleList = message.guild.roles.cache
-    const roleToAdd = Promise.resolve(roleList.filter(role => role.name == expectedRoleName))
-    debug(`Role '${expectedRoleName}' requested by ${requestorName} for ${targetName}...`)
-    // TODO verify this?
-    const result = Promise.resolve(targetMember.edit({
-      roles: [roleToAdd]
-    }))
-    if(result) {
-      debug(`${targetName} now has (or already had) the role ${expectedRoleName}!`)
-    }else {
-      // Almost certainly a permission error
-      message.reply(`I can't add you to ${expectedRoleName}, probably doesn't exist or it's an admin role. Contact an admin if this is unexpected`)
-      debug(`INFO: ${targetName} asked for role ${expectedRoleName} and it failed`)
-    }
-    return discordutil.SUCCESS
+    debug(`Role '${rolename}' requested by ${requestorName} for ${targetName}...`)
+    targetMember.roles.add(roleToAdd).then(result => {
+      // console.dir(result._roles)
+      message.reply(`${targetName} is in ${rolename}!`)
+    }).catch(err => {
+      // Permission error or role does not exist
+      message.reply(`I can't add you to ${rolename}, probably doesn't exist or it's an admin role. Contact an admin if this is unexpected`)
+      debug(`INFO: ${targetName} asked for role ${rolename} and it failed`)
+    })
+    return discordutil.LOADING
   } else {
     return MSG_SERVER_ONLY
   }
@@ -35,7 +31,7 @@ exports.giverole = function(input, message, client) {
 // List roles on the server that the bot can assign
 exports.roles = exports.listroles = function(input, message, client) {
   if (input.toLowerCase() == 'help')
-    return `'listroles' will get you a list of all roles on this server in a random order, this is slated for future improvement`
+    return `Usage: '!roles' will get you a list of all roles on this server in a random order, this is slated for future improvement`
   // If we're on a server, get them roles - reply intelligently in unhappy circumstances
   if (message.guild) {
     const roleList = message.guild.roles.cache
@@ -55,7 +51,7 @@ exports.roles = exports.listroles = function(input, message, client) {
 }
 
 //List people in a given role
-exports.rolemembers = function(input = '', message, client) {
+rolemembers = function(input = '', message, client) {
   if (!input) return `give me a role and I'll give you an answer`
   if (input.toLowerCase() == 'help') return `'rolemembers role-name' definitely doesn't list the members of a role`
   if (message.guild) {
