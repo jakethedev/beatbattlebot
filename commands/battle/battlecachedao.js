@@ -170,6 +170,16 @@ exports.addEntry = function(entrantId, entrantName, link, battleName) {
   }
 }
 
+exports.removeEntry = function(entrantId, battleName) {
+  let entryExisted = !!battleMap[battleName][ENTRYKEY][entrantId] // For smarter output
+  if (entryExisted) {
+    delete(battleMap[battleName][ENTRYKEY][entrantId])
+    _saveBattleState()
+    return `your entry has been removed, hope to see you again soon!`
+  }
+  return `you don't have an active entry in this battle`
+}
+
 exports.getEntriesFor = function(battleName) {
   return battleMap[battleName][ENTRYKEY]
 }

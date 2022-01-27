@@ -51,6 +51,8 @@ BUGS
 - nicer output from !vote, 'votes for artist1, artist2...'
 
 RECENTLY DONE
+X discord.js 13 (since 12 unsupported) #60
+X unsubmit #11
 X results output formattign #8
 X deactivate battles #57
 X simplify stop commands #66

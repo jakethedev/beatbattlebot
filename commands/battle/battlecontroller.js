@@ -59,6 +59,24 @@ exports.submit = function(input, msg) {
   }
 }
 
+exports.unsubmit = function(input, msg) {
+  if (input.toLowerCase() == 'help') {
+    return `Usage: \`!unsubmit\` to remove your entry from a battle you \`!submit\`'d a link to`
+  }
+  if (msg.guild) {
+    const battleName = `${msg.channel.id}`
+    if (!battledao.isBattleChannel(battleName)){
+      return MSG_BATTLE_INACTIVE
+    }
+    let entrantName = msg.member.nickname || msg.member.user.username
+    let entrantId = msg.member.id
+    debug(`${entrantName} has unsubmitted for battle[${battleName}]`)
+    return battledao.removeEntry(entrantId, battleName)
+  } else {
+    return MSG_SERVER_ONLY
+  }
+}
+
 //exports.
 let modsubmit = function(input, msg) {
   if (input.toLowerCase() == 'help') {
