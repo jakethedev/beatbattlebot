@@ -18,6 +18,9 @@ const client = new Client({
     Intents.FLAGS.DIRECT_MESSAGES,
     Intents.FLAGS.DIRECT_MESSAGE_REACTIONS,
     Intents.FLAGS.GUILD_SCHEDULED_EVENTS
+  ],
+  partials: [
+      'CHANNEL', // Required to receive DMs, thanks SO
   ]
 })
 
