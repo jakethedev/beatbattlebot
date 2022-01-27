@@ -1,38 +1,32 @@
 const fs = require('fs')
 const day = require('../../util/dayjs')
-const _cacheFile = 'battlecache.json'
-const log = msg => console.log(`bcache: ${msg}`)
-
-const BALLOT_SIZE_DEFAULT = 3
-const PODIUM_SIZE_DEFAULT = 15
+const _cacheFile = 'feedbackcache.json'
+const log = msg => console.log(`fbcache: ${msg}`)
 
 const ENTRYKEY = "entries"
-const VOTECACHEKEY = "votes"
-const VOTEREGKEY = "votereg"
-const SUB_DL_KEY = "subdeadline"
-const VOTE_DL_KEY = "votedeadline"
+const COOLDOWNKEY = "cooldown"
 
 // Barebones default state
-let battleMap = {}
+let feedbackMap = {}
 
 // Load old cache on init
 try {
-  battleMap = JSON.parse(fs.readFileSync(_cacheFile))
+  feedbackMap = JSON.parse(fs.readFileSync(_cacheFile))
 } catch (error) {
-  log(`if ENOENT this is totally ok - could not load JSON from old cache: ${error}`)
+  log(`if ENOENT this is expected - could not load feedback data from old cache: ${error}`)
 }
 
 // Simple persistence layer
-function _saveBattleState(){
+function _saveFeedbackState(){
   try {
-    fs.writeFileSync(_cacheFile, JSON.stringify(battleMap, null, 2))
+    fs.writeFileSync(_cacheFile, JSON.stringify(feedbackMap, null, 2))
   } catch(error) {
     log(`error saving cache: ${error}`)
   }
 }
 
-// Utility for clearing out battle registrations at the end of a battle
-function _resetBattleRegistration(battleName) {
+// TODO: everything below this line
+function _resetCooldown(userid) {
   if (!battleMap[VOTEREGKEY]) {
     log('adding vote reg first time')
     battleMap[VOTEREGKEY] = {}
@@ -47,7 +41,7 @@ function _resetBattleRegistration(battleName) {
 }
 
 // Battle data reset and core "structure" setup
-function _resetBattleState(battleName) {
+function _setCooldown(userid) {
   //TODO mv disk cache to cache.backup
   _resetBattleRegistration(battleName)
   let battleExisted = _isBattleInProgress(battleName)
@@ -66,7 +60,7 @@ function _resetBattleState(battleName) {
     return `the old battle is OVER, a new round has started!`
   }
 }
-exports.newBattle = _resetBattleState
+//exports.newBattle = _resetBattleState
 
 // Stop battles for an active battle channel
 function _deactivateBattle(battleName) {

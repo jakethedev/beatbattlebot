@@ -1,6 +1,6 @@
 const fs = require('fs')
 const day = require('../../util/dayjs')
-const _cacheFile = 'serverdao.json'
+const _cacheFile = 'servercache.json'
 const log = msg => console.log(`serverdao: ${msg}`)
 
 let serverData = {}
@@ -21,3 +21,14 @@ function _saveServerData(){
   }
 }
 
+exports.listenToChannel = function(discChannel) {
+  //TODO save channel
+}
+
+exports.ignoreChannel = function(discChannel) {
+  //TODO unsave channel
+}
+
+exports.getChannels = function(serverid) {
+  //TODO return [ channelids ] 
+}

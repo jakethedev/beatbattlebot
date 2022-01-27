@@ -1,8 +1,14 @@
 # todolist
 
 ### See the issues page for actual tasks, this is a notepad for minor things and a reminder of how far we've come
+CRITICAL TODO
+    ADD AUTOROLE BOT TO SERVER
+    <t:UNIX> TIME REFACTOR
+    feedback features (simplified)
+
 GENERAL TODO
-    write issue for the <t:UNIXTIME> autotime messages
+    notice duplicate command declarations and fail fast
+    take a gander at sqlite
     add issue numbers to each of below tasks or create an issue
     function template(input, serverid, channelid)
 
@@ -45,6 +51,8 @@ BUGS
 - nicer output from !vote, 'votes for artist1, artist2...'
 
 RECENTLY DONE
+X discord.js 13 (since 12 unsupported) #60
+X unsubmit #11
 X results output formattign #8
 X deactivate battles #57
 X simplify stop commands #66
