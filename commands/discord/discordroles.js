@@ -2,6 +2,12 @@ const discordutil = require('../../util/discord')
 const debug = (msg) => console.log(`DISCORDROLES: ${msg}`)
 const MSG_SERVER_ONLY = "this command needs to be run in a server channel where this bot is active"
 
+//exports.
+reactrole = function(input, message) {
+  //TODO figure out how this works
+}
+// exports.rr = exports.reactrole
+
 //Given a rolename as input, add it to the requestor if it doesn't result in new privileges
 exports.giverole = function(input, message, client) {
   if (!input.trim() || input.toLowerCase() == 'help') return `Usage: giverole 'the role name' will try to add the role to your user. Optionally, you can tag one person (after the role name) to attempt to give them the role`
