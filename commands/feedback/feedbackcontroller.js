@@ -27,17 +27,21 @@ function _getFeedbackEntryAndStageUser() {
 }
 
 exports.fb = function(input = '', msg) {
+  const userid = msg.author.id
   input = `${input}` // typescript.diy
   if (input.startsWith('https://')) {
-    // TODO verify user is not in cooldown
+    if (_userIsInCooldown(userid)){
+      const { timestamp, timespan } = _getCooldownTimestamp(userid)
+      return `aaa ${timestamp}`
+    }
     let [link, ...notes] = input.split(/\s/)
     if (notes && notes.length > 0) {
-      _submitNotes(notes.join(' '))
+      _submitNotes(userid, notes.join(' '))
     }
-    return _submitLink(msg.author.id, link.trim())
+    return _submitLink(userid, link.trim())
   } else if (input == 'notes') {
     // save notes to an entry spot, safe to do before or after entry
-    return _submitNotes(msg.author.id, input)
+    return _submitNotes(userid, input)
   } else if (input == 'open') {
     if (discordutil.isPowerfulMember(msg.author)) {
       return _getFeedbackEntryAndStageUser()
