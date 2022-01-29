@@ -1,7 +1,8 @@
 // List all local components here
 const components = [
   './discordroles',
-  './fun'
+  './fun',
+  './serverops'
 ]
 
 // Go through each chunk of the library and set each exported

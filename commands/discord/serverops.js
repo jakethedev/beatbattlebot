@@ -3,6 +3,12 @@ const MBinB = 1048576
 const rand = require('../../util/random')
 const config = require('../../util/config')
 
+//exports.
+summary = function(serverid) {
+  //TODO: hit util/discord util/servercachedao, format a nice report
+  return `unimplemented functionality, coming soon...ish`
+}
+
 // Handy guide link for easy pinning
 exports.guide = function() {
   return `Check out the **always-updated guide** on Github at ${config.guidelink}!`
@@ -28,3 +34,4 @@ exports.serverstats = function() {
     return `I've been awake for ${uptime} hours, my workload looks like ${load}, I've got ${free} MB free of ${max}, and I really want a ${desire} - thanks for asking.`
   }
 }
+

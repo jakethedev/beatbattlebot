@@ -6,12 +6,12 @@
   "scripts": {
     "start": "node bot.js",
     "devbot": "nodemon bot.js",
-    "jestkillcache": "jest --clearCache",
-    "jestdocs": "echo Check out the jest docs at https://jestjs.io/docs",
-    "jestcov": "jest --coverage --config=./.jestconfig.js",
-    "jestverbose": "jest --expand --config=./.jestconfig.js",
-    "jestwatch": "jest --watchAll --config=./.jestconfig.js",
     "test": "jest --config=./.jestconfig.js ; rm -r coverage/",
+    "testcov": "jest --coverage --config=./.jestconfig.js",
+    "testdocs": "echo Check out the jest docs at https://jestjs.io/docs",
+    "testclearcache": "jest --clearCache",
+    "testverbose": "jest --expand --config=./.jestconfig.js",
+    "testwatch": "jest --watchAll --config=./.jestconfig.js",
     "build": "echo Placeholder text for smushing libs into a bot.js for web page usage"
   },
   "repository": {
