@@ -1,6 +1,6 @@
 module.exports = {
-  "version": "1.10.3",
-  "releasenotes": "!guide for a link to the command list",
+  "version": "1.10.4",
+  "releasenotes": "!fb command suite ready for usage, feedback streams are now 123098x easier!",
   "guidelink": "https://gist.github.com/jakethedev/82865525164fb7fc64117751611bf597",
   "botkey": "!",
   "activeChannels": [
@@ -22,5 +22,5 @@ module.exports = {
     "mod-chat",
     "battlechat"
   ],
-  "gameStatus": "beat battles | !help for cmds"
+  "gameStatus": "BattleBot | !guide for info"
 }
