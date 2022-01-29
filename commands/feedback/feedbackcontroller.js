@@ -52,6 +52,8 @@ exports.fb = function(input = '', msg) {
   } else if (input.startsWith('cooldown')) {
     // mod only, adjust cooldown time
     // TODO: reset? clean cooldown list. int? set cooldown. else? error
+  } else if (input == 'method') {
+    // mod only, set the method for feedback: random, weighted, chrono
   } else if (input == 'start') {
     // mod only, get a random entry for feedback
   } else if (input == 'done') {
