@@ -43,7 +43,7 @@ exports.fb = function(input = '', msg) {
     // save notes to an entry spot, safe to do before or after entry
     return _submitNotes(userid, input)
   } else if (input == 'open') {
-    if (discordutil.isPowerfulMember(msg.author)) {
+    if (discordutil.isMessageFromMod(msg)) {
       return _getFeedbackEntryAndStageUser()
     }
     return MSG_MOD_ONLY
@@ -141,7 +141,7 @@ let fbcooldown = function(input, msg){
     return `Usage: \`!fbcooldown SPAN\` to set the cooldown before a user pulled for feedback can submit again`
   }
   if (msg.guild) {
-    if (discordutil.isPowerfulMember(msg)){
+    if (discordutil.isMessageFromMod(msg)){
       const battleName = `${msg.channel.id}`
       if (!battledao.isBattleChannel(battleName)){
         return MSG_BATTLE_INACTIVE

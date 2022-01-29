@@ -17,7 +17,7 @@ exports.newbattle = function(input, msg) {
     return `Post \`!newbattle\` to start a new beat battle for this channel!`
   }
   if (msg.guild){
-    if (discordutil.isPowerfulMember(msg)){
+    if (discordutil.isMessageFromMod(msg)){
       const battleName = `${msg.channel.id}`
       if (battledao.isBattleActive(battleName) && input !== 'letsgo') {
         return `heads up, this resets the current battle. Are you ready for a new round? \`!newbattle letsgo\` to confirm!`
@@ -91,7 +91,7 @@ let modsubmit = function(input, msg) {
     if (!battledao.isBattleChannel(battleName)){
       return MSG_BATTLE_INACTIVE
     }
-    if (discordutil.isPowerfulMember(msg)){
+    if (discordutil.isMessageFromMod(msg)){
       return `not implemented yet`
     } else {
       return MSG_MOD_ONLY
@@ -169,7 +169,7 @@ exports.stopbattle = function(input, msg){
     return `Usage: !stopbattle sets the submission AND voting deadlines to right now, stopping the battle in its *tracks*`
   }
   if (msg.guild) {
-    if (discordutil.isPowerfulMember(msg)){
+    if (discordutil.isMessageFromMod(msg)){
       const battleName = `${msg.channel.id}`
       if (!battledao.isBattleChannel(battleName)){
         return MSG_BATTLE_INACTIVE
@@ -194,7 +194,7 @@ exports.sd = function(input, msg){
     return usage
   }
   if (msg.guild) {
-    if (discordutil.isPowerfulMember(msg)){
+    if (discordutil.isMessageFromMod(msg)){
       const battleName = `${msg.channel.id}`
       if (!battledao.isBattleChannel(battleName)){
         return MSG_BATTLE_INACTIVE
@@ -225,7 +225,7 @@ exports.vd = function(input, msg){
     return usage
   }
   if (msg.guild) {
-    if (discordutil.isPowerfulMember(msg)){
+    if (discordutil.isMessageFromMod(msg)){
       const battleName = `${msg.channel.id}`
       if (!battledao.isBattleChannel(battleName)){
         return MSG_BATTLE_INACTIVE
@@ -257,7 +257,7 @@ let maxvotes = function(input, msg){
     return `Usage: #TODO usage info`
   }
   if (msg.guild) {
-    if (discordutil.isPowerfulMember(msg)){
+    if (discordutil.isMessageFromMod(msg)){
       const battleName = `${msg.channel.id}`
       if (!battledao.isBattleChannel(battleName)){
         return MSG_BATTLE_INACTIVE
@@ -358,7 +358,7 @@ exports.results = function(input, msg) {
     return `Usage: \`!results\` can be run by a mod after the voting deadline has passed to get the top `
   }
   if (msg.guild) {
-    if (discordutil.isPowerfulMember(msg)){
+    if (discordutil.isMessageFromMod(msg)){
       if (!battledao.isBattleChannel(battleName)){
         return MSG_BATTLE_INACTIVE
       }

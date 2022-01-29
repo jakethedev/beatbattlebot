@@ -11,7 +11,7 @@
     "jestcov": "jest --coverage --config=./.jestconfig.js",
     "jestverbose": "jest --expand --config=./.jestconfig.js",
     "jestwatch": "jest --watchAll --config=./.jestconfig.js",
-    "test": "jest --config=./.jestconfig.js",
+    "test": "jest --config=./.jestconfig.js ; rm -r coverage/",
     "build": "echo Placeholder text for smushing libs into a bot.js for web page usage"
   },
   "repository": {
