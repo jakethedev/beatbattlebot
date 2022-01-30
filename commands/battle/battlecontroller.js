@@ -194,16 +194,16 @@ exports.sd = function(input, msg){
     return usage
   }
   if (msg.guild) {
-    if (discordutil.isMessageFromMod(msg)){
+    if (discordutil.isMessageFromMod(msg)) {
       const battleName = `${msg.channel.id}`
-      if (!battledao.isBattleChannel(battleName)){
+      if (!battledao.isBattleChannel(battleName)) {
         return MSG_BATTLE_INACTIVE
       }
       if (input && input.toLowerCase() == 'now') {
         const deadline = new day.dayjs()
         battledao.setSubDeadline(battleName, deadline)
         return `submissions for this battle are now CLOSED! \`!submissions\` to see the final list of entries`
-      } else if (input){
+      } else if (input) {
         const deadline = day.addTimespan(input)
         battledao.setSubDeadline(battleName, deadline)
         return `submissions are now due ${deadline.fromNow()}! (${day.fmtAsPST(deadline)})`
@@ -219,15 +219,15 @@ exports.sd = function(input, msg){
 }
 exports.stopsubs = exports.sd // TODO Keep the old alias for a release then ditch it
 
-exports.vd = function(input, msg){
+exports.vd = function(input, msg) {
   usage = "Usage: `!vd timespan` (or `!stopvotes timespan`) sets the voting deadline to `timespan` from now. Example spans: 1w1d for 8 days; 1d12h for 36 hours; 90m for a real short deadline. You can use `!vd now` to set the deadline to right now too"
   if (input.toLowerCase() == 'help') {
     return usage
   }
   if (msg.guild) {
-    if (discordutil.isMessageFromMod(msg)){
+    if (discordutil.isMessageFromMod(msg)) {
       const battleName = `${msg.channel.id}`
-      if (!battledao.isBattleChannel(battleName)){
+      if (!battledao.isBattleChannel(battleName)) {
         return MSG_BATTLE_INACTIVE
       }
       if (input && input.toLowerCase() == 'now') {
@@ -257,9 +257,9 @@ let maxvotes = function(input, msg){
     return `Usage: #TODO usage info`
   }
   if (msg.guild) {
-    if (discordutil.isMessageFromMod(msg)){
+    if (discordutil.isMessageFromMod(msg)) {
       const battleName = `${msg.channel.id}`
-      if (!battledao.isBattleChannel(battleName)){
+      if (!battledao.isBattleChannel(battleName)) {
         return MSG_BATTLE_INACTIVE
       }
       // battledao.setBallotSize(battleName, input)
@@ -272,7 +272,7 @@ let maxvotes = function(input, msg){
   }
 }
 
-exports.getballot = function(input, msg){
+exports.getballot = function(input, msg) {
   const battleName = `${msg.channel.id}`
   const numEntries = battledao.getBattleSize(battleName)
   const ballotSize = battledao.getBallotSize(battleName)  // used in output sent to user
@@ -280,7 +280,7 @@ exports.getballot = function(input, msg){
     return `Usage: After submissions are closed, if there is a voting period, you can run \`!getballot\` in the channel where the battle occurred to recieve a numbered list of entries via DM. Once you have the list, DM back with \`!vote N\` or \`!vote N1, N2, Nmax\` to vote for your favorite ${numEntries} entries. `
   }
   if (msg.guild) {
-    if (!battledao.isBattleChannel(battleName)){
+    if (!battledao.isBattleChannel(battleName)) {
       return MSG_BATTLE_INACTIVE
     }
     if (battledao.isVotingOpen(battleName)) {
@@ -303,7 +303,7 @@ exports.getballot = function(input, msg){
   }
 }
 
-exports.vote = function(input, msg){
+exports.vote = function(input, msg) {
   // Validation and text for help output and rest of voting process
   if (msg.guild) {
     return MSG_DM_ONLY
@@ -318,17 +318,17 @@ exports.vote = function(input, msg){
   if (input.toLowerCase() == 'help') {
     return `Usage: After submissions are closed, if there is a voting period, you can run \`!getballot\` in the channel where the battle occurred to recieve a numbered list of entries via DM. Once you have the list, DM back with \`!vote N\` or \`!vote N1, N2, Nmax\` to vote for your favorite ${numEntries} entries. `
   }
-  if (!battledao.isBattleActive(battleName)){
+  if (!battledao.isBattleActive(battleName)) {
     return MSG_BATTLE_INACTIVE
   }
-  if (battledao.isVotingOpen(battleName)){
+  if (battledao.isVotingOpen(battleName)) {
     //Validation code until the next comments
     let voteItems = input.split(','), voteSet = new Set(), voteArrayValidated = []
     if (voteItems.length > ballotSize) {
       return `the max number of tracks you can vote for is ${ballotSize}, please slap a limiter on your votes and try again`
     }
-    for (let i of voteItems){
-      if (!parseInt(i)){
+    for (let i of voteItems) {
+      if (!parseInt(i)) {
         return `sorry, this vote was not formatted right: please make sure your entries are **comma-separated positive numbers** from the list provided by \`!getballot\`.\n\nExamples: \`!vote 7\`, \`!vote 1, 2, 3\` `
       }
       const voteEntryId = Math.abs(parseInt(i)) // no room for negativity
@@ -358,11 +358,11 @@ exports.results = function(input, msg) {
     return `Usage: \`!results\` can be run by a mod after the voting deadline has passed to get the top `
   }
   if (msg.guild) {
-    if (discordutil.isMessageFromMod(msg)){
-      if (!battledao.isBattleChannel(battleName)){
+    if (discordutil.isMessageFromMod(msg)) {
+      if (!battledao.isBattleChannel(battleName)) {
         return MSG_BATTLE_INACTIVE
       }
-      if (!battledao.isVotingOpen(battleName)){
+      if (!battledao.isVotingOpen(battleName)) {
         const voteCountObj = battledao.getVoteCountForBattle(battleName)
         const submissionMapObj = battledao.getEntriesFor(battleName)
         // Quick parameter handling if you just want top winner or whatev

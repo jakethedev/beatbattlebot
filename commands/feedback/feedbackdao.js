@@ -17,7 +17,7 @@ try {
 }
 
 // Simple persistence layer
-function _saveFeedbackState(){
+function _saveFeedbackState() {
   try {
     fs.writeFileSync(_cacheFile, JSON.stringify(feedbackMap, null, 2))
   } catch(error) {
@@ -102,19 +102,19 @@ function _isBattleInProgress(battleName) {
 }
 exports.isBattleActive = _isBattleInProgress
 
-exports.setSubDeadline = function(battleName, dayJsDate){
+exports.setSubDeadline = function(battleName, dayJsDate) {
   battleMap[battleName][SUB_DL_KEY] = dayJsDate.toISOString()
   _saveBattleState()
 }
 
-exports.setVotingDeadline = function(battleName, dayJsDate){
+exports.setVotingDeadline = function(battleName, dayJsDate) {
   battleMap[battleName][VOTE_DL_KEY] = dayJsDate.toISOString()
   _saveBattleState()
 }
 
 // Look... I know it's ugly, but DRY + needing to use exported functions
 //   locally means this nonsense
-function _getDeadlineByName(battleName, dlname){
+function _getDeadlineByName(battleName, dlname) {
   const dl = battleMap[battleName][dlname]
   if (dl) {
     return new day.dayjs(dl)
@@ -138,7 +138,7 @@ function _isSubmitOpen(battleName) {
 }
 exports.isSubmitOpen = _isSubmitOpen
 
-function _isVotingOpen(battleName){
+function _isVotingOpen(battleName) {
   const now = new day.dayjs()
   const vdl = _getVoteDeadline(battleName)
   if (vdl)
@@ -216,9 +216,10 @@ exports.voteAndDeregister = function(userId, voteIdxArray){
 }
 
 //TODO getter AND SETTER for both of these
-exports.getPodiumSize = function(battleName){
+exports.getPodiumSize = function(battleName) {
   return PODIUM_SIZE_DEFAULT
 }
+
 let setPodiumSize = function(battleName) {
   //TODO get this right
   debug("THIS IS NOT READY OMG")
@@ -228,6 +229,7 @@ exports.getBallotSize = function(battleName) {
   //TODO get this right
   return BALLOT_SIZE_DEFAULT
 }
+
 let setBallotSize = function(battleName) {
   //TODO get this right
   debug("THIS IS NOT READY OMG")
