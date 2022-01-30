@@ -1,7 +1,10 @@
 const con = require('../../commands/feedback/feedbackcontroller.js')
+const djsmock = require('../util/mock-discordjs')
+const mockmsg = (txt) => djsmock.mockMsg(txt)
 
 test('feedback/feedbackcontroller:fb no input', () => {
-  console.log(Promise.resolve(con.fb()))
+  let m = mockmsg('')
+  console.log(Promise.resolve(con.fb('', m)))
 })
 
 test('feedback/feedbackcontroller:fb open', () => {
