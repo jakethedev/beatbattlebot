@@ -31,8 +31,8 @@ exports.fb = function(input = '', msg) {
   input = `${input}` // typescript.diy
   if (input.startsWith('https://')) {
     if (_userIsInCooldown(userid)){
-      const { timestamp, timespan } = _getCooldownTimestamp(userid)
-      return `aaa ${timestamp}`
+      // const { timestamp, timespan } = _getCooldownTimestamp(userid)
+      return `you're still in cooldown from your last submission, more detail coming in a future bot version`
     }
     let [link, ...notes] = input.split(/\s/)
     if (notes && notes.length > 0) {

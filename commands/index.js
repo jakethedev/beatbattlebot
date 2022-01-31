@@ -1,6 +1,6 @@
 //TODO Switch this to require(fs).listDir() or something
-// const MODULES = ['./battle', './sys', './discord', './giftex', './feedback', './music']
-const MODULES = ['./battle', './sys', './discord', './giftex', './feedback']
+// const MODULES = ['./battle', './discord', './giftex', './feedback', './music']
+const MODULES = ['./battle', './discord', './giftex', './feedback']
 const debug = (msg) => console.log(`cmdidx: ${msg}`)
 
 // Dynamically load all operations we care about into a single commander object
