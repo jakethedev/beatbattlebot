@@ -26,12 +26,24 @@ function _getFeedbackEntryAndStageUser() {
   // TODO get weighted list, 
 }
 
+function _getCooldownTimestamp(chanid, userid) {
+  // TODO get weighted list, 
+  // return { timestamp: $ts, timespan: $span }
+}
+
+function _userIsInCooldown(chanid, userid) {
+  // TODO check if user has cooldown date after now in this channel
+  return false
+}
+
 exports.fb = function(input = '', msg) {
   const userid = msg.author.id
-  input = `${input}` // typescript.diy
+  const chanid = msg.channel ? msg.channel.id : "DM"
+  input = `${input}` // typescript.js
+
   if (input.startsWith('https://')) {
     if (_userIsInCooldown(userid)){
-      // const { timestamp, timespan } = _getCooldownTimestamp(userid)
+      const { timestamp, timespan } = _getCooldownTimestamp(userid)
       return `you're still in cooldown from your last submission, more detail coming in a future bot version`
     }
     let [link, ...notes] = input.split(/\s/)
