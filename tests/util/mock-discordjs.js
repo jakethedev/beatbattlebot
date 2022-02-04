@@ -8,9 +8,7 @@ exports.mockMsg = function(text = false, author = false, channel = false, isDM =
     content: text,
     channel: channel,
     author: author,
-    member: {
-      nickname: 'mockmembernickname'
-    },
+    member: author,
     react: (r) => console.log(`mock message reaction: ${r}`),
     reply: (r) => console.log(`mock message reply: ${r}`),
     send: (s) => console.log(`mock message send: ${r}`),
@@ -22,11 +20,14 @@ exports.mockSimpleUser = function(userid = 'mockSIMPLEruserdefaultID', username 
   return {
     id: userid,
     username: username,
-    nickname: false,
+    nickname: "mocksimpleNICK",
     bot: isBot,
     admin: false,
     send: (txt) => console.log(`mock simple user send: ${txt}`),
-    roles: [ "everyone" ]
+    roles: [ "everyone" ],
+    permissions: {
+      any: (rolearray) => false
+    }
   }
 }
 
@@ -34,11 +35,14 @@ exports.mockModUser = function(userid = 'mockMODuserdefaultID', username = 'mock
   return {
     id: userid,
     username: username,
-    nickname: false,
+    nickname: "mockmodNICK",
     bot: isBot,
     admin: false,
     send: (txt) => console.log(`mock mod user send: ${txt}`),
-    roles: [ "admin", "moderator", "everyone" ]
+    roles: [ "admin", "moderator", "everyone" ],
+    permissions: {
+      any: (rolearray) => true
+    }
   }
 }
 

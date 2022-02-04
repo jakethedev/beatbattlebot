@@ -1,4 +1,4 @@
-const fun = require('../../commands/discord/fun.js')
+const fun = require('../commands/discord/fun.js')
 
 test('discord/fun:help output', () => {
   // All help should be a string, primal litmus tests

@@ -1,4 +1,4 @@
-const dao = require('../../commands/feedback/feedbackdao.js')
+const dao = require('../commands/feedback/feedbackdao.js')
 
 test('feedback/feedbackdao:basic operation tests', () => {
   console.log(`fbdao: ${dao}`)
