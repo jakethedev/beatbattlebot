@@ -44,7 +44,7 @@ client.on('ready', () => {
 })
 
 // Command central
-client.on('message', msg => {
+client.on('messageCreate', msg => {
   // Contain the bot, and ensure we actually want to act on the command
   let channelName = msg.channel.name ? msg.channel.name.toLowerCase() : "NOT_A_CHANNEL_NAME"
   if (activeChannels.includes(channelName) || msg.channel.recipient) {

@@ -27,7 +27,7 @@ function _submitNotes (userid, notes) {
 }
 
 function _getFeedbackEntryAndStageUser() {
-  const feedbackOrder = servercache.getFeedbackOrder(serverid)
+  // const feedbackOrder = servercache.getFeedbackOrder(serverid)
   // TODO get weighted list, pick one 
   return `this is a feedback entry, user not staged, TBD`
 }
@@ -41,7 +41,7 @@ function _putUserInSpotlight(chanid) {
   return `user has not been queued for feedback TBD`
 }
 
-function _feedbackCompletedForQueuedUser()(chanid) {
+function _feedbackCompletedForQueuedUser(chanid) {
   return `user has not been set for cooldown, TBD`
 }
 

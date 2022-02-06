@@ -5,6 +5,7 @@
   "main": "bot.js",
   "scripts": {
     "start": "node bot.js",
+    "starttracedep": "node --trace-deprecation bot.js",
     "devbot": "nodemon bot.js",
     "test": "jest --config=./.jestconfig.js ; rm -r coverage/",
     "testcov": "jest --coverage --config=./.jestconfig.js",
