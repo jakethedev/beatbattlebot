@@ -1,9 +1,11 @@
 const { Message } = require('discord.js')
 const discordutil = require('../../util/discord')
+const servercache = require('../../util/servercachedao')
 const feedbackdao = require('./feedbackdao')
 const day = require('../../util/dayjs')
 const rand = require('../../util/random')
 
+const MSG_FUTURE_FEATURE = "this feature is in the works and will be available in a future version of the bot"
 const MSG_SERVER_ONLY = "this command needs to be run in a server channel where this bot is active"
 const MSG_DM_ONLY = "this command needs to be sent to the bot via DM"
 const MSG_MOD_ONLY = "this is a mod-only command"
@@ -14,21 +16,33 @@ let debug = msg => console.log(`feedbacklib: ${msg}`)
 
 function _submitLink (userid, link) {
   // TODO make safe before or after notes
-  return 'feedback submissions disabled at the moment, stay tuned!'
+  //    also return output should be note-presence sensitive
+  return 'link submissions disabled at the moment, stay tuned!'
 }
 
 function _submitNotes (userid, notes) {
   // TODO make safe before or after Link
-  return 'feedback submissions disabled at the moment, stay tuned!'
+  //    also return output should be link-presence sensitive
+  return 'notes submissions disabled at the moment, stay tuned!'
 }
 
 function _getFeedbackEntryAndStageUser() {
-  // TODO get weighted list, 
+  const feedbackOrder = servercache.getFeedbackOrder(serverid)
+  // TODO get weighted list, pick one 
+  return `this is a feedback entry, user not staged, TBD`
 }
 
 function _getCooldownTimestamp(chanid, userid) {
   // TODO get weighted list, 
-  // return { timestamp: $ts, timespan: $span }
+  return { timestamp: "NOTATIMESTAMP", timespan: "NOTASPAN" }
+}
+
+function _putUserInSpotlight(chanid) {
+  return `user has not been queued for feedback TBD`
+}
+
+function _feedbackCompletedForQueuedUser()(chanid) {
+  return `user has not been set for cooldown, TBD`
 }
 
 function _userIsInCooldown(chanid, userid) {
@@ -36,12 +50,26 @@ function _userIsInCooldown(chanid, userid) {
   return false
 }
 
+function _openChannelForFeedback(chanid) {
+  return `channel ${chanid} is OPEN for FEEDBACK`
+}
+
+function _closeChannelForFeedback(chanid) {
+  return `channel ${chanid} is CLOSED for FEEDBACK`
+}
+
+function _resetFeedbackChannel(chanid) {
+  return `feedback for channel ${chanid} has not been reset TBD`
+}
+
 exports.fb = function(input = '', msg) {
+  input = `${input}` // typescript.js
   const userid = msg.author.id
   const chanid = msg.channel ? msg.channel.id : "DM"
-  input = `${input}` // typescript.js
+  const serverid = msg.guild ? msg.guild.id : "DM"
+  let response = `Usage: !fb`
 
-  if (input.startsWith('https://')) {
+  if (input.startsWith('https://')) { // link indicates a submission and optional notes
     if (_userIsInCooldown(userid)){
       const { timestamp, timespan } = _getCooldownTimestamp(userid)
       return `you're still in cooldown from your last submission, more detail coming in a future bot version`
@@ -51,27 +79,40 @@ exports.fb = function(input = '', msg) {
       _submitNotes(userid, notes.join(' '))
     }
     return _submitLink(userid, link.trim())
-  } else if (input == 'notes') {
-    // save notes to an entry spot, safe to do before or after entry
+  } else if (input == 'notes') { // save notes from entrant for feedback
+    // TODO: safe to do before or after entry
     return _submitNotes(userid, input)
-  } else if (input == 'open') {
+  } else if (input == 'open') { // open the channel to submissions
     if (discordutil.isMessageFromMod(msg)) {
-      return _getFeedbackEntryAndStageUser()
+      return _openChannelForFeedback() 
     }
     return MSG_MOD_ONLY
-  } else if (input == 'close') {
-    // mod only, stop accepting submissions
-  } else if (input.startsWith('cooldown')) {
-    // mod only, adjust cooldown time
+  } else if (input == 'close') { // stop the channel from accepting submissions
+    if (discordutil.isMessageFromMod(msg)) {
+      return _closeChannelForFeedback(chanid)
+    }
+    return MSG_MOD_ONLY
+  } else if (input.startsWith('cooldown')) { //  MODONLY: adjust cooldown time
     // TODO: reset? clean cooldown list. int? set cooldown. else? error
-  } else if (input == 'method') {
-    // mod only, set the method for feedback: random, weighted, chrono
-  } else if (input == 'start') {
-    // mod only, get a random entry for feedback
-  } else if (input == 'done') {
-    // mod only, put userid: timestamp in the cooldown list
-  } else if (input == 'reset') {
-    // mod only, wipe feedback data for this channel, require letsgo confirmation
+    return MSG_FUTURE_FEATURE
+  } else if (input == 'method') { // MODONLY: change way of choosing entries
+    // TODO: set the method for feedback: random, weighted, chrono
+    return MSG_FUTURE_FEATURE
+  } else if (input == 'start') { // MODONLY: stage a user for feedback
+    return _getFeedbackEntryAndStageUser()
+  } else if (input == 'done') { // MODONLY: feedback is done, put user in cooldown
+    if (discordutil.isMessageFromMod(msg)) {
+      return _feedbackCompletedForQueuedUser()
+    }
+    return MSG_MOD_ONLY
+  } else if (input.startsWith('reset')) { // MODONLY: wipe the channel's fb queue and cooldowns
+    if (discordutil.isMessageFromMod(msg)) {
+      if (input.includes('letsgo')) {
+        return _resetFeedbackChannel(chanid)
+      }
+      return "warning, this wipes out this channel's feedback queue and resets all cooldowns, are you sure? run `!fb reset letsgo` to confirm"
+    }
+    return MSG_MOD_ONLY
   } else {
     debug('default case return help')
   }

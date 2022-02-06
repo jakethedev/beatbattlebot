@@ -1,5 +1,5 @@
 const fs = require('fs')
-const day = require('../../util/dayjs')
+const day = require('./dayjs')
 const _cacheFile = 'servercache.json'
 const log = msg => console.log(`serverdao: ${msg}`)
 
@@ -78,4 +78,16 @@ exports.setPreferredTimezone = function(serverid, tztext) {
 
 exports.getPreferredTimezone = function(serverid) {
   // TODO if get never called, set to EST
+}
+
+const FEEDBACK_ORDER_OLDEST = 'oldest'
+const FEEDBACK_ORDER_RANDOM = 'random'
+const FEEDBACK_ORDER_WEIGHTED = 'weighted'
+exports.setFeedbackOrder = function(serverid, type) {
+  // TODO weighted SPAN, chrono, random
+}
+
+exports.getFeedbackOrder = function(serverid) {
+  // TODO weighted SPAN, chrono, random
+  return FEEDBACK_ORDER_RANDOM
 }
