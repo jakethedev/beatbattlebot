@@ -1,7 +1,5 @@
 {
   "SERVERID_FULLYUSED": {
-    "tiebreak": "tbd",
-    "feedbackorder": "random",
     "timezone": "America/Los Angeles",
     "battleChannels": {
       "channelid1": "channelname1",

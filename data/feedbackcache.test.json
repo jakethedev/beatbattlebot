@@ -50,7 +50,7 @@
         "displayname": "id8alsdkjfoaiwehfajwenfk"
       }
     },
-    "method": "random",
+    "order": "random",
     "isOpenForFeedback": true,
     "cooldown": {
       "idZ": "timestampTBD",

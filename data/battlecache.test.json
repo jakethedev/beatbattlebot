@@ -90,6 +90,7 @@
       "id7": [ 4 ],
       "idA": [ 4 ]
     },
+    "tiebreak": "oldest",
     "subdeadline": false,
     "votedeadline": false
   },
