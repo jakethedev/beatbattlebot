@@ -6,6 +6,12 @@ CRITICAL TODO
     <t:UNIX> TIME REFACTOR #92
     feedback features (simplified) #24
 
+IMPORTANT
+    Issue for util/msg_util.js: msg_util.isModMsg, msg_util.isChannelMsg, abstract some shit
+    Issue for util/constants.js `const constants = require('./util/constants')`
+    Issue for refactoring `if (msg.guild)` into some metadata structure
+    ^ this solves the help crisis too
+
 GENERAL TODO
     notice duplicate command declarations and fail fast
     take a gander at sqlite
