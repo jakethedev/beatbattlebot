@@ -2,21 +2,22 @@
 
 ### See the issues page for actual tasks, this is a notepad for minor things and a reminder of how far we've come
 CRITICAL TODO
-    ADD AUTOROLE BOT TO SERVER
-    <t:UNIX> TIME REFACTOR #92
-    feedback features (simplified) #24
+  ADD AUTOROLE BOT TO SERVER
+  <t:UNIX> TIME REFACTOR #92
+  feedback features (simplified) #24
 
 IMPORTANT
-    Issue for util/msg_util.js: msg_util.isModMsg, msg_util.isChannelMsg, abstract some shit
-    Issue for util/constants.js `const constants = require('./util/constants')`
-    Issue for refactoring `if (msg.guild)` into some metadata structure
-    ^ this solves the help crisis too
+  Issue for util/msg_util.js: msg_util.isModMsg, msg_util.isChannelMsg, abstract some shit
+  Issue for util/constants.js `const constants = require('./util/constants')`
+  Issue for refactoring `if (msg.guild)` into some metadata structure
+  Issue for refactoring `if (util.isPowerfulSender(msg))` into some metadata structure for bot.js to simplify
+  ^ this solves the help crisis too
 
 GENERAL TODO
-    notice duplicate command declarations and fail fast
-    take a gander at sqlite
-    add issue numbers to each of below tasks or create an issue
-    function template(input, serverid, channelid)
+  notice duplicate command declarations and fail fast
+  take a gander at sqlite
+  add issue numbers to each of below tasks or create an issue
+  function template(input, serverid, channelid)
 
 TODO FOR util/serverdao.js
   notes
