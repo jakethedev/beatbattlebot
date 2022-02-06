@@ -5,7 +5,7 @@ const battledao = require('./battlecachedao')
 const day = require('../../util/dayjs')
 const rand = require('../../util/random')
 
-let debug = msg => console.log(`battlecmds: ${msg}`)
+let debug = msg => console.log(`battlectl: ${msg}`)
 
 exports.newbattle = function(input, msg) {
   if (input.toLowerCase() == 'help') {

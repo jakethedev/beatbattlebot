@@ -1,7 +1,7 @@
 const fs = require('fs')
 const day = require('../../util/dayjs')
 const _cacheFile = 'feedbackcache.json'
-const log = msg => console.log(`fbcache: ${msg}`)
+const log = msg => console.log(`feedbackdao: ${msg}`)
 
 const ENTRYKEY = "entries"
 const COOLDOWNKEY = "cooldown"
@@ -111,50 +111,10 @@ function _isBattleInProgress(battleName) {
 }
 exports.isBattleActive = _isBattleInProgress
 
-exports.setSubDeadline = function(battleName, dayJsDate) {
-  battleMap[battleName][SUB_DL_KEY] = dayJsDate.toISOString()
-  _saveBattleState()
+exports.isFeedbackOpen = function(){
+  //TODO: the thing
+  return true
 }
-
-exports.setVotingDeadline = function(battleName, dayJsDate) {
-  battleMap[battleName][VOTE_DL_KEY] = dayJsDate.toISOString()
-  _saveBattleState()
-}
-
-// Look... I know it's ugly, but DRY + needing to use exported functions
-//   locally means this nonsense
-function _getDeadlineByName(battleName, dlname) {
-  const dl = battleMap[battleName][dlname]
-  if (dl) {
-    return new day.dayjs(dl)
-  }
-  return null
-}
-var _getSubDeadline = (battlename) => _getDeadlineByName(battlename, SUB_DL_KEY)
-var _getVoteDeadline = (battlename) => _getDeadlineByName(battlename, VOTE_DL_KEY)
-// returns tuned dayjs object
-exports.getSubDeadline = _getSubDeadline
-// returns tuned dayjs object
-exports.getVotingDeadline = _getVoteDeadline
-
-function _isSubmitOpen(battleName) {
-  const now = new day.dayjs()
-  const subdl = _getSubDeadline(battleName)
-  if (subdl)
-    return now.isBefore(subdl)
-  return true // No deadline in a battle means its open until closed
-  // return !subdl || now.isBefore(subdl)
-}
-exports.isSubmitOpen = _isSubmitOpen
-
-function _isVotingOpen(battleName) {
-  const now = new day.dayjs()
-  const vdl = _getVoteDeadline(battleName)
-  if (vdl)
-    return now.isBefore(vdl)
-  return true // Same reason as _isSubmitOpen, no reason to block it
-}
-exports.isVotingOpen = _isVotingOpen
 
 exports.addEntry = function(entrantId, entrantName, link, battleName) {
   // Expects caller to verify that submissions are allowed
@@ -175,24 +135,6 @@ exports.addEntry = function(entrantId, entrantName, link, battleName) {
 
 exports.getEntriesFor = function(battleName) {
   return battleMap[battleName][ENTRYKEY]
-}
-
-exports.getVoteCountForBattle = function(battleName) {
-  const battleData = battleMap[battleName]
-  const entryMap = battleData[ENTRYKEY]
-  const votes = battleData[VOTECACHEKEY]
-  // Set up a way to store counters
-  let voteCounter = {}
-  for (let i = 1; i <= _battleSize(battleName); i++ ) {
-    voteCounter[`${i}`] = 0
-  }
-  // Count all the votes, find the top X, return ordered list of votes
-  for (let voterID in votes) {
-    for (let vote of votes[voterID]) {
-      voteCounter[`${vote}`]++
-    }
-  }
-  return voteCounter
 }
 
 function _getBattleIdByVoter(userId) {
@@ -222,24 +164,4 @@ exports.voteAndDeregister = function(userId, voteIdxArray){
   _saveBattleState()
   // TODO no UI logic in the database what is this rookie hour? jeepers
   return true
-}
-
-//TODO getter AND SETTER for both of these
-exports.getPodiumSize = function(battleName) {
-  return PODIUM_SIZE_DEFAULT
-}
-
-let setPodiumSize = function(battleName) {
-  //TODO get this right
-  debug("THIS IS NOT READY OMG")
-}
-
-exports.getBallotSize = function(battleName) {
-  //TODO get this right
-  return BALLOT_SIZE_DEFAULT
-}
-
-let setBallotSize = function(battleName) {
-  //TODO get this right
-  debug("THIS IS NOT READY OMG")
 }

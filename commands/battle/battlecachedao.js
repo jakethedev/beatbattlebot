@@ -1,11 +1,10 @@
 const fs = require('fs')
+const constants = require('../../util/constants')
 const day = require('../../util/dayjs')
 const _cacheFile = 'battlecache.json'
-const log = msg => console.log(`bcache: ${msg}`)
+const log = msg => console.log(`battledao: ${msg}`)
 
-const BALLOT_SIZE_DEFAULT = 3
-const PODIUM_SIZE_DEFAULT = 15
-
+// These are basically table names
 const ENTRYKEY = "entries"
 const VOTECACHEKEY = "votes"
 const VOTEREGKEY = "votereg"
@@ -82,6 +81,7 @@ exports.deactivateBattle = _deactivateBattle
 
 // Fast way to check "is this channel battle-ready"
 function _isBattleChannel(battleName) {
+  //TODO: change this to serverdao.getBattles().includes(battlename)
   return battleName in battleMap
 }
 exports.isBattleChannel = _isBattleChannel
@@ -233,7 +233,7 @@ exports.voteAndDeregister = function(userId, voteIdxArray){
 
 //TODO getter AND SETTER for both of these
 exports.getPodiumSize = function(battleName){
-  return PODIUM_SIZE_DEFAULT
+  return constants.BATTLE_DEFAULT_RESULTS
 }
 let setPodiumSize = function(battleName) {
   //TODO get this right
@@ -242,7 +242,7 @@ let setPodiumSize = function(battleName) {
 
 exports.getBallotSize = function(battleName) {
   //TODO get this right
-  return BALLOT_SIZE_DEFAULT
+  return constants.BATTLE_DEFAULT_VOTEMAX
 }
 let setBallotSize = function(battleName) {
   //TODO get this right

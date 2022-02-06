@@ -6,7 +6,7 @@ const feedbackdao = require('./feedbackdao')
 const day = require('../../util/dayjs')
 const rand = require('../../util/random')
 
-let debug = msg => console.log(`feedbacklib: ${msg}`)
+let debug = msg => console.log(`feedbackctl: ${msg}`)
 
 function _submitLink (userid, link) {
   // TODO: make safe before or after notes
@@ -65,9 +65,10 @@ function _getFeedbackOrder(chanid) {
 exports.fb = function(input = '', msg) {
   input = `${input}` // typescript.js
   const userid = msg.author.id
-  const chanid = msg.channel ? msg.channel.id : "DM"
-  const serverid = msg.guild ? msg.guild.id : "DM"
-  let response = `Usage: !fb`
+  const chanid = msg.guild ? msg.channel.id : false
+  const serverid = msg.guild ? msg.guild.id : false
+  debug(`fb running in channel? ${chanid} on server? ${serverid}`)
+  let response = `Usage: run !guide to see the full rundown of feedback commands`
 
   // OK look I know this SEEMS horrific but each if is a routine for specific input,
   //  choices where this or have a command for each operation. I'm fine 
