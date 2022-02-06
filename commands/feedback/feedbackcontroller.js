@@ -1,7 +1,7 @@
 const { Message } = require('discord.js')
 const constants = require('../../util/constants')
 const discordutil = require('../../util/discord')
-const servercache = require('../../util/servercachedao')
+const serverdao = require('../../util/serverdao')
 const feedbackdao = require('./feedbackdao')
 const day = require('../../util/dayjs')
 const rand = require('../../util/random')
@@ -21,7 +21,7 @@ function _submitNotes (userid, channelid, notes) {
 }
 
 function _getFeedbackEntryAndStageUser() {
-  // const feedbackOrder = servercache.getFeedbackOrder(serverid)
+  // const feedbackOrder = serverdao.getFeedbackOrder(serverid)
   // TODO: get weighted list, pick one 
   return `this is a feedback entry, user not staged, TBD`
 }

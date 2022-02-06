@@ -26,7 +26,7 @@ function _saveBattleState(){
   try {
     fs.writeFileSync(_cacheFile, JSON.stringify(battleMap, null, 2))
   } catch(error) {
-    log(`error saving cache: ${error}`)
+    log(`error saving battlecache: ${error}`)
   }
 }
 

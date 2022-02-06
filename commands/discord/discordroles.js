@@ -3,8 +3,7 @@ const debug = (msg) => console.log(`DISCORDROLES: ${msg}`)
 const MSG_SERVER_ONLY = "this command needs to be run in a server channel where this bot is active"
 
 //exports.
-reactrole = function(input, message) {
-  //TODO figure out how this works
+exports.reactrole = function(input, message) {
 }
 // exports.rr = exports.reactrole
 

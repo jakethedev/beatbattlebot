@@ -1,6 +1,6 @@
-const dao = require('../util/servercachedao.js')
+const dao = require('../util/serverdao.js')
 
-test('util/servercachedao:botmodrole operations', () => {
+test('util/serverdao:botmodrole operations', () => {
   // TODO: run mod command as simple user, expect failure
   // run addmodrole as mod, add role to simple user
   // TODO: test simple user can now run mod command

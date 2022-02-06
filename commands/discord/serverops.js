@@ -5,7 +5,7 @@ const config = require('../../util/config')
 
 //exports.
 summary = function(serverid) {
-  //TODO: hit util/discord util/servercachedao, format a nice report
+  //TODO: hit util/discord util/serverdao, format a nice report
   return `unimplemented functionality, coming soon...ish`
 }
 

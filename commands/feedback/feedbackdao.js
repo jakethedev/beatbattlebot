@@ -21,7 +21,7 @@ function _saveFeedbackState() {
   try {
     fs.writeFileSync(_cacheFile, JSON.stringify(feedbackCache, null, 2))
   } catch(error) {
-    log(`error saving cache: ${error}`)
+    log(`error saving feedback data: ${error}`)
   }
 }
 
