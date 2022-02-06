@@ -25,6 +25,15 @@ function _saveFeedbackState() {
   }
 }
 
+exports.setFeedbackOrder = function(serverid, type) {
+  // TODO weighted SPAN, chrono, random
+}
+
+exports.getFeedbackOrder = function(serverid) {
+  // TODO weighted SPAN, chrono, random
+  return FEEDBACK_ORDER_RANDOM
+}
+
 // TODO: everything below this line
 function _resetCooldown(userid) {
   if (!battleMap[VOTEREGKEY]) {

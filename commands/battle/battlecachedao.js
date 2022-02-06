@@ -248,3 +248,17 @@ let setBallotSize = function(battleName) {
   //TODO get this right
   debug("THIS IS NOT READY OMG")
 }
+
+// TODO: finish implementing for #72
+_validTiebreakOptions = ['random', 'oldest'] //, 'weighted']
+exports.setTiebreak = function(serverid, input) {
+  //TODO validate input as
+  //TODO call save
+}
+
+exports.getTiebreak = function(serverid) {
+  //TODO return a valid tiebreak option set for server
+  //    JIT save a default tiebreak upon first get, save file
+}
+
+exports.getTiebreakOptions = () => _validTiebreakOptions

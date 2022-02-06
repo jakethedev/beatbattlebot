@@ -49,19 +49,6 @@ exports.getBotModRoles = function(serverid) {
   //TODO return all mod-roles in serverid
 }
 
-_validTiebreakOptions = ['random', 'oldest', 'newest']
-exports.setTiebreak = function(serverid, input) {
-  //TODO validate input as
-  //TODO call save
-}
-
-exports.getTiebreak = function(serverid) {
-  //TODO return a valid tiebreak option set for server
-  //    JIT save a default tiebreak upon first get, save file
-}
-
-exports.getTiebreakOptions = () => _validTiebreakOptions
-
 exports.addWinner = function(serverid, channelid, userid) {
   // TODO add a new champion
   //TODO call save
@@ -78,16 +65,4 @@ exports.setPreferredTimezone = function(serverid, tztext) {
 
 exports.getPreferredTimezone = function(serverid) {
   // TODO if get never called, set to EST
-}
-
-const FEEDBACK_ORDER_OLDEST = 'oldest'
-const FEEDBACK_ORDER_RANDOM = 'random'
-const FEEDBACK_ORDER_WEIGHTED = 'weighted'
-exports.setFeedbackOrder = function(serverid, type) {
-  // TODO weighted SPAN, chrono, random
-}
-
-exports.getFeedbackOrder = function(serverid) {
-  // TODO weighted SPAN, chrono, random
-  return FEEDBACK_ORDER_RANDOM
 }

@@ -1,16 +1,10 @@
 const { Message } = require('discord.js')
+const constants = require('../../util/constants')
 const discordutil = require('../../util/discord')
 const servercache = require('../../util/servercachedao')
 const feedbackdao = require('./feedbackdao')
 const day = require('../../util/dayjs')
 const rand = require('../../util/random')
-
-const MSG_FUTURE_FEATURE = "this feature is in the works and will be available in a future version of the bot"
-const MSG_SERVER_ONLY = "this command needs to be run in a server channel where this bot is active"
-const MSG_DM_ONLY = "this command needs to be sent to the bot via DM"
-const MSG_MOD_ONLY = "this is a mod-only command"
-const MSG_CHANNEL_INACTIVE = "this channel is not open for feedback operations at the moment, reach out to a mod if that's a surprise"
-const MSG_BATTLE_CLOSED = "the battle in this channel is over and done, hope to see you next time!"
 
 let debug = msg => console.log(`feedbacklib: ${msg}`)
 
@@ -59,6 +53,15 @@ function _resetFeedbackChannel(chanid) {
   return `feedback for channel ${chanid} has not been reset TBD`
 }
 
+function _setFeedbackOrder(chanid, orderinput) {
+  return `fb order has TBD been set to ${orderinput}`
+}
+
+function _getFeedbackOrder(chanid) {
+  // const fborder = feedbackdao.get
+  return `fb order got and we got ${orderinput}`
+}
+
 exports.fb = function(input = '', msg) {
   input = `${input}` // typescript.js
   const userid = msg.author.id
@@ -70,6 +73,7 @@ exports.fb = function(input = '', msg) {
   //  choices where this or have a command for each operation. I'm fine 
   //  with that but we have a UX to perfect here, and !fb link is sick
   if (input.startsWith('https://')) { // link indicates a submission and optional notes
+    //TODO: move to subroutine
     if (_userIsInCooldown(userid)){
       const { timestamp, timespan } = _getCooldownTimestamp(userid)
       return `you're still in cooldown from your last submission, more detail coming in a future bot version`
@@ -86,25 +90,25 @@ exports.fb = function(input = '', msg) {
     if (discordutil.isMessageFromMod(msg)) {
       return _openChannelForFeedback() 
     }
-    return MSG_MOD_ONLY
+    return constants.MSG_MOD_ONLY
   } else if (input == 'close') { // stop the channel from accepting submissions
     if (discordutil.isMessageFromMod(msg)) {
       return _closeChannelForFeedback(chanid)
     }
-    return MSG_MOD_ONLY
+    return constants.MSG_MOD_ONLY
   } else if (input.startsWith('cooldown')) { //  MODONLY: adjust cooldown time
     // TODO: reset? clean cooldown list. int? set cooldown. else? error
-    return MSG_FUTURE_FEATURE
-  } else if (input == 'method') { // MODONLY: change way of choosing entries
-    // TODO: set the method for feedback: random, weighted, chrono
-    return MSG_FUTURE_FEATURE
+    return constants.MSG_FUTURE_FEATURE
+  } else if (input.startsWith('method')) { // MODONLY: change way of choosing entries
+    // TODO: set the method for feedback: random, weighted, chrono|age|oldest
+    return constants.MSG_FUTURE_FEATURE
   } else if (input == 'next') { // MODONLY: stage a user for feedback
     return _getFeedbackEntryAndStageUser()
   } else if (input == 'done') { // MODONLY: feedback is done, put queued users in cooldown
     if (discordutil.isMessageFromMod(msg)) {
       return _feedbackCompletedForQueuedUser()
     }
-    return MSG_MOD_ONLY
+    return constants.MSG_MOD_ONLY
   } else if (input.startsWith('reset')) { // MODONLY: wipe the channel's fb queue and cooldowns
     if (discordutil.isMessageFromMod(msg)) {
       if (input.includes('letsgo')) {
@@ -112,7 +116,7 @@ exports.fb = function(input = '', msg) {
       }
       return "warning, this wipes out this channel's feedback queue and resets all cooldowns, are you sure? run `!fb reset letsgo` to confirm"
     }
-    return MSG_MOD_ONLY
+    return constants.MSG_MOD_ONLY
   } else {
     debug('default case return help')
   }
@@ -144,7 +148,7 @@ submit = function(input, msg) {
     }
     return battledao.addEntry(entrantId, entrantName, link, battleName)
   } else {
-    return MSG_SERVER_ONLY
+    return constants.MSG_SERVER_ONLY
   }
 }
 
@@ -183,7 +187,7 @@ fbget = function(input, msg) {
       return `there are no submissions yet, but you could be the one to change that!`
     }
   } else {
-    return MSG_SERVER_ONLY
+    return constants.MSG_SERVER_ONLY
   }
 }
 
@@ -202,9 +206,9 @@ let fbcooldown = function(input, msg){
       // battledao.setBallotSize(battleName, input)
       return `not implemented yet`
     } else {
-      return MSG_MOD_ONLY
+      return constants.MSG_MOD_ONLY
     }
   } else {
-    return MSG_SERVER_ONLY
+    return constants.MSG_SERVER_ONLY
   }
 }

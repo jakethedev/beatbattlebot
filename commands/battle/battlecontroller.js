@@ -1,14 +1,9 @@
 const { Message } = require('discord.js')
+const constants = require('../../util/constants')
 const discordutil = require('../../util/discord')
 const battledao = require('./battlecachedao')
 const day = require('../../util/dayjs')
 const rand = require('../../util/random')
-
-const MSG_SERVER_ONLY = "this command needs to be run in a server channel where this bot is active"
-const MSG_DM_ONLY = "this command needs to be sent to the bot via DM"
-const MSG_MOD_ONLY = "this is a mod-only command"
-const MSG_BATTLE_INACTIVE = "there is no active battle for this channel, ask a mod if that's a surprise"
-const MSG_BATTLE_CLOSED = "the battle in this channel is over and done, hope to see you next time!"
 
 let debug = msg => console.log(`battlecmds: ${msg}`)
 
@@ -25,10 +20,10 @@ exports.newbattle = function(input, msg) {
       // TODO if input: stopsubs(input); return contextual response #69
       return battledao.newBattle(battleName)
     } else {
-      return MSG_MOD_ONLY
+      return constants.MSG_MOD_ONLY
     }
   } else {
-    return MSG_SERVER_ONLY
+    return constants.MSG_SERVER_ONLY
   }
 }
 
@@ -39,7 +34,7 @@ exports.submit = function(input, msg) {
   if (msg.guild) {
     const battleName = `${msg.channel.id}`
     if (!battledao.isBattleChannel(battleName)){
-      return MSG_BATTLE_INACTIVE
+      return constants.MSG_BATTLE_INACTIVE
     }
     // Note: nickname changes take time to propagate, so nickchange -> submit can result in the old nick saving instead
     let entrantId = msg.member.id
@@ -55,7 +50,7 @@ exports.submit = function(input, msg) {
     }
     return battledao.addEntry(entrantId, entrantName, link, battleName)
   } else {
-    return MSG_SERVER_ONLY
+    return constants.MSG_SERVER_ONLY
   }
 }
 
@@ -66,7 +61,7 @@ exports.unsubmit = function(input, msg) {
   if (msg.guild) {
     const battleName = `${msg.channel.id}`
     if (!battledao.isBattleChannel(battleName)){
-      return MSG_BATTLE_INACTIVE
+      return constants.MSG_BATTLE_INACTIVE
     }
     //TODO: #105, we need to consider votes to allow unsubmission after the fact
     if (battledao.isSubmitOpen(battleName)) {
@@ -77,7 +72,7 @@ exports.unsubmit = function(input, msg) {
     }
     return `sorry, the deadline has passed and we can't change the submissions after the deadline in case it messes with voting - this will likely work in the future though`
   } else {
-    return MSG_SERVER_ONLY
+    return constants.MSG_SERVER_ONLY
   }
 }
 
@@ -89,15 +84,15 @@ let modsubmit = function(input, msg) {
   if (msg.guild) {
     const battleName = `${msg.channel.id}`
     if (!battledao.isBattleChannel(battleName)){
-      return MSG_BATTLE_INACTIVE
+      return constants.MSG_BATTLE_INACTIVE
     }
     if (discordutil.isMessageFromMod(msg)){
-      return `not implemented yet`
+      return constants.MSG_FUTURE_FEATURE
     } else {
-      return MSG_MOD_ONLY
+      return constants.MSG_MOD_ONLY
     }
   } else {
-    return MSG_SERVER_ONLY
+    return constants.MSG_SERVER_ONLY
   }
 }
 
@@ -108,7 +103,7 @@ exports.submissions = function(input, msg) {
   if (msg.guild) {
     const battleName = `${msg.channel.id}`
     if (!battledao.isBattleChannel(battleName)){
-      return MSG_BATTLE_INACTIVE
+      return constants.MSG_BATTLE_INACTIVE
     }
     if (battledao.isBattleActive(battleName)){
       let submissionMapObj = battledao.getEntriesFor(battleName)
@@ -132,7 +127,7 @@ exports.submissions = function(input, msg) {
       return `there are no submissions yet, but you could be the one to change that!`
     }
   } else {
-    return MSG_SERVER_ONLY
+    return constants.MSG_SERVER_ONLY
   }
 }
 exports.subs = exports.sumbissions = exports.submissions
@@ -144,7 +139,7 @@ exports.deadlines = function(input, msg){
   if (msg.guild) {
     const battleName = `${msg.channel.id}`
     if (!battledao.isBattleChannel(battleName)){
-      return MSG_BATTLE_INACTIVE
+      return constants.MSG_BATTLE_INACTIVE
     }
     let subdl = battledao.getSubDeadline(battleName)
     let votedl = battledao.getVotingDeadline(battleName)
@@ -160,7 +155,7 @@ exports.deadlines = function(input, msg){
     }
     return response
   } else {
-    return MSG_SERVER_ONLY
+    return constants.MSG_SERVER_ONLY
   }
 }
 
@@ -172,7 +167,7 @@ exports.stopbattle = function(input, msg){
     if (discordutil.isMessageFromMod(msg)){
       const battleName = `${msg.channel.id}`
       if (!battledao.isBattleChannel(battleName)){
-        return MSG_BATTLE_INACTIVE
+        return constants.MSG_BATTLE_INACTIVE
       }
       const deadline = new day.dayjs()
       battledao.setSubDeadline(battleName, deadline)
@@ -181,10 +176,10 @@ exports.stopbattle = function(input, msg){
       }
       return `The battle is now CLOSED! Anyone can see the entries with \`!submissions\`, and mods can use \`!stopsubs\` and \`!stopvotes\` to extend the battle, or \`!results\` to see the podium`
     } else {
-      return MSG_MOD_ONLY
+      return constants.MSG_MOD_ONLY
     }
   } else {
-    return MSG_SERVER_ONLY
+    return constants.MSG_SERVER_ONLY
   }
 }
 
@@ -197,7 +192,7 @@ exports.sd = function(input, msg){
     if (discordutil.isMessageFromMod(msg)) {
       const battleName = `${msg.channel.id}`
       if (!battledao.isBattleChannel(battleName)) {
-        return MSG_BATTLE_INACTIVE
+        return constants.MSG_BATTLE_INACTIVE
       }
       if (input && input.toLowerCase() == 'now') {
         const deadline = new day.dayjs()
@@ -211,10 +206,10 @@ exports.sd = function(input, msg){
         return usage
       }
     } else {
-      return MSG_MOD_ONLY
+      return constants.MSG_MOD_ONLY
     }
   } else {
-    return MSG_SERVER_ONLY
+    return constants.MSG_SERVER_ONLY
   }
 }
 exports.stopsubs = exports.sd // TODO Keep the old alias for a release then ditch it
@@ -228,7 +223,7 @@ exports.vd = function(input, msg) {
     if (discordutil.isMessageFromMod(msg)) {
       const battleName = `${msg.channel.id}`
       if (!battledao.isBattleChannel(battleName)) {
-        return MSG_BATTLE_INACTIVE
+        return constants.MSG_BATTLE_INACTIVE
       }
       if (input && input.toLowerCase() == 'now') {
         const deadline = new day.dayjs()
@@ -242,10 +237,10 @@ exports.vd = function(input, msg) {
         return usage
       }
     } else {
-      return MSG_MOD_ONLY
+      return constants.MSG_MOD_ONLY
     }
   } else {
-    return MSG_SERVER_ONLY
+    return constants.MSG_SERVER_ONLY
   }
 }
 exports.stopvotes = exports.vd // TODO Keep the old alias for a release then ditch it
@@ -260,15 +255,15 @@ let maxvotes = function(input, msg){
     if (discordutil.isMessageFromMod(msg)) {
       const battleName = `${msg.channel.id}`
       if (!battledao.isBattleChannel(battleName)) {
-        return MSG_BATTLE_INACTIVE
+        return constants.MSG_BATTLE_INACTIVE
       }
       // battledao.setBallotSize(battleName, input)
       return `not implemented yet`
     } else {
-      return MSG_MOD_ONLY
+      return constants.MSG_MOD_ONLY
     }
   } else {
-    return MSG_SERVER_ONLY
+    return constants.MSG_SERVER_ONLY
   }
 }
 
@@ -281,7 +276,7 @@ exports.getballot = function(input, msg) {
   }
   if (msg.guild) {
     if (!battledao.isBattleChannel(battleName)) {
-      return MSG_BATTLE_INACTIVE
+      return constants.MSG_BATTLE_INACTIVE
     }
     if (battledao.isVotingOpen(battleName)) {
       battledao.registerVoter(msg.author.id, battleName)
@@ -296,17 +291,17 @@ exports.getballot = function(input, msg) {
       const output = `this battle is still taking submissions until ${day.fmtAsPST(subdl)}, so you can't start voting until then!`
       return output
     } else {
-      return MSG_BATTLE_CLOSED
+      return constants.MSG_BATTLE_CLOSED
     }
   } else {
-    return MSG_SERVER_ONLY
+    return constants.MSG_SERVER_ONLY
   }
 }
 
 exports.vote = function(input, msg) {
   // Validation and text for help output and rest of voting process
   if (msg.guild) {
-    return MSG_DM_ONLY
+    return constants.MSG_DM_ONLY
   }
   if (!battledao.isVoterRegistered(msg.author.id)) {
     return `you haven't registered to vote for a battle yet. Run \`!getballot\` in a battle channel to register, you can re-vote if you like - but you have to register for every vote`
@@ -319,7 +314,7 @@ exports.vote = function(input, msg) {
     return `Usage: After submissions are closed, if there is a voting period, you can run \`!getballot\` in the channel where the battle occurred to recieve a numbered list of entries via DM. Once you have the list, DM back with \`!vote N\` or \`!vote N1, N2, Nmax\` to vote for your favorite ${numEntries} entries. `
   }
   if (!battledao.isBattleActive(battleName)) {
-    return MSG_BATTLE_INACTIVE
+    return constants.MSG_BATTLE_INACTIVE
   }
   if (battledao.isVotingOpen(battleName)) {
     //Validation code until the next comments
@@ -360,7 +355,7 @@ exports.results = function(input, msg) {
   if (msg.guild) {
     if (discordutil.isMessageFromMod(msg)) {
       if (!battledao.isBattleChannel(battleName)) {
-        return MSG_BATTLE_INACTIVE
+        return constants.MSG_BATTLE_INACTIVE
       }
       if (!battledao.isVotingOpen(battleName)) {
         const voteCountObj = battledao.getVoteCountForBattle(battleName)
@@ -384,9 +379,9 @@ exports.results = function(input, msg) {
         return `sorry but the battle has not concluded -${subovertxt} voting ends at ${day.fmtAsPST(vdl)}, you can get official results then!`
       }
     } else {
-      return MSG_MOD_ONLY
+      return constants.MSG_MOD_ONLY
     }
   } else {
-    return MSG_SERVER_ONLY
+    return constants.MSG_SERVER_ONLY
   }
 }
