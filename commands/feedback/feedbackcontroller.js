@@ -8,13 +8,13 @@ const rand = require('../../util/random')
 
 let debug = msg => console.log(`feedbackctl: ${msg}`)
 
-function _submitLink (userid, link) {
+function _submitLink (userid, chanid, link) {
   // TODO: make safe before or after notes
   //    also return output should be note-presence sensitive
   return 'link submissions disabled at the moment, stay tuned!'
 }
 
-function _submitNotes (userid, notes) {
+function _submitNotes (userid, chanid, notes) {
   // TODO: make safe before or after Link
   //    also return output should be link-presence sensitive
   return 'notes submissions disabled at the moment, stay tuned!'
@@ -99,12 +99,14 @@ exports.fb = function(input = '', msg) {
     return constants.MSG_MOD_ONLY
   } else if (input.startsWith('cooldown')) { //  MODONLY: adjust cooldown time
     // TODO: reset? clean cooldown list. int? set cooldown. else? error
+    // TODO: if parsespan: set time else if method: set method else: usage
+    // T
+    // TODO: for method: set the method for feedback: random, weighted, chrono|age|oldest
     return constants.MSG_FUTURE_FEATURE
-  } else if (input.startsWith('method')) { // MODONLY: change way of choosing entries
-    // TODO: set the method for feedback: random, weighted, chrono|age|oldest
-    return constants.MSG_FUTURE_FEATURE
-  } else if (input == 'next') { // MODONLY: stage a user for feedback
+  } else if (input == 'go') { // MODONLY: stage a user for feedback
     return _getFeedbackEntryAndStageUser()
+  } else if (input.startsWith('skip')) { // MODONLY: unstage current user, get new one
+    return constants.MSG_FUTURE_FEATURE
   } else if (input == 'done') { // MODONLY: feedback is done, put queued users in cooldown
     if (discordutil.isMessageFromMod(msg)) {
       return _feedbackCompletedForQueuedUser()
@@ -118,10 +120,8 @@ exports.fb = function(input = '', msg) {
       return "warning, this wipes out this channel's feedback queue and resets all cooldowns, are you sure? run `!fb reset letsgo` to confirm"
     }
     return constants.MSG_MOD_ONLY
-  } else {
-    debug('default case return help')
   }
-  // delete message upon success
+  debug('default case return help')
   return 'pong'
 }
 
