@@ -1,0 +1,61 @@
+{
+  "CHANNELID": {
+    "entries": {
+      "id1": {
+        "link": "https://adams-entry/fillertextforlongerresponsesyaaaaay",
+        "ts": "2022-02-01T00:07:25.805Z",
+        "notes": "i need mix help plz",
+        "displayname": "armasendonawflakjsflakjfoenf"
+      },
+      "id2": {
+        "link": "https://b-entry/fillertextforlongerresponsesyaaaaay",
+        "ts": "2022-02-02T00:07:25.805Z",
+        "notes": "what's updog jk i really need help with the bassline",
+        "displayname": "id2asdlkfjalskdfjasdlfk"
+      },
+      "id3": {
+        "link": "https://cyprus-entr/fillertextforlongerresponsesyaaaaayy",
+        "ts": "2022-02-03T00:07:25.805Z",
+        "notes": "i cant guitar whats wrong",
+        "displayname": "cyprus"
+      },
+      "id4": {
+        "link": "https://d-entry",
+        "ts": "2022-02-04T00:07:25.805Z",
+        "notes": "would chuck norris approve of this",
+        "displayname": "id4alwekfjawlkejfalewkjf"
+      },
+      "id5": {
+        "link": "https://etsytypebeat-entry",
+        "ts": "2022-02-05T00:07:25.805Z",
+        "notes": false,
+        "displayname": "etsytypebeatsasdlfkjasdflkajsdflakj"
+      },
+      "id6": {
+        "link": "https://f-entry",
+        "ts": "2022-02-06T00:07:25.805Z",
+        "notes": false,
+        "displayname": "id6asdlhfalfhaweoifa"
+      },
+      "id7": {
+        "link": "https://goodestguystevest-entry",
+        "ts": "2022-02-07T00:07:25.805Z",
+        "notes": false,
+        "displayname": "goodguysteve"
+      },
+      "id8": {
+        "link": "https://h-entry",
+        "ts": "2022-02-08T00:07:25.805Z",
+        "notes": false,
+        "displayname": "id8alsdkjfoaiwehfajwenfk"
+      }
+    },
+    "method": "random",
+    "isOpenForFeedback": true,
+    "cooldown": {
+      "idZ": "timestampTBD",
+      "idY": "timestampTBD",
+      "idX": "timestampTBD"
+    }
+  }
+}

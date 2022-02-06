@@ -1,0 +1,23 @@
+{
+  "SERVERID_FULLYUSED": {
+    "tiebreak": "tbd",
+    "feedbackorder": "random",
+    "timezone": "America/Los Angeles",
+    "battleChannels": {
+      "channelid1": "channelname1",
+      "channelid2": "channelname2",
+      "channelid3": "channel3"
+    },
+    "feedbackChannels": {
+      "channelid1": "channelname1",
+      "channelid2": "channelname2",
+      "channelid3": "channel3"
+    },
+    "modroles": [
+      "modroleid1",
+      "modroleid2"
+    ]
+  },
+  "SERVERID_BLANK": {
+  }
+}
