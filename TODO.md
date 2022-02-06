@@ -1,12 +1,44 @@
 # todolist
 
-### See the issues page for actual tasks, this is a notepad for minor things and a reminder of how far we've come
-CRITICAL TODO
-  ADD AUTOROLE BOT TO SERVER
+### See the issues page for actual tasks, this is a notepad for minor things and a reminder of recent dubs
+Feedback priority tasks:
+  reset empties queue
+    ✔ reset(chanid)
+  notes standalone
+    ✔ saveNotesForUser(chanid, user, notes)
+  submit link [notes]
+    ✔ saveLinkForUser(chanid, user, link) // TIMESTAMP HERE
+  go v1 get a user, delete from queue
+    ✔ getSingleFeedbackEntry(chanid)
+
+Feedback second priority:
+  !fb go v2 if (last queued user) cooldown(last q user) queue new user
+  ✔ getSelectionMethodForChannel(chanid)
+  ✔ setSelectionMethodForChannel(chanid, str)
+  !fb skip: dequeue last queued user, handle "skipped" entries, clear "skipped" on !fb done
+  !fb done: empty queue to cooldown
+  !fb cooldown span if parsespan: else return current span and usage
+  ✔ getCooldownTimeForChannel(chanid)
+  ✔ setCooldownTimeForChannel(chanid, str)
+  ✔ isUserInCooldown(chanid, user) // STUB
+  ✔ queueUserForCooldown(chanid, user) // STUB
+  ✔ commitCooldownQueue(chanid) // STUB
+  ✔ removeUserFromCooldownQueue(chanid, user) // STUB
+
+
+STUBBED FOR LATER
+  !fb open
+  !fb close
+  ✔ isOpenForFeedback(chanid)
+  ✔ openChannelForFeedback(chanid)
+  ✔ closeChannelForFeedback(chanid)
+
+NEXT
   <t:UNIX> TIME REFACTOR #92
-  feedback features (simplified) #24
+  showcase features copied wholesale from PoC
 
 IMPORTANT
+  reactrole feature thanks to tutorial, servercache for config
   Issue for util/msg_util.js: msg_util.isModMsg, msg_util.isChannelMsg, abstract some shit
   Issue for util/constants.js `const constants = require('./util/constants')`
   Issue for refactoring `if (msg.guild)` into some metadata structure
@@ -16,46 +48,19 @@ IMPORTANT
 GENERAL TODO
   notice duplicate command declarations and fail fast
   take a gander at sqlite
-  add issue numbers to each of below tasks or create an issue
-  function template(input, serverid, channelid)
 
 TODO FOR util/serverdao.js
-  notes
-    dao-side no permission logic, that goes in controller
-    call save in every change function
-  () status that sends summary of all below info via dm, for mod use only
-    () set, get data per server
-    () initialize, sets defaults for listen, battle, podium, repeat, maxVotes, and feedbackCooldownTimer
-  tiebreakMethod
-    () set, get (default: chrono, options: oldest, newest, random)
-  list of GIVEABLE roles in a server
-    () add, remove, containsOneOf(list or obj) (default: none)
-  list of mod roles in a server
-    () add, remove, containsOneOf(list or obj) (default: none)
-  list of listen channels in a server
-    () add, remove, containsChannel(id) (default: bot, botspam?)
-  list of battle channels in a server
-    () add, remove, containsChannel(id) (default: any?)
-  preferredTimezone
-    () set, get (default: 'America/Los_Angeles')
-  battlePodiumSize
-    () set, get (default: 15)
-  allowRepeatWinners
-    () set, get (default: false)
-  battleWinners
-    () add, get (default: {})
-  maxVotesPerBattle
-    () set, get (default: 3)
-  feedbackCooldownPeriod
-    () set, get (default: 2 weeks, set: unimplemented error for now)
+  dao-side no permission logic, that goes in controller
+  call save in every change function
+() status that sends summary of all below info via dm, for mod use only
+  () set, get data per server
+  () initialize, sets defaults for listen, battle, podium, repeat, maxVotes, and feedbackCooldownTimer
 
 BUGS
 - stopbattle and stopsubs and stopvotes should leave deadline alone if in the past
-- newbattle on empty battle is bork
+- newbattle on empty battle was bork?
 - isVotingOpen should check subs are closed
 - stopvotes should sane-error if setting before sub deadline
-- submit: subdl passed output should be smarter with votedl
-- nicer output from !vote, 'votes for artist1, artist2...'
 
 RECENTLY DONE
 X test mock objects are dope now

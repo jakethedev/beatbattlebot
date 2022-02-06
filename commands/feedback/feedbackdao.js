@@ -3,15 +3,15 @@ const day = require('../../util/dayjs')
 const _cacheFile = 'feedbackcache.json'
 const log = msg => console.log(`feedbackdao: ${msg}`)
 
-const ENTRYKEY = "entries"
+const FEEDBACKKEY = "entries"
 const COOLDOWNKEY = "cooldown"
 
 // Barebones default state
-let feedbackMap = {}
+let feedbackCache = {}
 
 // Load old cache on init
 try {
-  feedbackMap = JSON.parse(fs.readFileSync(_cacheFile))
+  feedbackCache = JSON.parse(fs.readFileSync(_cacheFile))
 } catch (error) {
   log(`if ENOENT this is expected - could not load feedback data from old cache: ${error}`)
 }
@@ -19,113 +19,28 @@ try {
 // Simple persistence layer
 function _saveFeedbackState() {
   try {
-    fs.writeFileSync(_cacheFile, JSON.stringify(feedbackMap, null, 2))
+    fs.writeFileSync(_cacheFile, JSON.stringify(feedbackCache, null, 2))
   } catch(error) {
     log(`error saving cache: ${error}`)
   }
 }
 
-exports.setFeedbackOrder = function(serverid, type) {
-  // TODO weighted SPAN, chrono, random
+exports.resetQueue = function(channelid) {
+  log(`emptying feedback queue for channel [${channelid}]`)
+  feedbackCache[channelid] = {}
+  _saveFeedbackState()
 }
 
-exports.getFeedbackOrder = function(serverid) {
-  // TODO weighted SPAN, chrono, random
-  return FEEDBACK_ORDER_RANDOM
-}
-
-// TODO: everything below this line
-function _resetCooldown(userid) {
-  if (!battleMap[VOTEREGKEY]) {
-    log('adding vote reg first time')
-    battleMap[VOTEREGKEY] = {}
-  }
-  let voteRegistry = battleMap[VOTEREGKEY]
-  for (let entrant in voteRegistry) {
-    if (voteRegistry[entrant] == battleName) {
-      delete voteRegistry[entrant]
-    }
-  }
-  _saveBattleState()
-}
-
-// Battle data reset and core "structure" setup
-function _setCooldown(userid) {
-  //TODO mv disk cache to cache.backup
-  _resetBattleRegistration(battleName)
-  let battleExisted = _isBattleInProgress(battleName)
-  // Super simple template
-  let battleTemplate = {}
-  battleTemplate[ENTRYKEY] = {}
-  battleTemplate[VOTECACHEKEY] = {}
-  battleTemplate[SUB_DL_KEY] = false
-  battleTemplate[VOTE_DL_KEY] = false
-  // BAM lock and load!
-  battleMap[battleName] = battleTemplate
-  _saveBattleState()
-  if (!battleExisted) {
-    return `looks like the first battle in this channel, lets goooo!`
-  } else {
-    return `the old battle is OVER, a new round has started!`
-  }
-}
-//exports.newBattle = _resetBattleState
-
-// Stop battles for an active battle channel
-function _deactivateFeedback(battleName) {
-  if (battleName in battleMap) {
-    log(`deactivating ${battleName}`)
-    delete battleMap[battleName]
-    _saveBattleState()
-    return `this battle has been deactivated, !newbattle to reactivate`
-  }
-  return `battle is already deactivated, !newbattle to get this party started :sparkle:`
-}
-exports.deactivateFeedback = _deactivateFeedback
-
-// Fast way to check "is this channel battle-ready"
-function _isBattleChannel(battleName) {
-  return battleName in battleMap
-}
-exports.isBattleChannel = _isBattleChannel
-
-// Trick for using this function locally and as export
-function _battleSize(battleName) {
-  if (_isBattleChannel(battleName) && battleMap[battleName][ENTRYKEY]) {
-    const numEntries = Object.keys(battleMap[battleName][ENTRYKEY]).length
-    return numEntries
-  }
-  return 0
-}
-exports.getBattleSize = _battleSize
-
-// Quick util for seeing if a battle is active
-function _isBattleInProgress(battleName) {
-  if (!_isBattleChannel(battleName)) {
-    log(`notice: '${battleName}' checked for activity and is not in the map or has no entries`)
-    return false
-  }
-  let battleHasEntries = _battleSize(battleName) > 0
-  log(`btl entries: ${battleHasEntries}`)
-  return battleHasEntries
-}
-exports.isBattleActive = _isBattleInProgress
-
-exports.isFeedbackOpen = function(){
-  //TODO: the thing
-  return true
-}
-
-exports.addEntry = function(entrantId, entrantName, link, battleName) {
-  // Expects caller to verify that submissions are allowed
-  let entryExisted = !!battleMap[battleName][ENTRYKEY][entrantId] // For smarter output
-  battleMap[battleName][ENTRYKEY][entrantId] = {
+exports.saveLinkForUser = function(channelid, userid, username, link) {
+  // TODO:
+  let entryExisted = !!feedbackCache[channelid][FEEDBACKKEY][userid] // For smarter output
+  feedbackCache[channelid][FEEDBACKKEY][userid] = {
     'ts': new Date(),
     'link': link,
-    'displayname': entrantName
+    'displayname': username
   }
-  _saveBattleState()
-  let numEntries = _battleSize(battleName)
+  _saveFeedbackState()
+  let numEntries = _queueSize(channelid)
   if (entryExisted) {
     return `thanks for the update, saved your new entry! (${numEntries} entries)`
   } else {
@@ -133,35 +48,122 @@ exports.addEntry = function(entrantId, entrantName, link, battleName) {
   }
 }
 
-exports.getEntriesFor = function(battleName) {
-  return battleMap[battleName][ENTRYKEY]
-}
-
-function _getBattleIdByVoter(userId) {
-  return battleMap[VOTEREGKEY][userId] || null
-}
-exports.getBattleIdByVoter = _getBattleIdByVoter
-exports.isVoterRegistered = (userid) => _getBattleIdByVoter(userid) != null
-
-exports.registerVoter = function(userId, battleName){
-  if (!VOTEREGKEY in battleMap) {
-    battleMap[VOTEREGKEY] = {} // JIT assumption management
+exports.saveNotesForUser = function(channelid, userid, username, notes) {
+  // TODO:
+  let entryExisted = !!feedbackCache[channelid][FEEDBACKKEY][userid] // For smarter output
+  feedbackCache[channelid][FEEDBACKKEY][userid] = {
+    'ts': new Date(),
+    'link': link,
+    'displayname': username
   }
-  // mapping by userId like this avoids dual-registration
-  battleMap[VOTEREGKEY][userId] = battleName
-  _saveBattleState()
+  _saveFeedbackState()
+  let numEntries = _queueSize(channelid)
+  if (entryExisted) {
+    return `thanks for the update, saved your new entry! (${numEntries} entries)`
+  } else {
+    return `welcome to the battle! (${numEntries} entries)`
+  }
 }
 
-exports.voteAndDeregister = function(userId, voteIdxArray){
-  const battleName = _getBattleIdByVoter(userId)
-  // TODO finalize where this validation goes
-  if (!battleName) {
-    return false
-  }
-  battleMap[battleName][VOTECACHEKEY][userId] = voteIdxArray
-  // Revoking vote registration tag
-  delete battleMap[VOTEREGKEY][userId]
-  _saveBattleState()
-  // TODO no UI logic in the database what is this rookie hour? jeepers
+exports.getSingleFeedbackEntry = function(channelid) {
+  if (!feedbackCache[channelid]) return false
+  const entries = feedbackCache[channelid][FEEDBACKKEY]
+}
+
+/// EVERYTHING BELOW THIS LINE IS FOR FUTURE IMPLEMENTATION
+
+/*
+  - channel is open to things until closed for it
+  - cache:{ serveridnotpresent } = open
+  - cache:{ id: { object } } = open
+  - cache:{ id: false } = closed (or a sane constants.FEATURE_DISABLED_IN_CHANNEL for readability)
+*/
+exports.isChannelOpenForFeedback = function(channelid) {
   return true
 }
+
+exports.openChannelForFeedback = function(channelid) {
+  //TODO mv disk cache to cache.backup
+  _resetBattleRegistration(channelid)
+  let battleExisted = _isBattleInProgress(channelid)
+  // Super simple template
+  let battleTemplate = {}
+  battleTemplate[FEEDBACKKEY] = {}
+  battleTemplate[VOTECACHEKEY] = {}
+  battleTemplate[SUB_DL_KEY] = false
+  battleTemplate[VOTE_DL_KEY] = false
+  // BAM lock and load!
+  feedbackCache[channelid] = battleTemplate
+  _saveFeedbackState()
+  if (!battleExisted) {
+    return `looks like the first feedback queue in this channel, lets goooo!`
+  } else {
+    return `the previous feedback queue has been DUMPED, a new session has started!`
+  }
+}
+
+exports.closeChannelForFeedback = function(channelid) {
+  if (channelid in feedbackCache) {
+    log(`stopping feedback in ${channelid}`)
+    feedbackCache[channelid] = false
+    _saveFeedbackState()
+    return `this feedback channel has been deactivated, !fb open to reactivate`
+  }
+  return `feedback is already deactivated, !fb open to get this show on the road`
+}
+
+/*
+  Cooldown feature stubs for future work
+*/
+exports.queueUserForCooldown = function(channelid, userid) {
+  // TODO put user in hotseat for cooldown
+  return true
+}
+
+exports.removeUserFromCooldownQueue = function(channelid, userid) {
+  // TODO put user in hotseat for cooldown
+  return true
+}
+
+exports.commitCooldownQueue = function(channelid) {
+  // TODO put cooldown queue in actual cooldown state, set date for each user per cooldownTime
+  return true
+}
+
+exports.isUserInCooldown = function(channelid, userid) {
+  // TODO check and return { ts: ts, span: span } or false
+  return true
+}
+
+exports.setFeedbackCooldownTime = function(channelid, span) {
+  // TODO save new span
+  return true
+}
+
+exports.getFeedbackCooldownTime = function(channelid) {
+  // TODO read it out
+  return '7d'
+}
+
+/*
+  Selection adjustment feature stubsj for future work
+*/
+exports.setSelectionMethod = function(channelid, method) {
+  // TODO validate in CONTROLLER for weighted SPAN, chrono, random
+  return true
+}
+
+exports.getSelectionMethod = function(channelid) {
+  // TODO read it out
+  return 'random'
+}
+
+// Trick for using this function locally and as export
+function _getQueueSize(channelid) {
+  if (_isFeedbackChannel(channelid) && feedbackCache[channelid][FEEDBACKKEY]) {
+    const numEntries = Object.keys(feedbackCache[channelid][FEEDBACKKEY]).length
+    return numEntries
+  }
+  return 0
+}
+exports.getQueueSize = _getQueueSize

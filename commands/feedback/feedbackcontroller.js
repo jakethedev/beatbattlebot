@@ -8,13 +8,13 @@ const rand = require('../../util/random')
 
 let debug = msg => console.log(`feedbackctl: ${msg}`)
 
-function _submitLink (userid, chanid, link) {
+function _submitLink (userid, channelid, link) {
   // TODO: make safe before or after notes
   //    also return output should be note-presence sensitive
   return 'link submissions disabled at the moment, stay tuned!'
 }
 
-function _submitNotes (userid, chanid, notes) {
+function _submitNotes (userid, channelid, notes) {
   // TODO: make safe before or after Link
   //    also return output should be link-presence sensitive
   return 'notes submissions disabled at the moment, stay tuned!'
@@ -26,38 +26,38 @@ function _getFeedbackEntryAndStageUser() {
   return `this is a feedback entry, user not staged, TBD`
 }
 
-function _getCooldownTimestamp(chanid, userid) {
+function _getCooldownTimestamp(channelid, userid) {
   // TODO: get weighted list, 
   return { timestamp: "NOTATIMESTAMP", timespan: "NOTASPAN" }
 }
 
-function _feedbackCompletedForQueuedUser(chanid) {
+function _feedbackCompletedForQueuedUser(channelid) {
   return `user has not been set for cooldown, TBD`
 }
 
-function _userIsInCooldown(chanid, userid) {
+function _userIsInCooldown(channelid, userid) {
   // TODO: check if user has cooldown date after now in this channel
   return false
 }
 
-function _openChannelForFeedback(chanid) {
+function _openChannelForFeedback(channelid) {
   // TODO: default "feedback" data struct setup
-  return `channel ${chanid} is TBD OPEN for FEEDBACK`
+  return `channel ${channelid} is TBD OPEN for FEEDBACK`
 }
 
-function _closeChannelForFeedback(chanid) {
-  return `channel ${chanid} is TBD CLOSED for FEEDBACK`
+function _closeChannelForFeedback(channelid) {
+  return `channel ${channelid} is TBD CLOSED for FEEDBACK`
 }
 
-function _resetFeedbackChannel(chanid) {
-  return `feedback for channel ${chanid} has not been reset TBD`
+function _resetFeedbackChannel(channelid) {
+  return `feedback for channel ${channelid} has not been reset TBD`
 }
 
-function _setFeedbackOrder(chanid, orderinput) {
+function _setFeedbackOrder(channelid, orderinput) {
   return `fb order has TBD been set to ${orderinput}`
 }
 
-function _getFeedbackOrder(chanid) {
+function _getFeedbackOrder(channelid) {
   // const fborder = feedbackdao.get
   return `fb order got and we got ${orderinput}`
 }
@@ -65,9 +65,9 @@ function _getFeedbackOrder(chanid) {
 exports.fb = function(input = '', msg) {
   input = `${input}` // typescript.js
   const userid = msg.author.id
-  const chanid = msg.guild ? msg.channel.id : false
+  const channelid = msg.guild ? msg.channel.id : false
   const serverid = msg.guild ? msg.guild.id : false
-  debug(`fb running in channel? ${chanid} on server? ${serverid}`)
+  debug(`fb running in channel? ${channelid} on server? ${serverid}`)
   let response = `Usage: run !guide to see the full rundown of feedback commands`
 
   // OK look I know this SEEMS horrific but each if is a routine for specific input,
@@ -94,7 +94,7 @@ exports.fb = function(input = '', msg) {
     return constants.MSG_MOD_ONLY
   } else if (input == 'close') { // stop the channel from accepting submissions
     if (discordutil.isMessageFromMod(msg)) {
-      return _closeChannelForFeedback(chanid)
+      return _closeChannelForFeedback(channelid)
     }
     return constants.MSG_MOD_ONLY
   } else if (input.startsWith('cooldown')) { //  MODONLY: adjust cooldown time
@@ -115,7 +115,7 @@ exports.fb = function(input = '', msg) {
   } else if (input.startsWith('reset')) { // MODONLY: wipe the channel's fb queue and cooldowns
     if (discordutil.isMessageFromMod(msg)) {
       if (input.includes('letsgo')) {
-        return _resetFeedbackChannel(chanid)
+        return _resetFeedbackChannel(channelid)
       }
       return "warning, this wipes out this channel's feedback queue and resets all cooldowns, are you sure? run `!fb reset letsgo` to confirm"
     }
