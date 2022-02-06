@@ -15,30 +15,26 @@ const MSG_BATTLE_CLOSED = "the battle in this channel is over and done, hope to 
 let debug = msg => console.log(`feedbacklib: ${msg}`)
 
 function _submitLink (userid, link) {
-  // TODO make safe before or after notes
+  // TODO: make safe before or after notes
   //    also return output should be note-presence sensitive
   return 'link submissions disabled at the moment, stay tuned!'
 }
 
 function _submitNotes (userid, notes) {
-  // TODO make safe before or after Link
+  // TODO: make safe before or after Link
   //    also return output should be link-presence sensitive
   return 'notes submissions disabled at the moment, stay tuned!'
 }
 
 function _getFeedbackEntryAndStageUser() {
   // const feedbackOrder = servercache.getFeedbackOrder(serverid)
-  // TODO get weighted list, pick one 
+  // TODO: get weighted list, pick one 
   return `this is a feedback entry, user not staged, TBD`
 }
 
 function _getCooldownTimestamp(chanid, userid) {
-  // TODO get weighted list, 
+  // TODO: get weighted list, 
   return { timestamp: "NOTATIMESTAMP", timespan: "NOTASPAN" }
-}
-
-function _putUserInSpotlight(chanid) {
-  return `user has not been queued for feedback TBD`
 }
 
 function _feedbackCompletedForQueuedUser(chanid) {
@@ -46,16 +42,17 @@ function _feedbackCompletedForQueuedUser(chanid) {
 }
 
 function _userIsInCooldown(chanid, userid) {
-  // TODO check if user has cooldown date after now in this channel
+  // TODO: check if user has cooldown date after now in this channel
   return false
 }
 
 function _openChannelForFeedback(chanid) {
-  return `channel ${chanid} is OPEN for FEEDBACK`
+  // TODO: default "feedback" data struct setup
+  return `channel ${chanid} is TBD OPEN for FEEDBACK`
 }
 
 function _closeChannelForFeedback(chanid) {
-  return `channel ${chanid} is CLOSED for FEEDBACK`
+  return `channel ${chanid} is TBD CLOSED for FEEDBACK`
 }
 
 function _resetFeedbackChannel(chanid) {
@@ -69,6 +66,9 @@ exports.fb = function(input = '', msg) {
   const serverid = msg.guild ? msg.guild.id : "DM"
   let response = `Usage: !fb`
 
+  // OK look I know this SEEMS horrific but each if is a routine for specific input,
+  //  choices where this or have a command for each operation. I'm fine 
+  //  with that but we have a UX to perfect here, and !fb link is sick
   if (input.startsWith('https://')) { // link indicates a submission and optional notes
     if (_userIsInCooldown(userid)){
       const { timestamp, timespan } = _getCooldownTimestamp(userid)
@@ -98,9 +98,9 @@ exports.fb = function(input = '', msg) {
   } else if (input == 'method') { // MODONLY: change way of choosing entries
     // TODO: set the method for feedback: random, weighted, chrono
     return MSG_FUTURE_FEATURE
-  } else if (input == 'start') { // MODONLY: stage a user for feedback
+  } else if (input == 'next') { // MODONLY: stage a user for feedback
     return _getFeedbackEntryAndStageUser()
-  } else if (input == 'done') { // MODONLY: feedback is done, put user in cooldown
+  } else if (input == 'done') { // MODONLY: feedback is done, put queued users in cooldown
     if (discordutil.isMessageFromMod(msg)) {
       return _feedbackCompletedForQueuedUser()
     }
