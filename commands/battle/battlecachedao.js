@@ -81,7 +81,8 @@ exports.deactivateBattle = _deactivateBattle
 
 // Fast way to check "is this channel battle-ready"
 function _isBattleChannel(battleName) {
-  //TODO: change this to serverdao.getBattles().includes(battlename)
+  // NOTICE: Bot should listen to all channels, this is a GREAT
+  //    way to enable/disable a particular feature per channel
   return battleName in battleMap
 }
 exports.isBattleChannel = _isBattleChannel

@@ -72,7 +72,7 @@ function _setCooldown(userid) {
 //exports.newBattle = _resetBattleState
 
 // Stop battles for an active battle channel
-function _deactivateBattle(battleName) {
+function _deactivateFeedback(battleName) {
   if (battleName in battleMap) {
     log(`deactivating ${battleName}`)
     delete battleMap[battleName]
@@ -81,7 +81,7 @@ function _deactivateBattle(battleName) {
   }
   return `battle is already deactivated, !newbattle to get this party started :sparkle:`
 }
-exports.deactivateBattle = _deactivateBattle
+exports.deactivateFeedback = _deactivateFeedback
 
 // Fast way to check "is this channel battle-ready"
 function _isBattleChannel(battleName) {

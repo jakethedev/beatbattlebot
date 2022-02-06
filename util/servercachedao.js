@@ -32,7 +32,8 @@ exports.ignoreChannel = function(discChannel) {
 }
 
 exports.getChannels = function(serverid) {
-  //TODO return [ channelids ]
+  //TODO return feedbackdao.getChannels + battledao.getChannels? yikes?
+  // TODO: maybe just all channels are valid, rely on mods not to open everything to everyone
 }
 
 exports.addBotModRole = function(serverid, discordJsRole) {

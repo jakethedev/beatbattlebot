@@ -168,9 +168,8 @@ fbget = function(input, msg) {
     }
     if (battledao.isBattleActive(battleName)){
       let submissionMapObj = battledao.getEntriesFor(battleName)
-      const largeBattle = Object.entries(submissionMapObj).length > 10
       const shuffled = input.includes('shuf')
-      const printInChannel = !largeBattle || input.includes('here')
+      const printInChannel = input.includes('here')
       if (shuffled) {
         submissionMapObj = rand.getShuffledCopyOfObject(submissionMapObj)
       }
