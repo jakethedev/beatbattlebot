@@ -20,11 +20,13 @@ const client = new Client({
     Intents.FLAGS.GUILD_SCHEDULED_EVENTS
   ],
   partials: [
-      'CHANNEL', // Required to receive DMs, thanks SO
+    'MESSAGE', // ???
+    'CHANNEL', // Required to receive DMs, thanks SO
+    'REACTION' // reaction roles tutorial
   ]
 })
 
-// In case something happens, we'll want to see logs
+// In case something happens, we'll want to see logs, not crashes, I think?
 process.on('unhandledRejection', error => {
 	debug(`ERROR: Unhandled promise rejection: ${error}`);
 });
