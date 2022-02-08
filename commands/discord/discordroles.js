@@ -1,6 +1,6 @@
+const constants = require('../../util/constants')
 const discordutil = require('../../util/discord')
 const debug = (msg) => console.log(`DISCORDROLES: ${msg}`)
-const MSG_SERVER_ONLY = "this command needs to be run in a server channel where this bot is active"
 
 //exports.
 exports.reactrole = function(input, message) {
@@ -29,7 +29,7 @@ exports.giverole = function(input, message, client) {
     })
     return discordutil.LOADING
   } else {
-    return MSG_SERVER_ONLY
+    return constants.MSG_SERVER_ONLY
   }
 }
 
@@ -51,7 +51,7 @@ exports.roles = exports.listroles = function(input, message, client) {
     }
     return discordutil.SUCCESS
   } else {
-    return MSG_SERVER_ONLY
+    return constants.MSG_SERVER_ONLY
   }
 }
 
@@ -70,6 +70,6 @@ rolemembers = function(input = '', message, client) {
       return `role '${input}' not found - I need the role's full name to get you a roll call`
     }
   } else {
-    return MSG_SERVER_ONLY
+    return constants.MSG_SERVER_ONLY
   }
 }
