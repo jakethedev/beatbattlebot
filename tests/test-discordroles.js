@@ -4,4 +4,5 @@ test('discord/discordroles:giverole tests', () => {
   expect(input).toBeTruthy()
 })
 // test('discord/discordroles:roles tests', () => {
-// test('discord/discordroles:reactrole tests', () => {
+test('discord/discordroles:reactrole tests', () => {
+})
