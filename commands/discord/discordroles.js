@@ -4,6 +4,7 @@ const debug = (msg) => console.log(`DISCORDROLES: ${msg}`)
 
 exports.reactrole = function(input, message) {
   /*
+  // Logic thanks to https://www.youtube.com/watch?v=wXjsCiUjUqo
   const { messageContent, roleToAdd } = discurdutil.parseReactRoleObjectFrom(input)
   reactmsgid = message.channel ? message.channel.send(messageContent) : return "NO DM ONLY THROW"
   servercache.addReactMessageWatch(message.guild.id, reactmsgid, roleToAdd.id)
@@ -11,12 +12,17 @@ exports.reactrole = function(input, message) {
 
   BOT.JS
   client.on('messageReactionAdd', (reaction, user) => {
+    if (reaction.message.partial) await reaction.message.fetch()
+    if (reaction.partial) await reaction.fetch()
     const msgid = reaction.message.id
+    const chanid = reaction.message.channel.id
+    if (ignoring(chanid)) return
     const guildid = reaction.message.guild.id
     // TODO rename this to be reactRoleID
     const reactRoleId = servercache.getGuildRoleIDForReaction(guildid, msgid)
     if (reactRoleId) {
       const roleToAdd = user.guild.roles.find(id = reactRoleId)
+      // await reaction.message.guild.members.cache.get(user.id).roles.add(roleToAdd)
       try {
         user.roles.add(roleToAdd)
         reply(success)
