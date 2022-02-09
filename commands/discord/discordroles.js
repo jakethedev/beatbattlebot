@@ -2,8 +2,30 @@ const constants = require('../../util/constants')
 const discordutil = require('../../util/discord')
 const debug = (msg) => console.log(`DISCORDROLES: ${msg}`)
 
-//exports.
 exports.reactrole = function(input, message) {
+  /*
+  const { messageContent, roleToAdd } = discurdutil.parseReactRoleObjectFrom(input)
+  reactmsgid = message.channel ? message.channel.send(messageContent) : return "NO DM ONLY THROW"
+  servercache.addReactMessageWatch(message.guild.id, reactmsgid, roleToAdd.id)
+  return good
+
+  BOT.JS
+  client.on('messageReactionAdd', (reaction, user) => {
+    const msgid = reaction.message.id
+    const guildid = reaction.message.guild.id
+    // TODO rename this to be reactRoleID
+    const reactRoleId = servercache.getGuildRoleIDForReaction(guildid, msgid)
+    if (reactRoleId) {
+      const roleToAdd = user.guild.roles.find(id = reactRoleId)
+      try {
+        user.roles.add(roleToAdd)
+        reply(success)
+      } catch (e) {
+        debug('fuck')
+      }
+    }
+  }) 
+  */
 }
 // exports.rr = exports.reactrole
 
