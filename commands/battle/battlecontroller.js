@@ -147,7 +147,7 @@ exports.deadlines = function(input, msg){
       response += `ENTRIES: Submissions are due ${subdl.fromNow()} (at ${day.fmtAsPST(subdl)})\n`
     }
     if (votedl) {
-      response += `VOTING: If subs are closed, votes are due ${votedl.fromNow()} (${day.fmtAsPST(votedl)})\n`
+      response += `VOTING: Voting starts when subs are closed, then votes are due ${votedl.fromNow()} (${day.fmtAsPST(votedl)})\n`
     }
     if (!subdl && !votedl) {
       response += 'No deadlines set! Mods can use `!stopsubs` and `!stopvotes` to set them'
