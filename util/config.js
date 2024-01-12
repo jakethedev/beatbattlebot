@@ -8,7 +8,7 @@ module.exports = {
     "botspam",
     "🤖-bot-spam",
     "battles",
-    "beat-challenge-submissions",
+    "beet-battle-submissions",
     "beat-battle",
     "beat-battle-vc",
     "submissions",
