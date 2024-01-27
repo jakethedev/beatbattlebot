@@ -39,7 +39,10 @@ exports.submit = function(input, msg) {
     // Note: nickname changes take time to propagate, so nickchange -> submit can result in the old nick saving instead
     let entrantId = msg.member.id
     let entrantName = msg.member.nickname || msg.member.user.username
-    const link = input.split(' ')[0].trim()
+    let link = input.split(' ')[0].trim()
+    if (link.includes('?')) {
+      link = link.split('?')[0]
+    }
     debug(`${entrantName} has submitted ${link} for battle[${battleName}]`)
     if (!battledao.isSubmitOpen(battleName)){
       const subdl = battledao.getSubDeadline(battleName)
