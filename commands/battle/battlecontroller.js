@@ -28,6 +28,17 @@ exports.newbattle = function(input, msg) {
 }
 
 exports.submit = function(input, msg) {
+  /**
+   * SUBMIT REQUIRES:
+   *    entrantId [ msg.member.id || oauth.user.id? ]
+   *    entrantName [ msg.member.nickname || TODO: get discord account info? ]
+   *    battleName [ msg.channel.id || form.battleId ]
+   *    link [ msg.input[0] || form.submitLink ]
+   *    
+   * CONSTRAINTS
+   *    msg.guild presence. [ msg.guild || TODO: how? ]
+   *    battleDao.isSubmitOpen check
+   */
   if (input.toLowerCase() == 'help') {
     return `Usage: Post a new message that starts with \`!submit https://link.to.your/beat\` to enter the battle in this channel! Make sure there's a space after your link if you want to write more in your message, otherwise it might not save right`
   }
