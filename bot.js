@@ -1,13 +1,14 @@
-// Core bot setup
+// ops are bot commands, meta is help TODO: and slash command data
+const { ops, meta } = require('./commands')
+
 const fs = require('fs')
-const debug = (msg) => console.log(`MAIN: ${msg}`)
-// Config
 const { botkey, activeChannels, gameStatus, version } = require('./util/config')
 const { token } = JSON.parse(fs.readFileSync('.token.json', 'utf-8'))
-// Instantiating the manifold
+const logdebug = (msg) => console.log(`[bot.js] DEBUG: ${msg}`)
+const logerror = (msg) => console.error(`[bot.js] ERROR: ${msg}`)
+
 const { Client, Intents } = require('discord.js')
 const discordutil = require('./util/discord')
-const { ops, meta } = require('./commands')
 const client = new Client({ 
   intents: [
     // Intents.FLAGS.GUILD_MEMBERS, // Privileged
@@ -26,26 +27,26 @@ const client = new Client({
   ]
 })
 
-// In case something happens, we'll want to see logs, not crashes, I think?
+// Log instead of crash over unexpected async errors
 process.on('unhandledRejection', error => {
-	debug(`ERROR: Unhandled promise rejection: ${error}`);
+	logdebug(`ERROR: Unhandled promise rejection: ${error}`);
 });
 
-// Startup callback
+// Simple startup callback for status and logging
 client.on('ready', () => {
   if (process.env.NODE_ENV) {
-    debug(`${process.env.NODE_ENV} mode activated!`)
+    logdebug(`${process.env.NODE_ENV} mode activated!`)
   } else {
-    debug(`NODE_ENV not set, running in dev mode`)
+    logdebug(`NODE_ENV not set, running in dev mode`)
   }
-  debug(`BeatBattleBot v${version} has logged in as ${client.user.tag}!`)
+  logdebug(`BeatBattleBot v${version} has logged in as ${client.user.tag}!`)
   client.user.setPresence({
     "status": "online",
     "game": { "name": gameStatus }
   })
 })
 
-// Command central
+// Handle message inputs
 client.on('messageCreate', msg => {
   // Contain the bot, and ensure we actually want to act on the command
   let channelName = msg.channel.name ? msg.channel.name.toLowerCase() : "NOT_A_CHANNEL_NAME"
@@ -58,7 +59,7 @@ client.on('messageCreate', msg => {
     let execTime = new Date(Date.now()).toLocaleString();
     // If we have the requested op, send it - otherwise, log it quietly
     if (cmd in ops) {
-      debug(`INFO: ${execTime}: running ${cmd}(${input}) for ${msg.author.username}`)
+      logdebug(`INFO: ${execTime}: running ${cmd}(${input}) for ${msg.author.username}`)
       // Works for a string or a promise return. Sick. https://stackoverflow.com/a/27760489
       Promise.resolve( ops[cmd](input, msg, client) )
         .then(function(result) {
@@ -77,7 +78,7 @@ client.on('messageCreate', msg => {
         })
         .catch(function(err) {
           msg.reply(`your command met with a terrible fate and I nearly died. Have Jake check the logs plz`)
-          debug(`${execTime}: ERR: ${err}`)
+          logdebug(`${execTime}: ERR: ${err}`)
         })
     } else if (cmd == 'help') {
       let fullHelp = `Here's the commands, type \`${botkey}oneofthecommands help\` for more details:\n`
@@ -93,7 +94,7 @@ client.on('messageCreate', msg => {
       fullHelp += `\nIf you notice something weird or broken, run **${botkey}feedback** for support info`
       msg.channel.send(fullHelp)
     } else {
-      debug(`${execTime}: NOTICE: can't find ${cmd}(${input}) for ${msg.author.username}`)
+      logdebug(`${execTime}: NOTICE: can't find ${cmd}(${input}) for ${msg.author.username}`)
       msg.react(discordutil.emojifromname('confused'))
     }
   }

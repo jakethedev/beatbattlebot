@@ -1,7 +1,7 @@
 const { Message } = require('discord.js')
 const constants = require('../../util/constants')
 const discordutil = require('../../util/discord')
-const battledao = require('./battledao')
+const battledao = require('../../database/battledao')
 const day = require('../../util/dayjs')
 const rand = require('../../util/random')
 

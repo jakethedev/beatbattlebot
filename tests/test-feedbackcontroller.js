@@ -69,4 +69,3 @@ test('feedback/feedbackcontroller:fb submit then reset', () => {
   expect(Promise.resolve(con.fb('reset letsgo', m))).toBeTruthy()
   //TODO verify empty
 })
-

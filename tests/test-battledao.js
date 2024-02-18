@@ -1,4 +1,4 @@
-const dao = require('../commands/battle/battledao.js')
+const dao = require('../database/battledao.js')
 const con = require('../commands/battle/battlecontroller.js')
 
 test('battle/battledao:podiumsize operations', () => {

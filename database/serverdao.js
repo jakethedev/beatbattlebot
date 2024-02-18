@@ -1,5 +1,5 @@
 const fs = require('fs')
-const day = require('./dayjs')
+const day = require('../util/dayjs')
 const _cacheFile = 'servercache.json'
 const log = msg => console.log(`serverdao: ${msg}`)
 

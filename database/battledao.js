@@ -1,6 +1,6 @@
 const fs = require('fs')
-const constants = require('../../util/constants')
-const day = require('../../util/dayjs')
+const constants = require('../util/constants')
+const day = require('../util/dayjs')
 const _cacheFile = 'battlecache.json'
 const log = msg => console.log(`battledao: ${msg}`)
 

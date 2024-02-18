@@ -7,7 +7,7 @@
     "start": "node bot.js",
     "starttracedep": "node --trace-deprecation bot.js",
     "devbot": "nodemon bot.js",
-    "test": "jest --config=./.jestconfig.js ; rm -r coverage/",
+    "test": "jest --config=./.jestconfig.js",
     "testcov": "jest --coverage --config=./.jestconfig.js",
     "testdocs": "echo Check out the jest docs at https://jestjs.io/docs",
     "testclearcache": "jest --clearCache",
@@ -37,7 +37,8 @@
   "homepage": "https://github.com/jakethedev/beatbattlebot#readme",
   "dependencies": {
     "dayjs": "^1.11.7",
-    "discord.js": "^13.15.1"
+    "discord.js": "^13.15.1",
+    "express": "^4.18.2"
   },
   "engines": {
     "node": ">=16.0.0"

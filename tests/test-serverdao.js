@@ -1,4 +1,4 @@
-const dao = require('../util/serverdao.js')
+const dao = require('../database/serverdao')
 
 test('util/serverdao:botmodrole operations', () => {
   // TODO: run mod command as simple user, expect failure

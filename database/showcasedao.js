@@ -1,45 +1,44 @@
 const fs = require('fs')
-const day = require('../../util/dayjs')
-const _cacheFile = 'feedbackcache.json'
-const log = msg => console.log(`feedbackdao: ${msg}`)
+const day = require('../util/dayjs')
+const _cacheFile = 'showcasecache.json'
+const log = msg => console.log(`showcasedao: ${msg}`)
 
-const FEEDBACKKEY = "entries"
-const COOLDOWNKEY = "cooldown"
+const ENTRIES = "entries"
 
 // Barebones default state
-let feedbackCache = {}
+let showcaseCache = {}
 
 // Load old cache on init
 try {
-  feedbackCache = JSON.parse(fs.readFileSync(_cacheFile))
+  showcaseCache = JSON.parse(fs.readFileSync(_cacheFile))
 } catch (error) {
-  log(`if ENOENT this is expected - could not load feedback data from old cache: ${error}`)
+  log(`if ENOENT this is expected - could not load showcase data from old cache: ${error}`)
 }
 
 // Simple persistence layer
-function _saveFeedbackState() {
+function _saveShowcaseState() {
   try {
-    fs.writeFileSync(_cacheFile, JSON.stringify(feedbackCache, null, 2))
+    fs.writeFileSync(_cacheFile, JSON.stringify(showcaseCache, null, 2))
   } catch(error) {
-    log(`error saving feedback data: ${error}`)
+    log(`error saving showcase: ${error}`)
   }
 }
 
 exports.resetQueue = function(channelid) {
-  log(`emptying feedback queue for channel [${channelid}]`)
-  feedbackCache[channelid] = {}
-  _saveFeedbackState()
+  log(`emptying showcase queue for channel [${channelid}]`)
+  showcaseCache[channelid] = {}
+  _saveShowcaseState()
 }
 
 exports.saveLinkForUser = function(channelid, userid, username, link) {
   // TODO:
-  let entryExisted = !!feedbackCache[channelid][FEEDBACKKEY][userid] // For smarter output
-  feedbackCache[channelid][FEEDBACKKEY][userid] = {
+  let entryExisted = !!showcaseCache[channelid][showcaseKEY][userid] // For smarter output
+  showcaseCache[channelid][showcaseKEY][userid] = {
     'ts': new Date(),
     'link': link,
     'displayname': username
   }
-  _saveFeedbackState()
+  _saveShowcaseState()
   let numEntries = _queueSize(channelid)
   if (entryExisted) {
     return `thanks for the update, saved your new entry! (${numEntries} entries)`
@@ -50,13 +49,13 @@ exports.saveLinkForUser = function(channelid, userid, username, link) {
 
 exports.saveNotesForUser = function(channelid, userid, username, notes) {
   // TODO:
-  let entryExisted = !!feedbackCache[channelid][FEEDBACKKEY][userid] // For smarter output
-  feedbackCache[channelid][FEEDBACKKEY][userid] = {
+  let entryExisted = !!showcaseCache[channelid][showcaseKEY][userid] // For smarter output
+  showcaseCache[channelid][showcaseKEY][userid] = {
     'ts': new Date(),
     'link': link,
     'displayname': username
   }
-  _saveFeedbackState()
+  _saveShowcaseState()
   let numEntries = _queueSize(channelid)
   if (entryExisted) {
     return `thanks for the update, saved your new entry! (${numEntries} entries)`
@@ -65,9 +64,9 @@ exports.saveNotesForUser = function(channelid, userid, username, notes) {
   }
 }
 
-exports.getSingleFeedbackEntry = function(channelid) {
-  if (!feedbackCache[channelid]) return false
-  const entries = feedbackCache[channelid][FEEDBACKKEY]
+exports.getSingleShowcaseEntry = function(channelid) {
+  if (!showcaseCache[channelid]) return false
+  const entries = showcaseCache[channelid][showcaseKEY]
 }
 
 /// EVERYTHING BELOW THIS LINE IS FOR FUTURE IMPLEMENTATION
@@ -78,38 +77,38 @@ exports.getSingleFeedbackEntry = function(channelid) {
   - cache:{ id: { object } } = open
   - cache:{ id: false } = closed (or a sane constants.FEATURE_DISABLED_IN_CHANNEL for readability)
 */
-exports.isChannelOpenForFeedback = function(channelid) {
+exports.isChannelOpenForShowcase = function(channelid) {
   return true
 }
 
-exports.openChannelForFeedback = function(channelid) {
+exports.openChannelForShowcase = function(channelid) {
   //TODO mv disk cache to cache.backup
   _resetBattleRegistration(channelid)
   let battleExisted = _isBattleInProgress(channelid)
   // Super simple template
   let battleTemplate = {}
-  battleTemplate[FEEDBACKKEY] = {}
+  battleTemplate[showcaseKEY] = {}
   battleTemplate[VOTECACHEKEY] = {}
   battleTemplate[SUB_DL_KEY] = false
   battleTemplate[VOTE_DL_KEY] = false
   // BAM lock and load!
-  feedbackCache[channelid] = battleTemplate
-  _saveFeedbackState()
+  showcaseCache[channelid] = battleTemplate
+  _saveShowcaseState()
   if (!battleExisted) {
-    return `looks like the first feedback queue in this channel, lets goooo!`
+    return `looks like the first showcase queue in this channel, lets goooo!`
   } else {
-    return `the previous feedback queue has been DUMPED, a new session has started!`
+    return `the previous showcase queue has been DUMPED, a new session has started!`
   }
 }
 
-exports.closeChannelForFeedback = function(channelid) {
-  if (channelid in feedbackCache) {
-    log(`stopping feedback in ${channelid}`)
-    feedbackCache[channelid] = false
-    _saveFeedbackState()
-    return `this feedback channel has been deactivated, !fb open to reactivate`
+exports.closeChannelForShowcase = function(channelid) {
+  if (channelid in showcaseCache) {
+    log(`stopping showcase in ${channelid}`)
+    showcaseCache[channelid] = false
+    _saveShowcaseState()
+    return `this showcase channel has been deactivated, !fb open to reactivate`
   }
-  return `feedback is already deactivated, !fb open to get this show on the road`
+  return `showcase is already deactivated, !fb open to get this show on the road`
 }
 
 /*
@@ -135,12 +134,12 @@ exports.isUserInCooldown = function(channelid, userid) {
   return true
 }
 
-exports.setFeedbackCooldownTime = function(channelid, span) {
+exports.setShowcaseCooldownTime = function(channelid, span) {
   // TODO save new span
   return true
 }
 
-exports.getFeedbackCooldownTime = function(channelid) {
+exports.getShowcaseCooldownTime = function(channelid) {
   // TODO read it out
   return '7d'
 }
@@ -160,8 +159,8 @@ exports.getSelectionMethod = function(channelid) {
 
 // Trick for using this function locally and as export
 function _getQueueSize(channelid) {
-  if (_isFeedbackChannel(channelid) && feedbackCache[channelid][FEEDBACKKEY]) {
-    const numEntries = Object.keys(feedbackCache[channelid][FEEDBACKKEY]).length
+  if (_isShowcaseChannel(channelid) && showcaseCache[channelid][showcaseKEY]) {
+    const numEntries = Object.keys(showcaseCache[channelid][showcaseKEY]).length
     return numEntries
   }
   return 0
