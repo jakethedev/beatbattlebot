@@ -4,7 +4,10 @@
   "description": "Discord.js bot for organizing and handling beat battle submissions on music servers",
   "main": "bot.js",
   "scripts": {
-    "start": "node bot.js",
+    "start": "npm run start:bot",
+    "start:bot": "nodemon bot.js",
+    "start:server": "nodemon server.js",
+    "start:ui": "nodemon bot.js",
     "starttracedep": "node --trace-deprecation bot.js",
     "devbot": "nodemon bot.js",
     "test": "jest --config=./.jestconfig.js",
