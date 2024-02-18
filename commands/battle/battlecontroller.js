@@ -127,11 +127,7 @@ exports.submissions = function(input, msg) {
         submissionMapObj = rand.getShuffledCopyOfObject(submissionMapObj)
       }
       const response = discordutil.formatSubmissionsToArray(submissionMapObj, shuffled)
-      // If we've got a small battle or someone says "here", print to the channel
-      if (printInChannel) {
-        return response
-      }
-      // At this point we have a big battle, reply via dm with a confirmation to channel
+      // Reply via dm with a confirmation emoji to channel
       for (const responseChunk of response){
         msg.author.send(responseChunk)
       }
