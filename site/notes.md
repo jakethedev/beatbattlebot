@@ -14,7 +14,17 @@
   - less is more here, /* should work if possible
   - TODO: authentication for routes via... firebase? discord oauth?
 
-# UI Design Notes
+# Design Notes
 
-UI fw: React? Svelte?
-Style: daisyUI (winter, night themes) using TailwindCSS
+App structure: React static pages
+Style: Tailwind x Daisy
+Auth: Firebase? Cognito? OAuth Discord?
+Battle runners: Invitational? Server owners (login, get servers, can run battle for server, pick channel for bot?)
+  optional bot? required bot?
+Battle participants: Login with discord, can see battles in joined servers?
+UI next step for:
+Voting: must be better state component than redux? or is redux ok? react have light global state?
+    login: default is ok if possible, sketch
+    battle page: sketch
+    vote page: sketch
+    list battles: sketch

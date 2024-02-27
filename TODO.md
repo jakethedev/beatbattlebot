@@ -1,5 +1,28 @@
 # todolist
 
+fix voting, it sucks
+```
+!vote usernameFuzzySearch, user2, ... userX
+  voteIds = [], notFound = [], multiMatch = []
+  foreach name:
+    matches = entries.findSome(name)
+    if matches.length === 1
+      voteIds.push(match[0].id)
+    else if matches.length === 0
+      notFound.push(name)
+    else // multiple matches
+      multiMatch.push(name)
+  response = `some useful header`;
+  if (voteIds.length)
+    saveVote(msg.author.id, battleId, voteIds)
+  if (notFound.length)
+    response += `not found: ${...notfound}`
+  if (multiMatch.length)
+    response += `multiple matches found for: ${...multiMatch}`
+  reply(response);
+```
+website REALLY fixes it js
+
 ### See the issues page for actual tasks, this is a notepad for minor things and a reminder of recent dubs
 Feedback priority tasks:
   reset empties queue
