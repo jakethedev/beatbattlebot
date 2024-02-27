@@ -7,7 +7,7 @@
     "start": "npm run start:bot",
     "start:bot": "nodemon bot.js",
     "start:server": "nodemon server.js",
-    "start:ui": "nodemon bot.js",
+    "start:ui": "echo ERR: there is no UI project yet",
     "starttracedep": "node --trace-deprecation bot.js",
     "devbot": "nodemon bot.js",
     "test": "jest --config=./.jestconfig.js",
@@ -16,7 +16,7 @@
     "testclearcache": "jest --clearCache",
     "testverbose": "jest --expand --config=./.jestconfig.js",
     "testwatch": "jest --watchAll --config=./.jestconfig.js",
-    "build": "echo Placeholder text for smushing libs into a bot.js for web page usage"
+    "build": "echo Placeholder command for compiling libs into a bot.js, server.js, and possibly site/index.html+app.js+styles.css"
   },
   "repository": {
     "type": "git",
