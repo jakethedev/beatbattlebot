@@ -61,7 +61,6 @@ NEXT
   showcase features copied wholesale from PoC
 
 IMPORTANT
-  reactrole feature thanks to tutorial, servercache for config
   Issue for util/msg_util.js: msg_util.isModMsg, msg_util.isChannelMsg, abstract some shit
   Issue for util/constants.js `const constants = require('./util/constants')`
   Issue for refactoring `if (msg.guild)` into some metadata structure
@@ -80,6 +79,7 @@ TODO FOR util/serverdao.js
   () initialize, sets defaults for listen, battle, podium, repeat, maxVotes, and feedbackCooldownTimer
 
 BUGS
+- deadlines output is dumb about relative deadlines (if subs are closed? bruh get the dl and say when voting starts)
 - stopbattle and stopsubs and stopvotes should leave deadline alone if in the past
 - newbattle on empty battle was bork?
 - isVotingOpen should check subs are closed
