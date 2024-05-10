@@ -2,17 +2,15 @@
 const { ops, meta } = require('./commands')
 // REMINDER: ops[CMD](input, disJsMessage, disJsClient)
 
-// TODO: npm i --save express
 // TODO: check all this lmao writing blind here
-const espresso = require('express');
-const app = espresso();
+const app = require('express')();
 
 app.get('/ping', (req, res) => {
   res.send('pong');
 });
 
 app.get('', (req, res) => {
-  
+
 });
 
 app.get('/coin', (req, res) => {
