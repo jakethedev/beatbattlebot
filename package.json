@@ -43,7 +43,7 @@
     "node": ">=16.0.0"
   },
   "devDependencies": {
-    "jest": "^27.5.1",
+    "jest": "^30.2.0",
     "nodemon": "^3.0.2"
   }
 }
